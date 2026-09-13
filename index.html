@@ -731,8 +731,17 @@ class ClassWizEngine {
       const vv=window.visualViewport;
       const sw=vv?vv.width:window.innerWidth;
       const sh=vv?vv.height:window.innerHeight;
-      const scale=Math.max(0.5, Math.min(1, (sw-pad)/el.offsetWidth, (sh-pad)/el.offsetHeight));
-      el.style.transform=`scale(${scale})`;
+      const ox=(vv&&vv.offsetLeft)?vv.offsetLeft:0;
+      const oy=(vv&&vv.offsetTop)?vv.offsetTop:0;
+      const vw=el.offsetWidth, vh=el.offsetHeight;
+      const s=Math.max(0.5, Math.min(1, (sw-pad)/vw, (sh-pad)/vh));
+      const cx=ox+sw/2, cy=oy+sh/2;
+      el.style.transformOrigin='0 0';
+      el.style.position='fixed';
+      el.style.left=(cx-(vw*s)/2)+'px';
+      el.style.top=(cy-(vh*s)/2)+'px';
+      el.style.margin='0';
+      el.style.transform=`scale(${s})`;
     } catch(e){}
   }
 
