@@ -444,6 +444,32 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
 .frm-card .d { font-size:9.5px; color:var(--slate-400); line-height:1.45; }
 .frm-badge { display:inline-block; font-size:7.5px; font-weight:800; letter-spacing:.5px; color:var(--slate-400); border:1px solid var(--slate-700); border-radius:3px; padding:0 4px; margin-left:6px; vertical-align:1px; }
 
+/* --- STAT mode --- */
+.stat-data {
+  width:100%; background:var(--slate-900); border:1px solid var(--slate-700); color:var(--slate-100);
+  border-radius:6px; padding:8px 10px; font-size:12px; font-family:monospace; resize:vertical; outline:none;
+}
+.stat-data:focus { border-color:rgba(245,158,11,.6); }
+
+/* --- MAT mode --- */
+.mat-grid { display:grid; gap:4px; margin:4px 0; }
+.mat-cell {
+  background:var(--slate-900); border:1px solid var(--slate-700); color:var(--slate-100);
+  border-radius:4px; padding:6px 4px; font-size:11px; width:100%; box-sizing:border-box; outline:none; text-align:center;
+}
+.mat-cell:focus { border-color:rgba(34,211,238,.6); }
+
+/* --- SHEET mode --- */
+.sheet-grid { display:grid; gap:2px; grid-template-columns:30px repeat(6,1fr); font-size:11px; }
+.sheet-head { font-size:9px; color:var(--slate-500); font-weight:700; text-align:center; padding:4px 0; }
+.sheet-label { font-size:9px; color:var(--slate-600); font-weight:600; text-align:center; padding:4px 0; }
+.sheet-cell {
+  background:var(--slate-900); border:1px solid var(--slate-800); color:var(--slate-100);
+  border-radius:3px; padding:0; font-size:11px; width:100%; box-sizing:border-box; outline:none; text-align:center;
+}
+.sheet-cell:focus { border-color:rgba(34,211,238,.6); z-index:1; }
+.sheet-cell.error { color:var(--rose-400); font-size:9px; }
+
 /* ---------- Keypad ---------- */
 .keys { display:flex; flex-direction:column; gap:8px; }
 .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
@@ -992,6 +1018,184 @@ sub { font-size:.7em; } sup { font-size:.7em; }
   </div>
 </div>
 
+<!-- STAT (all-in-one mode) -->
+<div id="statOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title amber">STAT · statistics</span>
+    <button id="closeStat" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-label">Data values (space or comma separated, ×1 row: X only · ×2 rows: X Y)</div>
+    <textarea id="statData" class="stat-data" rows="4" placeholder="1 2 3 4 5&#10;or X: 1 2 3 and Y: 3 5 7 on the second line" autocomplete="off" spellcheck="false"></textarea>
+    <div style="margin-top:8px;">
+      <button id="statCalcBtn" class="graph-btn accent">Calculate</button>
+    </div>
+    <div id="statResult" class="solve-result"></div>
+    <div class="solve-legend">One-variable stats plus linear regression y = a + bx (when two rows given).</div>
+  </div>
+</div>
+
+<!-- MAT (all-in-one mode) -->
+<div id="matOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title cyan">MAT · matrices</span>
+    <button id="closeMat" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-tabs">
+      <button class="solve-tab" id="m2t">2×2</button>
+      <button class="solve-tab active" id="m3t">3×3</button>
+      <button class="solve-tab" id="m4t">4×4</button>
+    </div>
+    <div id="matDims" class="solve-label">Matrix A · Matrix B</div>
+    <div class="mat-grid" id="matGridA"></div>
+    <div class="mat-grid" id="matGridB"></div>
+    <div class="solve-tabs" style="margin-top:10px;">
+      <button class="solve-tab active" data-mop="detA">det A</button>
+      <button class="solve-tab" data-mop="detB">det B</button>
+      <button class="solve-tab" data-mop="invA">A⁻¹</button>
+      <button class="solve-tab" data-mop="trA">Aᵀ</button>
+      <button class="solve-tab" data-mop="mult">A×B</button>
+      <button class="solve-tab" data-mop="add">A+B</button>
+      <button class="solve-tab" data-mop="sub">A−B</button>
+    </div>
+    <div style="margin-top:10px;">
+      <button id="matCalcBtn" class="graph-btn accent">Compute</button>
+    </div>
+    <div id="matResult" class="solve-result"></div>
+    <div class="solve-legend">Ops on square n×n matrices. Inverse uses Gauss-Jordan; singular matrices report no inverse.</div>
+  </div>
+</div>
+
+<!-- VCT (all-in-one mode) -->
+<div id="vctOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title rose">VCT · vectors</span>
+    <button id="closeVct" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-tabs">
+      <button class="solve-tab active" id="v3d">3D</button>
+      <button class="solve-tab" id="v2d">2D</button>
+    </div>
+    <div class="solve-label">Vector A</div>
+    <div class="solve-grid3">
+      <input id="vax1" class="solve-num" placeholder="x₁" inputmode="decimal">
+      <input id="vax2" class="solve-num" placeholder="y₁" inputmode="decimal">
+      <input id="vax3" class="solve-num" placeholder="z₁" inputmode="decimal">
+    </div>
+    <div class="solve-label" style="margin-top:8px;">Vector B</div>
+    <div class="solve-grid3">
+      <input id="vbx1" class="solve-num" placeholder="x₂" inputmode="decimal">
+      <input id="vbx2" class="solve-num" placeholder="y₂" inputmode="decimal">
+      <input id="vbx3" class="solve-num" placeholder="z₂" inputmode="decimal">
+    </div>
+    <div class="solve-tabs" style="margin-top:10px;">
+      <button class="solve-tab active" data-vop="dot">dot</button>
+      <button class="solve-tab" data-vop="cross">cross</button>
+      <button class="solve-tab" data-vop="add">add</button>
+      <button class="solve-tab" data-vop="sub">sub</button>
+      <button class="solve-tab" data-vop="magA">|A|</button>
+      <button class="solve-tab" data-vop="magB">|B|</button>
+      <button class="solve-tab" data-vop="ang">angle</button>
+    </div>
+    <div style="margin-top:10px;">
+      <button id="vctCalcBtn" class="graph-btn accent">Compute</button>
+    </div>
+    <div id="vctResult" class="solve-result"></div>
+    <div class="solve-legend">angle is in degrees between A and B. cross is 3D-only.</div>
+  </div>
+</div>
+
+<!-- INEQ (all-in-one mode) -->
+<div id="ineqOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title rose">INEQ · inequalities</span>
+    <button id="closeIneq" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-label">ax + b ▢ 0 (linear)</div>
+    <div class="solve-grid4">
+      <input id="iqA" class="solve-num" placeholder="a" inputmode="decimal">
+      <input id="iqB" class="solve-num" placeholder="b" inputmode="decimal">
+      <select id="iqSign" class="solve-num">
+        <option>></option><option>≥</option><option><</option><option>≤</option>
+      </select>
+      <button id="iqSolveBtn" class="graph-btn accent">Solve</button>
+    </div>
+    <div id="iqLinearResult" class="solve-result"></div>
+    <div class="solve-label" style="margin-top:12px;">ax² + bx + c ▢ 0 (quadratic)</div>
+    <div class="solve-grid3">
+      <input id="iqA2" class="solve-num" placeholder="a" inputmode="decimal">
+      <input id="iqB2" class="solve-num" placeholder="b" inputmode="decimal">
+      <input id="iqC2" class="solve-num" placeholder="c" inputmode="decimal">
+    </div>
+    <div class="solve-grid2 rev">
+      <select id="iqSign2" class="solve-num">
+        <option>></option><option>≥</option><option><</option><option>≤</option>
+      </select>
+      <button id="iqSolve2Btn" class="graph-btn accent">Solve</button>
+    </div>
+    <div id="iqQuadResult" class="solve-result"></div>
+    <div class="solve-legend">Assumes a ≠ 0. Real-interval solutions are shown in set notation.</div>
+  </div>
+</div>
+
+<!-- RATIO (all-in-one mode) -->
+<div id="ratioOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title violet">RATIO · proportions</span>
+    <button id="closeRatio" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-label">a : b = c : d  — leave the unknown blank</div>
+    <div class="solve-grid4">
+      <input id="rA" class="solve-num" placeholder="a" inputmode="decimal">
+      <input id="rB" class="solve-num" placeholder="b" inputmode="decimal">
+      <input id="rC" class="solve-num" placeholder="c" inputmode="decimal">
+      <input id="rD" class="solve-num" placeholder="d" inputmode="decimal">
+    </div>
+    <div style="margin-top:10px;">
+      <button id="ratioSolveBtn" class="graph-btn accent">Solve</button>
+    </div>
+    <div id="ratioResult" class="solve-result"></div>
+    <div class="solve-legend">Exactly one box must be empty; solves a/b = c/d for the missing term.</div>
+  </div>
+</div>
+
+<!-- DIST (all-in-one mode) -->
+<div id="distOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title amber">DIST · normal distribution</span>
+    <button id="closeDist" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-label">Normal N(μ, σ)</div>
+    <div class="solve-grid3">
+      <input id="dMu" class="solve-num" placeholder="μ" inputmode="decimal">
+      <input id="dSigma" class="solve-num" placeholder="σ" inputmode="decimal">
+      <input id="dX" class="solve-num" placeholder="x" inputmode="decimal">
+    </div>
+    <div style="margin-top:10px;">
+      <button id="distCalcBtn" class="graph-btn accent">P(X ≤ x)</button>
+    </div>
+    <div id="distResult" class="solve-result"></div>
+    <div class="solve-legend">Also gives z-score. σ must be &gt; 0.</div>
+  </div>
+</div>
+
+<!-- SHEET (all-in-one mode) -->
+<div id="sheetOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title cyan">SHEET · spreadsheet</span>
+    <button id="closeSheet" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="app-hint" style="margin-bottom:8px;">Type numbers or formulas starting with <b>=</b>. Cell refs like <b>A1</b>, math with <b>+ − * / ( )</b>, <b>=SUM(A1:A3)</b>. Grid auto-recalculates.</div>
+    <div id="sheetGrid" class="sheet-grid"></div>
+  </div>
+</div>
+
 <button id="installBtn" class="install-btn hidden" title="Install app">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
   <span id="ibLabel">Install</span>
@@ -1144,6 +1348,13 @@ class ClassWizEngine {
     this.frmCat = 'all';
     this.selZ = null;
     this._graphRaf = false;
+    this.baseMode = true;
+    this.matDims = 3;
+    this.matRows = ['','','','']; this.matCols = ['','','',''];
+    this.matA = [[],[],[]]; this.matB = [[],[],[]];
+    this.matOp = 'detA';
+    this.vctDims = 3; this.vctOp = 'dot';
+    this.sheet = [];
 
     this.constants = [
       [
@@ -1291,7 +1502,28 @@ class ClassWizEngine {
       ptableGrid:id('ptableGrid'), chemDetail:id('chemDetail'),
       molarInput:id('molarInput'), molarOut:id('molarOut'),
       formOverlay:id('formOverlay'), closeForm:id('closeForm'),
-      frmSearch:id('frmSearch'), frmList:id('frmList')
+      frmSearch:id('frmSearch'), frmList:id('frmList'),
+      statOverlay:id('statOverlay'), closeStat:id('closeStat'),
+      statData:id('statData'), statCalcBtn:id('statCalcBtn'), statResult:id('statResult'),
+      matOverlay:id('matOverlay'), closeMat:id('closeMat'),
+      matGridA:id('matGridA'), matGridB:id('matGridB'), matCalcBtn:id('matCalcBtn'), matResult:id('matResult'),
+      m2t:id('m2t'), m3t:id('m3t'), m4t:id('m4t'), matDimsLabel:id('matDims'),
+      vctOverlay:id('vctOverlay'), closeVct:id('closeVct'),
+      v2d:id('v2d'), v3d:id('v3d'),
+      vctCalcBtn:id('vctCalcBtn'), vctResult:id('vctResult'),
+      vax1:id('vax1'), vax2:id('vax2'), vax3:id('vax3'), vbx1:id('vbx1'), vbx2:id('vbx2'), vbx3:id('vbx3'),
+      ineqOverlay:id('ineqOverlay'), closeIneq:id('closeIneq'),
+      iqA:id('iqA'), iqB:id('iqB'), iqSign:id('iqSign'),
+      iqSolveBtn:id('iqSolveBtn'), iqLinearResult:id('iqLinearResult'),
+      iqA2:id('iqA2'), iqB2:id('iqB2'), iqC2:id('iqC2'), iqSign2:id('iqSign2'),
+      iqSolve2Btn:id('iqSolve2Btn'), iqQuadResult:id('iqQuadResult'),
+      ratioOverlay:id('ratioOverlay'), closeRatio:id('closeRatio'),
+      rA:id('rA'), rB:id('rB'), rC:id('rC'), rD:id('rD'),
+      ratioSolveBtn:id('ratioSolveBtn'), ratioResult:id('ratioResult'),
+      distOverlay:id('distOverlay'), closeDist:id('closeDist'),
+      dMu:id('dMu'), dSigma:id('dSigma'), dX:id('dX'),
+      distCalcBtn:id('distCalcBtn'), distResult:id('distResult'),
+      sheetOverlay:id('sheetOverlay'), closeSheet:id('closeSheet'), sheetGrid:id('sheetGrid')
     };
   }
 
@@ -1357,6 +1589,7 @@ class ClassWizEngine {
     this.dom.btnQrSearch.addEventListener('click',()=>{ this.qrMode='search'; this.setQrTab('search'); this.renderQrCode(); });
     this.dom.qrCanvas.addEventListener('click',()=>this.copyQrData());
     this.bindModuleEvents();
+    this.bindModeEvents();
     window.addEventListener('keydown',e=>this.handlePhysicalKeyboard(e));
     window.addEventListener('resize',()=>this.fitToScreen());
     window.addEventListener('orientationchange',()=>setTimeout(()=>this.fitToScreen(),250));
@@ -1521,7 +1754,8 @@ class ClassWizEngine {
 
   closeAllOverlays(){
     ['menuOverlay','optnOverlay','constOverlay','convOverlay','memoryOverlay','historyOverlay','qrOverlay','tableOverlay',
-     'graphOverlay','solveOverlay','chemOverlay','formOverlay']
+     'graphOverlay','solveOverlay','chemOverlay','formOverlay',
+     'statOverlay','matOverlay','vctOverlay','ineqOverlay','ratioOverlay','distOverlay','sheetOverlay']
       .forEach(k=>this.dom[k].classList.add('hidden'));
   }
 
@@ -1536,7 +1770,16 @@ class ClassWizEngine {
       this.updateDisplay();
       return;
     }
-    if (id!=='COMP'){ this.result=`MODE: ${id} (feed for COMP & TABLE)`; this.updateDisplay(); return; }
+    if (id==='EQN'){ this.openSolveOverlay(); return; }
+    if (id==='STAT'){ this.openStatOverlay(); return; }
+    if (id==='CMPLX'){ this.expression=""; this.cursorPos=0; this.result="a+bi mode"; this.updateDisplay(); return; }
+    if (id==='BASE'){ this.expression=""; this.cursorPos=0; this.result="Base mode"; this.updateDisplay(); return; }
+    if (id==='MAT'){ this.openMatOverlay(); return; }
+    if (id==='VCT'){ this.openVctOverlay(); return; }
+    if (id==='INEQ'){ this.openIneqOverlay(); return; }
+    if (id==='RATIO'){ this.openRatioOverlay(); return; }
+    if (id==='DIST'){ this.openDistOverlay(); return; }
+    if (id==='SHEET'){ this.openSheetOverlay(); return; }
     this.expression=""; this.cursorPos=0; this.result="0"; this.updateDisplay();
   }
 
@@ -1678,6 +1921,16 @@ class ClassWizEngine {
     if ('+×÷-=^'.indexOf(lastCh)>=0) return;
     const factM=this.expression.match(/^FACT\((\d+)\)$/);
     if (factM){ this.result=this.primeFactors(+factM[1]); this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
+    if (this.activeMode==='CMPLX'){
+      try {
+        const z=this.evalComplex(this.expression);
+        if (z===null){ this.result="Syntax ERROR"; }
+        else if (!isFinite(z.re)||!isFinite(z.im)){ this.result="Math ERROR"; }
+        else { this.result=this.cplxStr(z); this.baseVal=Math.hypot(z.re,z.im); }
+        this.exactForm=null; this._showingExact=false;
+      } catch(e){ this.result="Syntax ERROR"; }
+      this.updateDisplay(); return;
+    }
     try {
       let s=this.expandAdvanced(this.baseConvert(this.expression));
       s=s.replace(/PreAns/g,`(${this.previousAnswer})`)
@@ -1711,6 +1964,7 @@ class ClassWizEngine {
       if (typeof res==='number' && isFinite(res)){
         res=parseFloat(res.toPrecision(12));
         if (res===0) res=0;
+        this.baseVal=res;
         this.result=res.toString();
         this.exactForm=this.computeExact(this.expression,res);
         this._showingExact=!!this.exactForm;
@@ -2319,6 +2573,413 @@ class ClassWizEngine {
     });
   }
 
+    bindModeEvents(){
+    const D=this.dom;
+    D.closeStat.addEventListener('click',()=>{ D.statOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeMat.addEventListener('click',()=>{ D.matOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeVct.addEventListener('click',()=>{ D.vctOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeIneq.addEventListener('click',()=>{ D.ineqOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeRatio.addEventListener('click',()=>{ D.ratioOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeDist.addEventListener('click',()=>{ D.distOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeSheet.addEventListener('click',()=>{ D.sheetOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.statCalcBtn.addEventListener('click',()=>this.calcStats());
+    D.statData.addEventListener('input',()=>this.calcStats());
+    [[D.m2t,2],[D.m3t,3],[D.m4t,4]].forEach(([t,n])=>t.addEventListener('click',()=>this.setMatDims(n)));
+    D.matCalcBtn.addEventListener('click',()=>this.computeMat());
+    document.querySelectorAll('#matOverlay [data-mop]').forEach(b=>{
+      b.addEventListener('click',()=>{
+        this.matOp=b.getAttribute('data-mop');
+        document.querySelectorAll('#matOverlay [data-mop]').forEach(x=>x.classList.toggle('active',x===b));
+      });
+    });
+    D.vctCalcBtn.addEventListener('click',()=>this.computeVct());
+    [[D.v2d,2],[D.v3d,3]].forEach(([t,n])=>t.addEventListener('click',()=>{
+      this.vctDims=n;
+      document.querySelectorAll('#vctOverlay .solve-tab').forEach(x=>x.classList.toggle('active',x===t));
+      this.syncVctDims();
+    }));
+    document.querySelectorAll('#vctOverlay [data-vop]').forEach(b=>{
+      b.addEventListener('click',()=>{
+        this.vctOp=b.getAttribute('data-vop');
+        document.querySelectorAll('#vctOverlay [data-vop]').forEach(x=>x.classList.toggle('active',x===b));
+      });
+    });
+    D.iqSolveBtn.addEventListener('click',()=>this.solveLinearIneq());
+    D.iqSolve2Btn.addEventListener('click',()=>this.solveQuadIneq());
+    D.ratioSolveBtn.addEventListener('click',()=>this.solveRatio());
+    D.distCalcBtn.addEventListener('click',()=>this.calcDist());
+  }
+
+  openMatOverlay(){
+    this.closeAllOverlays();
+    this.renderMatGrids();
+    this.dom.matOverlay.classList.remove('hidden');
+  }
+  openBaseMode(b){ this.baseMode=b; this.updateDisplay(); }
+
+  evalComplex(expr){
+    const s=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/\s+/g,'')
+      .replace(/(\d)i/g,'$1*i').replace(/\)\(/g,')*(').replace(/i\(/g,'i*(');
+    const C=(re,im)=>({re,im}), z=C(0,1);
+    let i=0,toks=[];
+    const numRe=/^((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)/;
+    const fnRe=/^(sin|cos|tan|exp|ln|abs|arg|conj|re|im)/;
+    while(i<s.length){
+      const ch=s[i];
+      if('+-*/^(),'.indexOf(ch)>=0){ toks.push({t:'op',v:ch}); i++; continue; }
+      if(ch==='i'){ toks.push({t:'i'}); i++; continue; }
+      const m=s.slice(i).match(numRe);
+      if(m){ toks.push({t:'num',v:parseFloat(m[1])}); i+=m[1].length; continue; }
+      const fn=s.slice(i).match(fnRe);
+      if(fn){ toks.push({t:'fn',v:fn[1]}); i+=fn[1].length; continue; }
+      return null;
+    }
+    toks.push({t:'end'});
+    let p=0;
+    const peek=()=>toks[p], next=()=>toks[p++];
+    function mul(a,b){ return C(a.re*b.re-a.im*b.im, a.re*b.im+a.im*b.re); }
+    function div(a,b){ const d=b.re*b.re+b.im*b.im; if(d===0) return C(1/0,1/0); return C((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d); }
+    function cpow(a,e){
+      if(!isFinite(e)) return C(NaN,NaN);
+      if(e===0) return C(1,0);
+      if(e===Math.round(e)&&Math.abs(e)<=1000){
+        let r=C(1,0); const n=Math.abs(e);
+        for(let k=0;k<n;k++) r=mul(r,a);
+        return e<0?div(C(1,0),r):r;
+      }
+      if(a.re===0&&a.im===0) return C(0,0);
+      const m=Math.hypot(a.re,a.im), th=Math.atan2(a.im,a.re), me=Math.pow(m,e);
+      return C(me*Math.cos(e*th), me*Math.sin(e*th));
+    }
+    function callFn(fn,a){
+      const x=a.re, y=a.im;
+      switch(fn){
+        case 're': return C(x,0);
+        case 'im': return C(y,0);
+        case 'abs': return C(Math.hypot(x,y),0);
+        case 'arg': return C(Math.atan2(y,x),0);
+        case 'conj': return C(x,-y);
+        case 'exp': return C(Math.exp(x)*Math.cos(y), Math.exp(x)*Math.sin(y));
+        case 'ln': return C(Math.log(Math.hypot(x,y)), Math.atan2(y,x));
+        case 'sin': return C(Math.cosh(y)*Math.sin(x), Math.sinh(y)*Math.cos(x));
+        case 'cos': return C(Math.cosh(y)*Math.cos(x), -Math.sinh(y)*Math.sin(x));
+        case 'tan': { const d=Math.cos(2*x)+Math.cosh(2*y); return d===0?C(NaN,NaN):C(Math.sin(2*x)/d, Math.sinh(2*y)/d); }
+        default: return C(NaN,NaN);
+      }
+    }
+    function atom(){
+      const t=peek();
+      if(t.t==='num'){ next(); return C(t.v,0); }
+      if(t.t==='i'){ next(); return C(0,1); }
+      if(t.t==='op'&&t.v==='('){ next(); const a=parseExpr(); if(peek().t==='op'&&peek().v===')') next(); return a; }
+      if(t.t==='fn'){ const fn=next().v; const open=peek(); if(open.t==='op'&&open.v==='('){ next(); const a=parseExpr(); if(peek().t==='op'&&peek().v===')') next(); return callFn(fn,a); } return callFn(fn,atom()); }
+      return null;
+    }
+    function parseTerm(){
+      let a=atom();
+      for(;;){
+        const t=peek();
+        if(t.t==='op'&&t.v==='^'){ next(); const b=atom(); a=cpow(a,b.re); continue; }
+        if(t.t==='op'&&t.v==='*'){ next(); a=mul(a,atom()); continue; }
+        if(t.t==='op'&&t.v==='/'){ next(); a=div(a,atom()); continue; }
+        if(t.t==='op'&&t.v==='('){ a=mul(a,atom()); continue; }
+        if(t.t==='i'||t.t==='num'||t.t==='fn'){ a=mul(a,atom()); continue; }
+        break;
+      }
+      return a;
+    }
+    function parseExpr(){ let a=parseTerm(); while(peek().t==='op'&&(peek().v==='+'||peek().v==='-')){ const op=next().v; const b=parseTerm(); a=op==='+'?C(a.re+b.re,a.im+b.im):C(a.re-b.re,a.im-b.im); } return a; }
+    const r=parseExpr(); return (peek().t==='end')?r:null;
+  }
+  cplxStr(z){
+    if(!isFinite(z.re)||!isFinite(z.im)) return 'Math ERROR';
+    if(Math.abs(z.im)<1e-10) return this.fmtNum(z.re);
+    const re=Math.abs(z.re)<1e-10?0:z.re, im=Math.abs(z.im)<1e-10?0:z.im;
+    const rs=re===0?'':this.fmtNum(re);
+    const sign=im<0?' − ':' + ';
+    const is=Math.abs(im)===1?'i':this.fmtNum(Math.abs(im))+'·i';
+    const angle=Math.atan2(im,re)*180/Math.PI;
+    return (rs?rs:'')+sign+is+' ≈ '+this.fmtNum(Math.hypot(z.re,z.im))+'∠'+this.fmtNum(angle)+'°';
+  }
+
+  openStatOverlay(){ this.closeAllOverlays(); this.dom.statOverlay.classList.remove('hidden'); this.dom.statData.focus(); }
+  calcStats(){
+    const text=this.dom.statData.value.trim();
+    if(!text){ this.dom.statResult.textContent=''; return; }
+    const lines=text.split(/\n/).map(l=>l.split(/[\s,;]+/).map(Number).filter(v=>!isNaN(v)));
+    const x=lines.filter(l=>l.length>=1).map(l=>l[0]).filter(v=>isFinite(v));
+    const yLines=lines.filter(l=>l.length>=2);
+    const y=yLines.map(l=>l[1]).filter(v=>isFinite(v));
+    const useXY=y.length>=2;
+    if(x.length===0){ this.dom.statResult.textContent='No valid data'; return; }
+    const n=x.length;
+    const sorted=[...x].sort((a,b)=>a-b);
+    const sum=x.reduce((a,b)=>a+b,0), sum2=x.reduce((a,b)=>a+b*b,0);
+    const mean=sum/n;
+    const sortedM=[...sorted];
+    const med=n%2?sortedM[(n-1)/2]:(sortedM[n/2-1]+sortedM[n/2])/2;
+    const popSD=Math.sqrt(sum2/n-mean*mean), sD=n>1?Math.sqrt((sum2-mean*mean*n)/(n-1)):0;
+    let out='n = '+n+'\nx̄ = '+this.fmtNum(mean)+'\nΣx = '+this.fmtNum(sum)+'\nΣx² = '+this.fmtNum(sum2)
+      +'\nmin = '+this.fmtNum(sorted[0])+'\nmax = '+this.fmtNum(sorted[n-1])+'\nMed = '+this.fmtNum(med)
+      +'\nσ = '+this.fmtNum(popSD)+'\ns = '+this.fmtNum(sD);
+    if(useXY && y.length>=2){
+      const m=Math.min(x.length,y.length);
+      const sx=x.slice(0,m).reduce((a,b)=>a+b,0), sy=y.slice(0,m).reduce((a,b)=>a+b,0);
+      const sxy=x.slice(0,m).reduce((a,b,i)=>a+b*y[i],0), sx2=x.slice(0,m).reduce((a,b)=>a+b*b,0), sy2=y.slice(0,m).reduce((a,b,i)=>a+b*b,0);
+      const denom=m*sx2-sx*sx;
+      const b_num=m*sxy-sx*sy;
+      const b=denom!==0?b_num/denom:NaN;
+      const a_val=(sy-b*sx)/m;
+      const r2_num=m*sxy-sx*sy, r2_den=Math.sqrt((m*sx2-sx*sx)*(m*sy2-sy*sy));
+      const r=r2_den!==0?r2_num/r2_den:NaN;
+      out+='\n\n─── Linear Regression (y = a + bx) ───\nb = '+this.fmtNum(b)+'\na = '+this.fmtNum(a_val)+'\ny = '+this.fmtNum(a_val)+' + '+this.fmtNum(b)+'·x\nr = '+this.fmtNum(r);
+    }
+    this.dom.statResult.textContent=out;
+  }
+
+  setMatDims(n){
+    if(n===this.matDims) return;
+    if(this.dom.matGridA.querySelectorAll('.mat-cell').length){
+      try{ const [a,b]=this.readMat(); this.matA=a; this.matB=b; }catch(e){}
+    }
+    this.matDims=n;
+    [[this.dom.m2t,2],[this.dom.m3t,3],[this.dom.m4t,4]].forEach(([t,nn])=>t.classList.toggle('active',nn===n));
+    this.renderMatGrids();
+  }
+  renderMatGrids(){
+    const D=this.dom, n=this.matDims;
+    D.matDimsLabel.textContent='Matrix A · Matrix B ('+n+'×'+n+')';
+    const cols='repeat('+n+',1fr)';
+    D.matGridA.style.gridTemplateColumns=cols; D.matGridB.style.gridTemplateColumns=cols;
+    const readMat=(el)=>{
+      const m=[]; el.querySelectorAll('.mat-cell').forEach(inp=>{ const k=inp.dataset.key; const r=+k[2], c=+k[3]; if(!m[r])m[r]=[]; m[r][c]=inp.value===''?NaN:parseFloat(inp.value); }); return m;
+    };
+    const build=(el,pref)=>{
+      let h=''; for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+        const kr=pref+r, kc=pref+c;
+        const old=(pref==='A'?this.matA:this.matB)[r]&&((pref==='A'?this.matA:this.matB)[r][c]);
+        h+='<input class="mat-cell" data-key="'+pref+r+c+'" inputmode="decimal" placeholder="'+pref+(r+1)+(c+1)+'" value="'+(old!==undefined&&old===old?old:'')+'">';
+      } el.innerHTML=h;
+    };
+    if(this.matA.length!==n) this.matA=Array.from({length:n},()=>Array(n).fill(NaN));
+    if(this.matB.length!==n) this.matB=Array.from({length:n},()=>Array(n).fill(NaN));
+    build(D.matGridA,'A'); build(D.matGridB,'B');
+  }
+  readMat(){
+    const n=this.matDims, A=[], B=[];
+    const readArr=(el,pref)=>{
+      const m=Array.from({length:n},()=>Array(n).fill(0));
+      el.querySelectorAll('.mat-cell').forEach(inp=>{ const k=inp.dataset.key; const r=+k[2], c=+k[3]; m[r][c]=inp.value===''?0:parseFloat(inp.value)||0; }); return m;
+    };
+    return [readArr(this.dom.matGridA,'A'), readArr(this.dom.matGridB,'B')];
+  }
+  determinant(a){
+    const n=a.length; let A=a.map(r=>r.slice()), s=1;
+    for(let i=0;i<n;i++){ let p=i; for(let j=i+1;j<n;j++) if(Math.abs(A[j][i])>Math.abs(A[p][i])) p=j;
+      if(Math.abs(A[p][i])<1e-18) return 0; if(p!==i){ [A[i],A[p]]=[A[p],A[i]]; s=-s; }
+      for(let j=i+1;j<n;j++){ const f=A[j][i]/A[i][i]; for(let k=i;k<n;k++) A[j][k]-=f*A[i][k]; } }
+    let d=s; for(let i=0;i<n;i++) d*=A[i][i]; return d;
+  }
+  inverse(a){
+    const n=a.length; const M=a.map((r,i)=>r.slice().concat(Array.from({length:n},(_,j)=>i===j?1:0)));
+    for(let i=0;i<n;i++){ let p=i; for(let j=i+1;j<n;j++) if(Math.abs(M[j][i])>Math.abs(M[p][i])) p=j;
+      if(Math.abs(M[p][i])<1e-18) return null; if(p!==i){ const t=M[p]; M[p]=M[i]; M[i]=t; }
+      const piv=M[i][i]; for(let k=0;k<2*n;k++) M[i][k]/=piv;
+      for(let j=0;j<n;j++) if(j!==i){ const f=M[j][i]; for(let k=0;k<2*n;k++) M[j][k]-=f*M[i][k]; } }
+    return M.map(r=>r.slice(n));
+  }
+  multMat(a,b){
+    const n=a.length, m=b[0].length, p=b.length;
+    const c=Array.from({length:n},()=>Array(m).fill(0));
+    for(let i=0;i<n;i++) for(let j=0;j<m;j++) for(let k=0;k<p;k++) c[i][j]+=a[i][k]*b[k][j];
+    return c;
+  }
+  transpose(a){ const n=a.length,m=a[0].length; return Array.from({length:m},(_,j)=>Array.from({length:n},(_,i)=>a[i][j])); }
+  fmtMat(m){ return m.map(r=>r.map(v=>this.fmtNum(v)).join('\t')).join('\n'); }
+  computeMat(){
+    const [A,B]=this.readMat(), n=this.matDims;
+    const op=this.matOp;
+    const D=this.dom.matResult;
+    try{
+      if(op==='detA') D.textContent='det(A) = '+this.fmtNum(this.determinant(A));
+      else if(op==='detB') D.textContent='det(B) = '+this.fmtNum(this.determinant(B));
+      else if(op==='invA'){ const I=this.inverse(A); D.textContent=I?'A⁻¹ =\n'+this.fmtMat(I):'Singular matrix (no inverse)'; }
+      else if(op==='trA') D.textContent='Aᵀ =\n'+this.fmtMat(this.transpose(A));
+      else if(op==='mult') D.textContent='A × B =\n'+this.fmtMat(this.multMat(A,B));
+      else if(op==='add') D.textContent='A + B =\n'+this.fmtMat(A.map((r,i)=>r.map((v,j)=>v+B[i][j])));
+      else if(op==='sub') D.textContent='A − B =\n'+this.fmtMat(A.map((r,i)=>r.map((v,j)=>v-B[i][j])));
+      else D.textContent='Select an operation';
+    }catch(e){ D.textContent='Error: '+e.message; }
+  }
+
+  openVctOverlay(){ this.closeAllOverlays(); this.dom.vctOverlay.classList.remove('hidden'); this.syncVctDims(); }
+  syncVctDims(){ const d3=this.vctDims===3; [this.dom.vax3,this.dom.vbx3].forEach(e=>e.parentElement.style.display=d3?'':'none'); }
+  computeVct(){
+    const D=this.dom;
+    const p=n=>{ const v=parseFloat(n); return isNaN(v)?0:v; };
+    const ax=p(D.vax1.value),ay=p(D.vax2.value),az=p(D.vax3.value);
+    const bx=p(D.vbx1.value),by=p(D.vbx2.value),bz=p(D.vbx3.value);
+    const A=[ax,ay,...(this.vctDims===3?[az]:[])], B=[bx,by,...(this.vctDims===3?[bz]:[])];
+    const op=this.vctOp;
+    let out='';
+    if(op==='dot'){ const zz=this.vctDims===3?A[2]*B[2]:0; out='A · B = '+this.fmtNum(A[0]*B[0]+A[1]*B[1]+zz); }
+    else if(op==='cross'){
+      if(this.vctDims!==3) out='cross requires 3D'; else out='A × B = ('+this.fmtNum(ay*bz-az*by)+', '+this.fmtNum(az*bx-ax*bz)+', '+this.fmtNum(ax*by-ay*bx)+')';
+    } else if(op==='add') out='A + B = ('+A.map((v,i)=>this.fmtNum(v+B[i])).join(', ')+')';
+    else if(op==='sub') out='A − B = ('+A.map((v,i)=>this.fmtNum(v-B[i])).join(', ')+')';
+    else if(op==='magA') out='|A| = '+this.fmtNum(Math.hypot(...A));
+    else if(op==='magB') out='|B| = '+this.fmtNum(Math.hypot(...B));
+    else if(op==='ang'){
+      const dot=A.reduce((s,v,i)=>s+v*B[i],0), m1=Math.hypot(...A), m2=Math.hypot(...B);
+      out=(m1===0||m2===0)?'Zero vector':('∠ = '+this.fmtNum(Math.acos(dot/(m1*m2))*180/Math.PI)+'°');
+    }
+    D.vctResult.textContent=out;
+  }
+
+  openIneqOverlay(){ this.closeAllOverlays(); this.dom.ineqOverlay.classList.remove('hidden'); }
+  solveLinearIneq(){
+    const a=parseFloat(this.dom.iqA.value)||0, b=parseFloat(this.dom.iqB.value)||0, sign=this.dom.iqSign.value;
+    const D=this.dom.iqLinearResult;
+    const holds=(bInstance)=>{
+      if(bInstance>0) return sign==='>'||sign==='≥';
+      if(bInstance<0) return sign==='<'||sign==='≤';
+      return sign==='≥'||sign==='≤';
+    };
+    if(a===0){ D.textContent=holds(b)?'All real numbers':'No solution'; return; }
+    const swap={ '>':'<','<':'>','≥':'≤','≤':'≥' };
+    const sym=a>0?sign:(swap[sign]||sign);
+    D.textContent='x '+sym+' '+this.fmtNum(-b/a);
+  }
+  solveQuadIneq(){
+    const a=parseFloat(this.dom.iqA2.value)||0, b=parseFloat(this.dom.iqB2.value)||0, c=parseFloat(this.dom.iqC2.value)||0, sign=this.dom.iqSign2.value;
+    const D=this.dom.iqQuadResult;
+    const f=n=>this.fmtNum(n), le=sign==='≥', lt=sign==='>', leq=sign==='≤', ltl=sign==='<';
+    if(a===0){ D.textContent='a must be ≠ 0 (use linear mode)'; return; }
+    const disc=b*b-4*a*c;
+    if(disc<0){
+      const up=(a>0&&(lt||le))||(a<0&&(ltl||leq));
+      D.textContent=up?'All real numbers':'No solution';
+      return;
+    }
+    const sq=Math.sqrt(disc);
+    let r1=(-b-sq)/(2*a), r2=(-b+sq)/(2*a);
+    if(r1>r2){ const t=r1; r1=r2; r2=t; }
+    const precise=Math.abs(disc)<1e-9;
+    const x0=-b/(2*a);
+    if(precise){
+      if((sign==='>'&&a<0)||(sign==='<'&&a>0)){ D.textContent='No solution'; return; }
+      if((sign==='≥'&&a>0)||(sign==='≤'&&a<0)){ D.textContent='All real numbers'; return; }
+      if((sign==='>'&&a>0)||(sign==='<'&&a<0)){ D.textContent='x ≠ '+f(x0)+'  (i.e. x < '+f(x0)+' or x > '+f(x0)+')'; return; }
+      D.textContent='x = '+f(x0);
+      return;
+    }
+    let out;
+    if(a>0){
+      if(lt) out='x < '+f(r1)+'  or  x > '+f(r2);
+      else if(le) out='x ≤ '+f(r1)+'  or  x ≥ '+f(r2);
+      else if(ltl) out=f(r1)+' < x < '+f(r2);
+      else out=f(r1)+' ≤ x ≤ '+f(r2);
+    } else {
+      if(lt) out=f(r1)+' < x < '+f(r2);
+      else if(le) out=f(r1)+' ≤ x ≤ '+f(r2);
+      else if(ltl) out='x < '+f(r1)+'  or  x > '+f(r2);
+      else out='x ≤ '+f(r1)+'  or  x ≥ '+f(r2);
+    }
+    D.textContent=out;
+  }
+
+  openRatioOverlay(){ this.closeAllOverlays(); this.dom.ratioOverlay.classList.remove('hidden'); }
+  solveRatio(){
+    const D=this.dom.ratioResult;
+    const v=[this.dom.rA,this.dom.rB,this.dom.rC,this.dom.rD];
+    const blanks=v.filter(inp=>inp.value.trim()==='').length;
+    const empty=v.findIndex(inp=>inp.value.trim()==='');
+    if(blanks===0){ const n=v.map(inp=>parseFloat(inp.value));
+      D.textContent=(Math.abs(n[0]/n[1]-n[2]/n[3])<1e-9)?'True':'False'; return; }
+    if(blanks!==1){ D.textContent='Leave exactly one box blank'; return; }
+    const n=v.map(inp=>inp.value.trim()===''?1:parseFloat(inp.value));
+    let result;
+    if(empty===0) result=n[1]*n[2]/n[3];
+    else if(empty===1) result=n[0]*n[3]/n[2];
+    else if(empty===2) result=n[0]*n[3]/n[1];
+    else result=n[1]*n[2]/n[0];
+    v[empty].value=this.fmtNum(result);
+    D.textContent=[...'ABCD'][empty]+' = '+this.fmtNum(result);
+  }
+
+  openDistOverlay(){ this.closeAllOverlays(); this.dom.distOverlay.classList.remove('hidden'); }
+  calcDist(){
+    const mu=parseFloat(this.dom.dMu.value)||0;
+    let sigma=parseFloat(this.dom.dSigma.value); if(!isFinite(sigma)) sigma=1;
+    const x=parseFloat(this.dom.dX.value)||0;
+    const D=this.dom.distResult;
+    if(sigma<=0){ D.textContent='σ must be > 0'; return; }
+    const z=(x-mu)/sigma;
+    const p=0.5*this.erfc(-z/Math.SQRT2);
+    D.textContent='z = '+this.fmtNum(z)+'\nP(X ≤ x) = '+this.fmtNum(p)+'\nP(X > x) = '+this.fmtNum(1-p)+'\n'+(p<0.5?'< 0.5 (below mean)':p>0.5?'> 0.5 (above mean)':'= 0.5 (at mean)');
+  }
+  erfc(x){ const t=1/(1+0.3275911*Math.abs(x)), p=t*(0.254829592+t*(-0.284496736+t*(1.421413741+t*(-1.453152027+t*1.061405429)))); return x<0?2-p*Math.exp(-x*x):p*Math.exp(-x*x); }
+
+  openSheetOverlay(){
+    this.closeAllOverlays();
+    if(!this.sheet||!this.sheet.length) this.buildSheetGrid();
+    this.dom.sheetOverlay.classList.remove('hidden');
+    this.sheetRecalc(); this.sheetShowAll();
+  }
+  buildSheetGrid(){
+    const D=this.dom, cols='ADEF', rows=12, colL='ABCDEF';
+    this.sheet=[];
+    let h='<div class="sheet-head"></div>';
+    for(let c=0;c<6;c++) h+='<div class="sheet-head">'+colL[c]+'</div>';
+    for(let r=0;r<rows;r++){
+      h+='<div class="sheet-label">'+(r+1)+'</div>';
+      for(let c=0;c<6;c++){
+        const k=colL[c]+(r+1);
+        h+='<input id="s-'+k+'" class="sheet-cell" data-key="'+k+'" autocomplete="off">';
+        this.sheet.push({key:k,col:c,row:r,text:'',val:0,inputEl:null});
+      }
+    }
+    D.sheetGrid.innerHTML=h;
+    this.sheet.forEach(cell=>{
+      cell.inputEl=D.sheetGrid.querySelector('#s-'+cell.key);
+      cell.inputEl.addEventListener('input',()=>{ cell.text=cell.inputEl.value; this.sheetRecalc(); this.sheetShowAll(); });
+      cell.inputEl.addEventListener('focus',()=>{ if(cell.text.startsWith('=')) cell.inputEl.value=cell.text; });
+      cell.inputEl.addEventListener('blur',()=>this.sheetShowCell(cell));
+    });
+  }
+  sheetCell(c,r){ return this.sheet[r*6+c]; }
+  sheetRefVal(ref){
+    const col=ref.charCodeAt(0)-65, row=parseInt(ref.slice(1))-1;
+    if(col<0||col>5||row<0||row>11) return 0;
+    return this.sheetCell(col,row).val||0;
+  }
+  sheetRecalc(){
+    for(let iter=0;iter<20;iter++){
+      this.sheet.forEach(cell=>{
+        const t=cell.text.trim();
+        if(!t){ cell.val=0; cell.error=false; return; }
+        if(!t.startsWith('=')){ const v=parseFloat(t); cell.val=isNaN(v)?0:v; cell.error=false; return; }
+        let expr=t.slice(1).toUpperCase().replace(/\s+/g,'');
+        expr=expr.replace(/SUM\(([A-F][0-9]{1,2}):([A-F][0-9]{1,2})\)/g,(_,a,b)=>{
+          const ac=a.charCodeAt(0)-65, ar=parseInt(a.slice(1))-1, bc=b.charCodeAt(0)-65, br=parseInt(b.slice(1))-1;
+          let sum=0; for(let r=Math.min(ar,br);r<=Math.max(ar,br);r++) for(let c=Math.min(ac,bc);c<=Math.max(ac,bc);c++) sum+=this.sheetCell(c,r).val||0;
+          return '('+sum+')';
+        });
+        expr=expr.replace(/\b([A-F])([0-9]{1,2})\b/g,(_,col,row)=>this.sheetRefVal(col+row));
+        if(!/^[0-9A-Za-z.+\-*/()]*$/.test(expr)){ cell.val=0; cell.error=true; return; }
+        try{ const v=new Function('return ('+expr+')')(); cell.val=typeof v==='number'?v:0; cell.error=!isFinite(v); }
+        catch(e){ cell.val=0; cell.error=true; }
+      });
+    }
+  }
+  sheetShowAll(){ this.sheet.forEach(cell=>this.sheetShowCell(cell)); }
+  sheetShowCell(cell){
+    if(!cell.inputEl) return;
+    if(document.activeElement===cell.inputEl) return;
+    if(cell.error) cell.inputEl.value='Error';
+    else if(cell.text!=='') cell.inputEl.value=this.fmtNum(cell.val);
+  }
+
   compileGraphFn(expr){
     let t=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/\^/g,'**')
       .replace(/√\(/g,'sqrt(').replace(/∛\(/g,'cbrt(')
@@ -2768,6 +3429,20 @@ class ClassWizEngine {
     let val=(this._showingExact&&this.exactForm)?this.exactForm:this.result;
     if (typeof val==='string'&&/^-?\d+(\.\d+)?$/.test(val)) val=this.groupDigits(val);
     this.dom.resultDisplay.innerHTML=this.renderMathStr(val);
+    if (this.activeMode==='BASE' && typeof this.baseVal==='number' && isFinite(this.baseVal)){
+      const b=this.baseVal, neg=b<0, ai=Math.abs(b), int=Math.round(ai), isInt=Math.abs(ai-int)<Math.max(1e-9,Math.abs(ai)*1e-10);
+      let extra;
+      if (isInt){
+        const sgn=neg?'−':'';
+        extra='DEC: '+this.groupDigits((neg?'-':'')+int)
+          +'&nbsp;&nbsp;HEX: '+sgn+int.toString(16).toUpperCase()
+          +'&nbsp;&nbsp;OCT: '+sgn+int.toString(8)
+          +'&nbsp;&nbsp;BIN: '+sgn+int.toString(2);
+      } else {
+        extra='DEC: '+this.fmtNum(b)+' (HEX/OCT/BIN apply to integers)';
+      }
+      this.dom.resultDisplay.innerHTML+='<br><span style="font-size:10px;color:var(--amber-300);font-weight:600;letter-spacing:.3px">'+extra+'</span>';
+    }
     this.dom.indShift.classList.toggle('active',this.shiftActive);
     this.dom.indAlpha.classList.toggle('active',this.alphaActive);
     this.dom.indAngle.textContent=this.angleModes[this.angleIndex];
