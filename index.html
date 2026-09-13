@@ -127,8 +127,10 @@ body {
 }
 .lcd-display-frame.power-off { background:#111411; box-shadow:inset 0 0 20px rgba(0,0,0,.95); }
 .lcd-glare {
-  position:absolute; top:0; left:-50%; width:200%; height:100%; pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.02) 42%,rgba(255,255,255,.08) 50%,rgba(255,255,255,0) 58%);
+  position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9;
+  background:linear-gradient(-25deg,transparent 0 38%,rgba(255,255,255,.16) 47% 53%,transparent 62% 100%),
+             linear-gradient(120deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.06) 50%,rgba(255,255,255,0) 60%);
+  opacity:.8; mix-blend-mode:screen;
 }
 
 .lcd-ribbon {
@@ -208,16 +210,48 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
 .ov-close { background:none; border:none; color:var(--slate-400); cursor:pointer; padding:0 4px; font-size:13px; }
 .ov-hint { font-size:10px; color:var(--slate-400); }
 
-.menu-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; flex:1; overflow-y:auto; }
+.menu-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; flex:1; overflow-y:auto; align-content:start; }
 .menu-item {
-  padding:4px; border-radius:4px; border:1px solid var(--slate-700);
-  background:var(--slate-800); cursor:pointer; text-align:center;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  position:relative; padding:4px 2px; border-radius:6px; border:1px solid var(--slate-700);
+  background:var(--slate-800); cursor:pointer; text-align:center; min-height:52px;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:1px;
+  transition:border-color .15s ease,background .15s ease,transform .05s ease,box-shadow .15s ease;
 }
 .menu-item:hover { background:var(--slate-700); }
-.menu-item .mi-t { font-weight:700; color:var(--cyan-400); font-size:10px; }
-.menu-item .mi-s { font-size:8px; color:var(--slate-400); }
-.menu-item-selected { background:var(--slate-900) !important; color:var(--cyan-400) !important; border-color:var(--cyan-400) !important; }
+.menu-item:active { transform:translateY(1px); }
+.mi-badge {
+  position:absolute; top:2px; left:3px; font-size:7px; font-weight:800; color:var(--slate-500);
+  background:rgba(2,6,23,.5); border:1px solid var(--slate-700); padding:0 3px; border-radius:3px;
+}
+.mi-ico {
+  width:22px; height:20px; border-radius:5px; display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:800; color:#e2e8f0; margin-top:2px;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 60%),var(--mode-tint);
+  border:1px solid rgba(255,255,255,.18); border-bottom:2px solid rgba(0,0,0,.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+}
+.menu-item .mi-t { font-weight:700; color:var(--cyan-400); font-size:9px; }
+.menu-item .mi-s { font-size:7.5px; color:var(--slate-400); line-height:1; }
+.menu-item-selected {
+  background:var(--slate-900) !important; color:var(--cyan-400) !important;
+  border-color:rgba(34,211,238,.8) !important;
+  box-shadow:0 0 0 1px rgba(34,211,238,.5),0 0 12px rgba(34,211,238,.25);
+}
+.menu-item-selected .mi-ico { border-color:rgba(34,211,238,.8); }
+.menu-item-selected .mi-t { color:var(--amber-300) !important; }
+
+[data-mode-id="COMP"]  { --mode-tint:#0ea5e9; }
+[data-mode-id="CMPLX"] { --mode-tint:#6366f1; }
+[data-mode-id="BASE"]  { --mode-tint:#059669; }
+[data-mode-id="MAT"]   { --mode-tint:#3b82f6; }
+[data-mode-id="VCT"]   { --mode-tint:#7c3aed; }
+[data-mode-id="STAT"]  { --mode-tint:#2dd4bf; }
+[data-mode-id="DIST"]  { --mode-tint:#f59e0b; }
+[data-mode-id="SHEET"] { --mode-tint:#10b981; }
+[data-mode-id="TBL"]   { --mode-tint:#ef4444; }
+[data-mode-id="EQN"]   { --mode-tint:#8b5cf6; }
+[data-mode-id="INEQ"]  { --mode-tint:#f97316; }
+[data-mode-id="RATIO"] { --mode-tint:#ec4899; }
 
 .tabs { display:flex; gap:4px; font-size:8px; border-bottom:1px solid var(--slate-800); padding-bottom:4px; margin-bottom:4px; }
 .tab { padding:2px 4px; border-radius:4px; background:var(--slate-900); color:var(--slate-400); cursor:pointer; border:none; }
@@ -279,12 +313,24 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
   display:flex; align-items:center; justify-content:center; white-space:nowrap;
   border:none; cursor:pointer; color:#f3f4f6;
   outline:none; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none;
-  transition:transform .04s cubic-bezier(.4,0,.2,1),box-shadow .04s ease;
-  box-shadow:0 3px 0 #090b10,0 4px 6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2);
+  border-radius:7px;
+  border-bottom:3px solid rgba(3,6,14,.85);
+  border-top:1px solid rgba(255,255,255,.3);
+  box-shadow:0 1px 4px 1px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14);
+  transition:transform .04s cubic-bezier(.4,0,.2,1),box-shadow .04s ease,filter .08s ease,border-color .04s ease;
 }
+.btn-casio::before {
+  content:""; position:absolute; left:8%; width:84%; height:55%; top:1px; pointer-events:none;
+  border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0));
+  mix-blend-mode:soft-light; opacity:.65;
+}
+.btn-casio:hover { filter:saturate(1.12) brightness(1.05); }
 .btn-casio:active, .btn-casio.active-press {
   transform:translateY(2px);
-  box-shadow:0 1px 0 #090b10,0 2px 3px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);
+  border-bottom-width:1px; border-top-width:0; border-top-color:rgba(255,255,255,.08);
+  box-shadow:0 0 2px 1px rgba(0,0,0,.6),inset 0 2px 3px rgba(0,0,0,.4);
+  filter:brightness(.92);
 }
 .btn-casio-num { height:36px; }
 
@@ -295,12 +341,12 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
 .t9 { font-size:9px; } .t10 { font-size:10px; } .txs { font-size:12px; } .tlg { font-size:18px; } .txl { font-size:20px; }
 .c-rose { color:var(--rose-400); } .c-amber { color:var(--amber-400); }
 
-.btn-grey-dark { background:linear-gradient(180deg,#374151 0%,#1f2937 100%); color:#f3f4f6; }
-.btn-white     { background:linear-gradient(180deg,#fff 0%,#cbd5e1 100%); color:#0f172a; }
-.btn-shift-gold{ background:linear-gradient(180deg,#d97706 0%,#78350f 100%); color:#fffbeb; }
-.btn-alpha-pink{ background:linear-gradient(180deg,#e11d48 0%,#881337 100%); color:#fff1f2; }
-.btn-primary-blue{ background:linear-gradient(180deg,#2563eb 0%,#1e3a8a 100%); color:#fff; }
-.btn-danger-red{ background:linear-gradient(180deg,#dc2626 0%,#7f1d1d 100%); color:#fff; }
+.btn-grey-dark { background:linear-gradient(180deg,#3d4656 0%,#19202d 100%); color:#f3f4f6; }
+.btn-white     { background:linear-gradient(180deg,#ffffff 0%,#c7d2e0 100%); color:#0f172a; }
+.btn-shift-gold{ background:linear-gradient(180deg,#e2840b 0%,#7a3d05 100%); color:#fffbeb; }
+.btn-alpha-pink{ background:linear-gradient(180deg,#e73c64 0%,#8e1437 100%); color:#fff1f2; }
+.btn-primary-blue{ background:linear-gradient(180deg,#3b82f6 0%,#1c3f9e 100%); color:#fff; }
+.btn-danger-red{ background:linear-gradient(180deg,#ef4444 0%,#7f1d1d 100%); color:#fff; }
 
 sub { font-size:.7em; } sup { font-size:.7em; }
 
@@ -409,18 +455,18 @@ sub { font-size:.7em; } sup { font-size:.7em; }
       <div id="menuOverlay" class="overlay hidden">
         <div class="ov-head"><span class="ov-title amber">MENU / SETUP</span><span class="ov-hint">Select a mode</span></div>
         <div id="menuGrid" class="menu-grid">
-          <button data-mode-id="COMP" class="menu-item menu-item-selected"><span class="mi-t">1:COMP</span><span class="mi-s">Calculate</span></button>
-          <button data-mode-id="CMPLX" class="menu-item"><span class="mi-t">2:CMPLX</span><span class="mi-s">Complex</span></button>
-          <button data-mode-id="BASE" class="menu-item"><span class="mi-t">3:BASE-N</span><span class="mi-s">Base-N</span></button>
-          <button data-mode-id="MAT" class="menu-item"><span class="mi-t">4:MATRIX</span><span class="mi-s">Matrix</span></button>
-          <button data-mode-id="VCT" class="menu-item"><span class="mi-t">5:VECTOR</span><span class="mi-s">Vector</span></button>
-          <button data-mode-id="STAT" class="menu-item"><span class="mi-t">6:STAT</span><span class="mi-s">Statistics</span></button>
-          <button data-mode-id="DIST" class="menu-item"><span class="mi-t">7:DIST</span><span class="mi-s">Distribution</span></button>
-          <button data-mode-id="SHEET" class="menu-item"><span class="mi-t">8:SPREAD</span><span class="mi-s">Spreadsheet</span></button>
-          <button data-mode-id="TBL" class="menu-item"><span class="mi-t">9:TABLE</span><span class="mi-s">Table</span></button>
-          <button data-mode-id="EQN" class="menu-item"><span class="mi-t">A:EQN</span><span class="mi-s">Equation</span></button>
-          <button data-mode-id="INEQ" class="menu-item"><span class="mi-t">B:INEQ</span><span class="mi-s">Inequality</span></button>
-          <button data-mode-id="RATIO" class="menu-item"><span class="mi-t">C:RATIO</span><span class="mi-s">Ratio</span></button>
+          <button data-mode-id="COMP" class="menu-item menu-item-selected"><span class="mi-badge">1</span><span class="mi-ico">ƒx</span><span class="mi-t">COMP</span><span class="mi-s">Calculate</span></button>
+          <button data-mode-id="CMPLX" class="menu-item"><span class="mi-badge">2</span><span class="mi-ico">i</span><span class="mi-t">CMPLX</span><span class="mi-s">Complex</span></button>
+          <button data-mode-id="BASE" class="menu-item"><span class="mi-badge">3</span><span class="mi-ico">boh</span><span class="mi-t">BASE-N</span><span class="mi-s">Base-N</span></button>
+          <button data-mode-id="MAT" class="menu-item"><span class="mi-badge">4</span><span class="mi-ico">▦</span><span class="mi-t">MATRIX</span><span class="mi-s">Matrix</span></button>
+          <button data-mode-id="VCT" class="menu-item"><span class="mi-badge">5</span><span class="mi-ico">→</span><span class="mi-t">VECTOR</span><span class="mi-s">Vector</span></button>
+          <button data-mode-id="STAT" class="menu-item"><span class="mi-badge">6</span><span class="mi-ico">∑</span><span class="mi-t">STAT</span><span class="mi-s">Statistics</span></button>
+          <button data-mode-id="DIST" class="menu-item"><span class="mi-badge">7</span><span class="mi-ico">σ</span><span class="mi-t">DIST</span><span class="mi-s">Distribution</span></button>
+          <button data-mode-id="SHEET" class="menu-item"><span class="mi-badge">8</span><span class="mi-ico">⊞</span><span class="mi-t">SPREAD</span><span class="mi-s">Spreadsheet</span></button>
+          <button data-mode-id="TBL" class="menu-item"><span class="mi-badge">9</span><span class="mi-ico">≡</span><span class="mi-t">TABLE</span><span class="mi-s">Table</span></button>
+          <button data-mode-id="EQN" class="menu-item"><span class="mi-badge">A</span><span class="mi-ico">x=</span><span class="mi-t">EQN</span><span class="mi-s">Equation</span></button>
+          <button data-mode-id="INEQ" class="menu-item"><span class="mi-badge">B</span><span class="mi-ico">≠</span><span class="mi-t">INEQ</span><span class="mi-s">Inequality</span></button>
+          <button data-mode-id="RATIO" class="menu-item"><span class="mi-badge">C</span><span class="mi-ico">a:b</span><span class="mi-t">RATIO</span><span class="mi-s">Ratio</span></button>
         </div>
       </div>
 
@@ -901,7 +947,10 @@ class ClassWizEngine {
       case 'ALPHA': this.alphaActive=!this.alphaActive; this.shiftActive=false; break;
       case 'MENU':
         if (isShift) this.angleIndex=(this.angleIndex+1)%this.angleModes.length;
-        else this.dom.menuOverlay.classList.toggle('hidden');
+        else {
+          this.dom.menuOverlay.classList.toggle('hidden');
+          if (!this.dom.menuOverlay.classList.contains('hidden')) this.updateMenuSelection();
+        }
         break;
       case 'ON': this.expression=""; this.cursorPos=0; this.result="0"; this.closeAllOverlays(); break;
       case 'AC':
@@ -1004,6 +1053,11 @@ class ClassWizEngine {
     const t=map[key];
     if (t){ const v=parseFloat(this.result)||parseFloat(this.lastAnswer)||0; this.variables[t]=v; this.result=`${v} ➔ ${t}`; }
     else this.result="Invalid Variable";
+  }
+
+  updateMenuSelection(){
+    this.dom.menuGrid.querySelectorAll('.menu-item').forEach(b=>
+      b.classList.toggle('menu-item-selected',b.getAttribute('data-mode-id')===this.activeMode));
   }
 
   openConstOverlay(){ this.renderConstCategory(0); this.dom.constOverlay.classList.remove('hidden'); }
