@@ -297,8 +297,156 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
 .qr-hint { font-size:9px; color:var(--cyan-400); font-weight:700; margin-top:5px; min-height:11px; word-break:break-all; text-align:center; }
 .qr-caption { font-size:8px; color:var(--slate-400); margin-top:2px; }
 
+/* ---------- All-in-one app modules (overlays) ---------- */
+.app-overlay {
+  position:fixed; inset:0; z-index:9500;
+  background:var(--slate-950); color:var(--slate-100);
+  display:flex; flex-direction:column;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+.app-head {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-bottom:1px solid var(--slate-800);
+  background:rgba(15,23,42,.55);
+}
+.app-title { font-weight:800; font-size:13px; letter-spacing:.4px; }
+.app-title.amber { color:var(--amber-400); }
+.app-title.cyan { color:var(--cyan-400); }
+.app-title.rose { color:var(--pink-300); }
+.app-title.violet { color:#a78bfa; }
+.app-close {
+  margin-left:auto; background:var(--slate-800); border:1px solid var(--slate-700);
+  color:var(--slate-300); border-radius:6px; width:28px; height:28px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px;
+}
+.app-close:hover { background:var(--slate-700); color:#fff; }
+.app-body { flex:1; overflow-y:auto; padding:12px 14px 28px; -webkit-overflow-scrolling:touch; }
+.app-hint { font-size:10px; color:var(--slate-500); margin-top:6px; line-height:1.5; }
+.app-empty { color:var(--slate-500); font-style:italic; text-align:center; padding:16px 0; font-size:11px; }
+
+/* --- Graph module --- */
+.graph-wrap { display:flex; flex-direction:column; gap:8px; }
+.graph-input-row { display:flex; gap:6px; align-items:center; }
+.graph-fn-input {
+  flex:1; min-width:0; background:var(--slate-900); border:1px solid var(--slate-700);
+  color:var(--cyan-400); border-radius:6px; padding:8px 10px; font-size:13px; font-family:inherit;
+  outline:none;
+}
+.graph-fn-input:focus { border-color:rgba(34,211,238,.6); box-shadow:0 0 0 2px rgba(34,211,238,.15); }
+.graph-btn {
+  background:var(--slate-800); border:1px solid var(--slate-700); color:var(--slate-200);
+  border-radius:6px; padding:8px 12px; font-size:12px; font-weight:700; cursor:pointer;
+}
+.graph-btn:hover { background:var(--slate-700); }
+.graph-btn.accent { background:var(--amber-500); border-color:rgba(245,158,11,.55); color:#1c1917; }
+.graph-presets { display:flex; gap:5px; flex-wrap:wrap; }
+.graph-chip {
+  background:var(--slate-900); border:1px solid var(--slate-700); color:var(--slate-300);
+  border-radius:999px; padding:3px 10px; font-size:10px; font-family:inherit; cursor:pointer;
+}
+.graph-chip:hover { color:var(--cyan-400); border-color:rgba(34,211,238,.5); }
+.graph-stage {
+  position:relative; background:#0b1526; border:1px solid var(--slate-700);
+  border-radius:10px; height:min(46vh,420px); overflow:hidden; touch-action:none; cursor:grab;
+}
+.graph-stage:active { cursor:grabbing; }
+.graph-stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.graph-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:11px; }
+.graph-tool {
+  background:var(--slate-800); border:1px solid var(--slate-700); color:var(--slate-200);
+  border-radius:6px; padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; min-width:34px;
+}
+.graph-tool:hover { background:var(--slate-700); }
+.graph-tool.active { background:var(--amber-400); border-color:rgba(245,158,11,.6); color:#1c1917; }
+.graph-readout { font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace; font-size:12px; color:var(--amber-300); }
+
+/* --- Periodic table module --- */
+.chem-toolbar { display:flex; gap:6px; align-items:center; margin-bottom:10px; }
+.chem-search {
+  flex:1; min-width:0; background:var(--slate-900); border:1px solid var(--slate-700);
+  color:var(--pink-300); border-radius:6px; padding:8px 10px; font-size:12px; outline:none;
+}
+.chem-search:focus { border-color:rgba(244,114,182,.6); }
+.ptable { display:grid; grid-template-columns:repeat(18,minmax(0,1fr)); gap:2px; }
+.pcell {
+  aspect-ratio:18/14; border-radius:3px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:#0f172a; cursor:pointer; font-weight:700; font-size:9px; line-height:1; position:relative; padding:1px;
+  border:1px solid rgba(255,255,255,.28);
+}
+.pcell .pn { position:absolute; top:1px; left:2px; font-size:5.5px; font-weight:700; opacity:.8; }
+.pcell .pm { position:absolute; bottom:1px; right:2px; font-size:5px; font-weight:700; opacity:.8; }
+.pcell .sym { font-size:9.5px; font-weight:800; }
+.pcell:hover { filter:brightness(1.2); transform:translateY(-1px); }
+.pcell.sel { outline:2px solid var(--amber-400); z-index:1; }
+.pcell.hide { display:none; }
+.pcell.blank { background:transparent !important; border:none; cursor:default; }
+.pcell.blank:hover { filter:none; transform:none; }
+.pcat-alkali{background:#f87171}.pcat-alkaline{background:#fbbf24}.pcat-trans{background:#f59e0b}
+.pcat-post{background:#a3e635}.pcat-metalloid{background:#34d399}.pcat-nonmetal{background:#22d3ee}
+.pcat-halogen{background:#60a5fa}.pcat-noble{background:#a78bfa}.pcat-lanth{background:#fb7185}
+.pcat-actinide{background:#c084fc}.pcat-unknown{background:#94a3b8}
+.chem-detail {
+  margin-top:10px; border:1px solid var(--slate-700); border-radius:8px;
+  background:var(--slate-900); padding:10px; display:flex; gap:12px; align-items:center;
+}
+.chem-detail .big-sym {
+  font-size:20px; font-weight:800; width:46px; height:46px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto; color:#0f172a;
+}
+.chem-detail .d-name { font-size:13px; font-weight:800; color:var(--slate-100); }
+.chem-detail .d-row { font-size:11px; color:var(--slate-300); margin-top:2px; }
+.chem-detail .d-row b { color:var(--amber-300); }
+.molar-wrap { margin-top:10px; border:1px solid var(--slate-800); border-radius:8px; background:var(--slate-900); padding:10px; }
+.molar-label { font-size:9px; color:var(--slate-400); font-weight:700; letter-spacing:.5px; margin-bottom:4px; }
+.molar-input { width:100%; box-sizing:border-box; background:var(--slate-950); border:1px solid var(--slate-700); color:var(--cyan-400); border-radius:6px; padding:8px 10px; font-size:13px; outline:none; }
+.molar-input:focus { border-color:rgba(34,211,238,.6); }
+.molar-out { margin-top:8px; font-size:12px; color:var(--amber-300); font-weight:700; min-height:16px; }
+
+/* --- Solve module --- */
+.solve-tabs { display:flex; gap:5px; font-size:10px; border-bottom:1px solid var(--slate-800); padding-bottom:6px; margin-bottom:10px; }
+.solve-tab { padding:4px 10px; border-radius:6px; background:var(--slate-900); color:var(--slate-400); cursor:pointer; border:none; font-weight:600; }
+.solve-tab.active { background:var(--slate-800); color:var(--amber-300); font-weight:800; border:1px solid rgba(245,158,11,.3); }
+.solve-eq {
+  background:var(--slate-900); border:1px solid var(--slate-700); color:var(--cyan-400);
+  border-radius:6px; padding:8px 10px; font-size:13px; width:100%; box-sizing:border-box; outline:none;
+}
+.solve-eq:focus { border-color:rgba(34,211,238,.6); }
+.solve-grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.solve-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+.solve-grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+.solve-grid2.rev { margin-top:8px; }
+.solve-num {
+  background:var(--slate-900); border:1px solid var(--slate-700); color:var(--slate-100);
+  border-radius:6px; padding:8px 10px; font-size:12px; width:100%; box-sizing:border-box; outline:none; text-align:center;
+}
+.solve-num:focus { border-color:rgba(245,158,11,.6); }
+.solve-label { font-size:9px; color:var(--slate-400); font-weight:700; letter-spacing:.5px; margin:2px 0 4px; text-transform:uppercase; }
+.solve-result {
+  margin-top:10px; border:1px solid var(--slate-800); border-radius:8px; background:var(--slate-900);
+  padding:10px; font-size:12px; color:var(--amber-300); font-weight:700; white-space:pre-wrap; min-height:20px;
+}
+.solve-legend { font-size:10px; color:var(--slate-500); margin-top:8px; line-height:1.5; }
+.solve-legend b { color:var(--slate-300); }
+
+/* --- Formula browser --- */
+.frm-toolbar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.frm-tab { padding:4px 12px; border-radius:999px; background:var(--slate-900); color:var(--slate-400); cursor:pointer; border:1px solid var(--slate-800); font-size:10px; font-weight:600; }
+.frm-tab.active { background:var(--slate-800); color:var(--cyan-400); border-color:rgba(34,211,238,.5); font-weight:800; }
+.frm-search {
+  width:100%; box-sizing:border-box; background:var(--slate-900); border:1px solid var(--slate-700);
+  color:#a78bfa; border-radius:6px; padding:8px 10px; font-size:12px; outline:none; margin-bottom:10px;
+}
+.frm-search:focus { border-color:rgba(167,139,250,.6); }
+.frm-list { display:flex; flex-direction:column; gap:6px; }
+.frm-card { border:1px solid var(--slate-800); background:var(--slate-900); border-radius:8px; padding:8px 12px; }
+.frm-card h4 { margin:0 0 3px; font-size:11px; color:var(--cyan-400); font-weight:800; letter-spacing:.3px; }
+.frm-card .f { font-size:13.5px; color:var(--amber-300); font-family:"Cambria Math","STIX Two Math","Times New Roman",serif; margin:3px 0; line-height:1.5; }
+.frm-card .d { font-size:9.5px; color:var(--slate-400); line-height:1.45; }
+.frm-badge { display:inline-block; font-size:7.5px; font-weight:800; letter-spacing:.5px; color:var(--slate-400); border:1px solid var(--slate-700); border-radius:3px; padding:0 4px; margin-left:6px; vertical-align:1px; }
+
 /* ---------- Keypad ---------- */
 .keys { display:flex; flex-direction:column; gap:8px; }
+.grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
 .grid5 { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
 .grid6 { display:grid; grid-template-columns:repeat(6,1fr); gap:4px; }
 
@@ -341,7 +489,7 @@ sub { font-size:.62em; vertical-align:sub; line-height:1; }
 
 .fw-b { font-weight:700; } .fw-sb { font-weight:600; } .fw-eb { font-weight:800; }
 .t9 { font-size:9px; } .t10 { font-size:10px; } .txs { font-size:12px; } .tlg { font-size:18px; } .txl { font-size:20px; }
-.c-rose { color:var(--rose-400); } .c-amber { color:var(--amber-400); }
+.c-rose { color:var(--rose-400); } .c-amber { color:var(--amber-400); } .c-cyan { color:var(--cyan-400); }
 
 .btn-grey-dark { background:linear-gradient(180deg,#3d4656 0%,#19202d 100%); color:#f3f4f6; }
 .btn-white     { background:linear-gradient(180deg,#ffffff 0%,#c7d2e0 100%); color:#0f172a; }
@@ -639,6 +787,14 @@ sub { font-size:.7em; } sup { font-size:.7em; }
       <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="CONST" class="btn-casio btn-grey-dark rounded-md t9 fw-sb">CNST</button></div>
     </div>
 
+    <!-- All-in-one module launchers -->
+    <div class="grid4">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:var(--cyan-400);">GRAPH</span></div><button data-key="GRAPH" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-cyan">y=f(x)</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="SOLVE" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-amber">f(x)=0</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#f9a8d4;">CHEM</span></div><button data-key="CHEM" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-rose">⚗</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#a78bfa;">FORM</span></div><button data-key="FORM" class="btn-casio btn-grey-dark rounded-md t10 fw-b" style="color:#a78bfa;">ƒ(x)</button></div>
+    </div>
+
     <!-- Numeric block -->
     <div class="grid5">
       <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="7" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">7</button></div>
@@ -692,6 +848,150 @@ sub { font-size:.7em; } sup { font-size:.7em; }
   </div>
 </div>
 
+<!-- GRAPH (all-in-one module) -->
+<div id="graphOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title cyan">GRAPH · y = f(x)</span>
+    <button id="closeGraph" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="graph-wrap">
+      <div class="graph-input-row">
+        <input id="graphFnInput" class="graph-fn-input" placeholder="f(x) = sin(x), x^2-3x+2, 1/x …" autocomplete="off" spellcheck="false" enterkeyhint="go">
+        <button id="graphPlotBtn" class="graph-btn accent">Plot</button>
+      </div>
+      <div class="graph-presets" id="graphPresets">
+        <button class="graph-chip" data-fn="sin(x)">sin(x)</button>
+        <button class="graph-chip" data-fn="cos(x)">cos(x)</button>
+        <button class="graph-chip" data-fn="x^2-3x+2">quadratic</button>
+        <button class="graph-chip" data-fn="x^3">x³</button>
+        <button class="graph-chip" data-fn="1/x">1/x</button>
+        <button class="graph-chip" data-fn="sqrt(x)">√x</button>
+        <button class="graph-chip" data-fn="2^x">2^x</button>
+        <button class="graph-chip" data-fn="ln(x)">ln(x)</button>
+      </div>
+      <div class="graph-stage" id="graphStage">
+        <canvas id="graphCanvas"></canvas>
+      </div>
+      <div class="graph-toolbar">
+        <button class="graph-tool" id="gIn" title="Zoom in">+</button>
+        <button class="graph-tool" id="gOut" title="Zoom out">−</button>
+        <button class="graph-tool" id="gReset" title="Reset view">R</button>
+        <button class="graph-tool" id="gTrace" title="Trace along the curve">Trace</button>
+        <span id="graphReadout" class="graph-readout"></span>
+      </div>
+      <div class="app-hint">Drag to pan · pinch or scroll to zoom · Trace: drag across the curve or use ◀ ▶ keys. sin/cos/tan follow the current angle mode.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLVE (all-in-one module) -->
+<div id="solveOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title amber">SOLVE · equations &amp; systems</span>
+    <button id="closeSolve" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="solve-tabs">
+      <button class="solve-tab active" id="stEq">f(x)=0</button>
+      <button class="solve-tab" id="stSys2">2×2 System</button>
+      <button class="solve-tab" id="stSys3">3×3 System</button>
+    </div>
+    <div id="solvePaneEq">
+      <div class="solve-label">Equation in x</div>
+      <input id="solveEqInput" class="solve-eq" placeholder="x^2 - 5x + 6 = 0" autocomplete="off" spellcheck="false" enterkeyhint="go">
+      <div style="margin-top:8px;">
+        <button id="solveEqBtn" class="graph-btn accent">Solve</button>
+      </div>
+      <div id="solveEqResult" class="solve-result"></div>
+      <div class="solve-legend">Finds real roots of <b>f(x) = 0</b> across a wide scan. Forms like <b>x^2-5x+6=0</b>, <b>x^2=4</b> or <b>sin(x)=0.5</b> all work. Roots are verified by back-substitution.</div>
+    </div>
+    <div id="solvePaneSys2" class="hidden">
+      <div class="solve-label">a₁·x + b₁·y = c₁</div>
+      <div class="solve-grid3">
+        <input id="s2a1" class="solve-num" placeholder="a₁" inputmode="decimal" autocomplete="off">
+        <input id="s2b1" class="solve-num" placeholder="b₁" inputmode="decimal" autocomplete="off">
+        <input id="s2c1" class="solve-num" placeholder="c₁" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="solve-grid3 rev">
+        <input id="s2a2" class="solve-num" placeholder="a₂" inputmode="decimal" autocomplete="off">
+        <input id="s2b2" class="solve-num" placeholder="b₂" inputmode="decimal" autocomplete="off">
+        <input id="s2c2" class="solve-num" placeholder="c₂" inputmode="decimal" autocomplete="off">
+      </div>
+      <div style="margin-top:10px;">
+        <button id="solveSys2Btn" class="graph-btn accent">Solve 2×2</button>
+      </div>
+      <div id="solveSys2Result" class="solve-result"></div>
+      <div class="solve-legend">Cramer's rule. <b>det = 0</b> → parallel or coincident lines (no unique solution).</div>
+    </div>
+    <div id="solvePaneSys3" class="hidden">
+      <div class="solve-label">a·x + b·y + c·z = d</div>
+      <div class="solve-grid4">
+        <input id="s3a1" class="solve-num" placeholder="a₁" inputmode="decimal" autocomplete="off">
+        <input id="s3b1" class="solve-num" placeholder="b₁" inputmode="decimal" autocomplete="off">
+        <input id="s3c1" class="solve-num" placeholder="c₁" inputmode="decimal" autocomplete="off">
+        <input id="s3d1" class="solve-num" placeholder="d₁" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="solve-grid4 rev">
+        <input id="s3a2" class="solve-num" placeholder="a₂" inputmode="decimal" autocomplete="off">
+        <input id="s3b2" class="solve-num" placeholder="b₂" inputmode="decimal" autocomplete="off">
+        <input id="s3c2" class="solve-num" placeholder="c₂" inputmode="decimal" autocomplete="off">
+        <input id="s3d2" class="solve-num" placeholder="d₂" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="solve-grid4 rev">
+        <input id="s3a3" class="solve-num" placeholder="a₃" inputmode="decimal" autocomplete="off">
+        <input id="s3b3" class="solve-num" placeholder="b₃" inputmode="decimal" autocomplete="off">
+        <input id="s3c3" class="solve-num" placeholder="c₃" inputmode="decimal" autocomplete="off">
+        <input id="s3d3" class="solve-num" placeholder="d₃" inputmode="decimal" autocomplete="off">
+      </div>
+      <div style="margin-top:10px;">
+        <button id="solveSys3Btn" class="graph-btn accent">Solve 3×3</button>
+      </div>
+      <div id="solveSys3Result" class="solve-result"></div>
+      <div class="solve-legend">Gaussian elimination with partial pivoting. <b>det = 0</b> → no unique solution.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHEM (all-in-one module) -->
+<div id="chemOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title rose">CHEM · periodic table</span>
+    <button id="closeChem" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="chem-toolbar">
+      <input id="chemSearch" class="chem-search" placeholder="Search: iron, Fe, carbon, 6 …" autocomplete="off" spellcheck="false">
+      <button id="chemClearBtn" class="graph-btn">Clear</button>
+    </div>
+    <div id="ptableGrid" class="ptable"></div>
+    <div id="chemDetail" class="chem-detail hidden"></div>
+    <div class="molar-wrap">
+      <div class="molar-label">Molar mass from formula</div>
+      <input id="molarInput" class="molar-input" placeholder="H2O · C6H12O6 · Ca(OH)2" autocomplete="off" spellcheck="false">
+      <div id="molarOut" class="molar-out"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM (all-in-one module) -->
+<div id="formOverlay" class="app-overlay hidden">
+  <div class="app-head">
+    <span class="app-title violet">FORM · formula reference</span>
+    <button id="closeForm" class="app-close" title="Close (ESC)">✕</button>
+  </div>
+  <div class="app-body">
+    <div class="frm-toolbar">
+      <button class="frm-tab active" data-cat="all">All</button>
+      <button class="frm-tab" data-cat="Math">Math</button>
+      <button class="frm-tab" data-cat="Physics">Physics</button>
+      <button class="frm-tab" data-cat="Chemistry">Chemistry</button>
+    </div>
+    <input id="frmSearch" class="frm-search" placeholder="Search formulas…" autocomplete="off" spellcheck="false">
+    <div id="frmList" class="frm-list"></div>
+  </div>
+</div>
+
 <button id="installBtn" class="install-btn hidden" title="Install app">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
   <span id="ibLabel">Install</span>
@@ -710,6 +1010,114 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 </script>
 
 <script>
+const ELEMENTS=[
+[1,"H","Hydrogen",1.008],[2,"He","Helium",4.002602],[3,"Li","Lithium",6.94],[4,"Be","Beryllium",9.0121831],
+[5,"B","Boron",10.81],[6,"C","Carbon",12.011],[7,"N","Nitrogen",14.007],[8,"O","Oxygen",15.999],
+[9,"F","Fluorine",18.998403163],[10,"Ne","Neon",20.1797],[11,"Na","Sodium",22.98976928],
+[12,"Mg","Magnesium",24.305],[13,"Al","Aluminium",26.9815385],[14,"Si","Silicon",28.085],
+[15,"P","Phosphorus",30.973761998],[16,"S","Sulfur",32.06],[17,"Cl","Chlorine",35.45],
+[18,"Ar","Argon",39.948],[19,"K","Potassium",39.0983],[20,"Ca","Calcium",40.078],
+[21,"Sc","Scandium",44.955908],[22,"Ti","Titanium",47.867],[23,"V","Vanadium",50.9415],
+[24,"Cr","Chromium",51.9961],[25,"Mn","Manganese",54.938044],[26,"Fe","Iron",55.845],
+[27,"Co","Cobalt",58.933194],[28,"Ni","Nickel",58.6934],[29,"Cu","Copper",63.546],
+[30,"Zn","Zinc",65.38],[31,"Ga","Gallium",69.723],[32,"Ge","Germanium",72.63],
+[33,"As","Arsenic",74.921595],[34,"Se","Selenium",78.971],[35,"Br","Bromine",79.904],
+[36,"Kr","Krypton",83.798],[37,"Rb","Rubidium",85.4678],[38,"Sr","Strontium",87.62],
+[39,"Y","Yttrium",88.90584],[40,"Zr","Zirconium",91.224],[41,"Nb","Niobium",92.90637],
+[42,"Mo","Molybdenum",95.95],[43,"Tc","Technetium",98],[44,"Ru","Ruthenium",101.07],
+[45,"Rh","Rhodium",102.9055],[46,"Pd","Palladium",106.42],[47,"Ag","Silver",107.8682],
+[48,"Cd","Cadmium",112.414],[49,"In","Indium",114.818],[50,"Sn","Tin",118.71],
+[51,"Sb","Antimony",121.76],[52,"Te","Tellurium",127.6],[53,"I","Iodine",126.90447],
+[54,"Xe","Xenon",131.293],[55,"Cs","Cesium",132.90545196],[56,"Ba","Barium",137.327],
+[57,"La","Lanthanum",138.90547],[58,"Ce","Cerium",140.116],[59,"Pr","Praseodymium",140.90766],
+[60,"Nd","Neodymium",144.242],[61,"Pm","Promethium",145],[62,"Sm","Samarium",150.36],
+[63,"Eu","Europium",151.964],[64,"Gd","Gadolinium",157.25],[65,"Tb","Terbium",158.92535],
+[66,"Dy","Dysprosium",162.5],[67,"Ho","Holmium",164.93033],[68,"Er","Erbium",167.259],
+[69,"Tm","Thulium",168.93422],[70,"Yb","Ytterbium",173.045],[71,"Lu","Lutetium",174.9668],
+[72,"Hf","Hafnium",178.49],[73,"Ta","Tantalum",180.94788],[74,"W","Tungsten",183.84],
+[75,"Re","Rhenium",186.207],[76,"Os","Osmium",190.23],[77,"Ir","Iridium",192.217],
+[78,"Pt","Platinum",195.084],[79,"Au","Gold",196.966569],[80,"Hg","Mercury",200.592],
+[81,"Tl","Thallium",204.38],[82,"Pb","Lead",207.2],[83,"Bi","Bismuth",208.9804],
+[84,"Po","Polonium",209],[85,"At","Astatine",210],[86,"Rn","Radon",222],
+[87,"Fr","Francium",223],[88,"Ra","Radium",226],[89,"Ac","Actinium",227],
+[90,"Th","Thorium",232.0377],[91,"Pa","Protactinium",231.03588],[92,"U","Uranium",238.02891],
+[93,"Np","Neptunium",237],[94,"Pu","Plutonium",244],[95,"Am","Americium",243],
+[96,"Cm","Curium",247],[97,"Bk","Berkelium",247],[98,"Cf","Californium",251],
+[99,"Es","Einsteinium",252],[100,"Fm","Fermium",257],[101,"Md","Mendelevium",258],
+[102,"No","Nobelium",259],[103,"Lr","Lawrencium",266],[104,"Rf","Rutherfordium",267],
+[105,"Db","Dubnium",268],[106,"Sg","Seaborgium",269],[107,"Bh","Bohrium",270],
+[108,"Hs","Hassium",277],[109,"Mt","Meitnerium",278],[110,"Ds","Darmstadtium",281],
+[111,"Rg","Roentgenium",282],[112,"Cn","Copernicium",285],[113,"Nh","Nihonium",286],
+[114,"Fl","Flerovium",289],[115,"Mc","Moscovium",290],[116,"Lv","Livermorium",293],
+[117,"Ts","Tennessine",294],[118,"Og","Oganesson",294]
+];
+
+const FORMULAS=[
+{cat:"Math",t:"Quadratic formula",f:"x = (−b ± √(b² − 4ac)) ⁄ 2a",d:"Roots of ax² + bx + c = 0. Discriminant D = b² − 4ac."},
+{cat:"Math",t:"Pythagorean theorem",f:"a² + b² = c²",d:"Right triangle: c is the hypotenuse."},
+{cat:"Math",t:"Distance",f:"d = √((x₂ − x₁)² + (y₂ − y₁)²)",d:"Distance between two points on a plane."},
+{cat:"Math",t:"Midpoint",f:"M = ( (x₁+x₂)/2 , (y₁+y₂)/2 )",d:"Midpoint of a segment."},
+{cat:"Math",t:"Slope",f:"m = (y₂ − y₁) ⁄ (x₂ − x₁)",d:"Slope of the line through two points."},
+{cat:"Math",t:"Circle area",f:"A = πr²",d:"Area enclosed by a circle of radius r."},
+{cat:"Math",t:"Circumference",f:"C = 2πr",d:"Perimeter of a circle in degrees/radians mode agnostic."},
+{cat:"Math",t:"Rectangle area",f:"A = l × w",d:"Area of a rectangle."},
+{cat:"Math",t:"Triangle area",f:"A = ½ b h",d:"Area of a triangle with base b and height h."},
+{cat:"Math",t:"Trapezoid area",f:"A = ½ (a + b)h",d:"Area with parallel sides a, b and height h."},
+{cat:"Math",t:"Sphere volume",f:"V = ⁴⁄₃ π r³",d:"Volume of a sphere."},
+{cat:"Math",t:"Cylinder volume",f:"V = π r² h",d:"Volume of a cylinder."},
+{cat:"Math",t:"Cone volume",f:"V = ⅓ π r² h",d:"Volume of a cone."},
+{cat:"Math",t:"Arithmetic series",f:"Sₙ = n⁄2 (2a + (n−1)d)",d:"Sum of first n terms, first term a, common diff d."},
+{cat:"Math",t:"Geometric series",f:"Sₙ = a(1 − rⁿ) ⁄ (1 − r)",d:"Sum of n terms, ratio r ≠ 1."},
+{cat:"Math",t:"Trig identity",f:"sin²θ + cos²θ = 1",d:"Pythagorean identity for any angle θ."},
+{cat:"Math",t:"Law of sines",f:"sin A ⁄ a = sin B ⁄ b = sin C ⁄ c",d:"Sides a, b, c opposite angles A, B, C."},
+{cat:"Math",t:"Compound interest",f:"A = P(1 + r⁄n)^(nt)",d:"P principal, r annual rate, n compounds per year."},
+{cat:"Physics",t:"Newton's 2nd law",f:"F = m a",d:"Net force on a body."},
+{cat:"Physics",t:"Weight",f:"W = m g",d:"g ≈ 9.81 m/s² on Earth."},
+{cat:"Physics",t:"Kinetic energy",f:"KE = ½ m v²",d:"Energy of motion."},
+{cat:"Physics",t:"Potential energy",f:"PE = m g h",d:"Gravitational potential energy."},
+{cat:"Physics",t:"Work",f:"W = F d cos θ",d:"Work done by force F over distance d at angle θ."},
+{cat:"Physics",t:"Power",f:"P = W ⁄ t",d:"Work per unit time (watts)."},
+{cat:"Physics",t:"Momentum",f:"p = m v",d:"Linear momentum."},
+{cat:"Physics",t:"Speed",f:"v = d ⁄ t",d:"Average speed."},
+{cat:"Physics",t:"Kinematics",f:"v = u + a t",d:"Final velocity u→v with constant acceleration."},
+{cat:"Physics",t:"Kinematics",f:"s = u t + ½ a t²",d:"Displacement with constant acceleration."},
+{cat:"Physics",t:"Kinematics",f:"v² = u² + 2 a s",d:"Constant acceleration relation."},
+{cat:"Physics",t:"Newton's gravity",f:"F = G m₁m₂ ⁄ r²",d:"Gravitational attraction."},
+{cat:"Physics",t:"Ohm's law",f:"V = I R",d:"Voltage = current × resistance."},
+{cat:"Physics",t:"Electric power",f:"P = V I",d:"Electrical power."},
+{cat:"Physics",t:"Coulomb's law",f:"F = k q₁q₂ ⁄ r²",d:"Force between point charges."},
+{cat:"Physics",t:"Ideal gas law",f:"P V = n R T",d:"n moles at temperature T (Kelvin)."},
+{cat:"Physics",t:"Centripetal force",f:"F = m v² ⁄ r",d:"Force keeping circular motion."},
+{cat:"Physics",t:"Thin lens",f:"1⁄f = 1⁄u + 1⁄v",d:"Focal length f, object u, image v."},
+{cat:"Chemistry",t:"Moles",f:"n = m ⁄ M",d:"Mass m divided by molar mass M (g/mol)."},
+{cat:"Chemistry",t:"Particles",f:"N = n × Nₐ",d:"Nₐ = 6.022×10²³ mol⁻¹ (Avogadro)."},
+{cat:"Chemistry",t:"Concentration",f:"c = n ⁄ V",d:"Amount per litre of solution."},
+{cat:"Chemistry",t:"Dilution",f:"c₁V₁ = c₂V₂",d:"Dilute a stock solution."},
+{cat:"Chemistry",t:"Density",f:"ρ = m ⁄ V",d:"Mass per unit volume."},
+{cat:"Chemistry",t:"pH scale",f:"pH = −log₁₀[H⁺]",d:"Acidity; pOH = 14 − pH at 25 °C."},
+{cat:"Chemistry",t:"Percent yield",f:"% = (actual ⁄ theoretical) × 100",d:"Efficiency of a reaction."},
+{cat:"Chemistry",t:"Mass percent",f:"% = m(solute) ⁄ m(solution) × 100",d:"Composition of a solution."},
+{cat:"Chemistry",t:"Boyle's law",f:"P₁V₁ = P₂V₂",d:"Constant temperature, n constant."},
+{cat:"Chemistry",t:"Charles's law",f:"V₁ ⁄ T₁ = V₂ ⁄ T₂",d:"Constant pressure (T in Kelvin)."},
+{cat:"Chemistry",t:"Gay-Lussac",f:"P₁ ⁄ T₁ = P₂ ⁄ T₂",d:"Constant volume (T in Kelvin)."},
+{cat:"Chemistry",t:"Combined gas law",f:"P₁V₁ ⁄ T₁ = P₂V₂ ⁄ T₂",d:"All quantities changing."},
+{cat:"Chemistry",t:"Heat",f:"q = m c ΔT",d:"Heat gained/lost, c = specific heat."}
+];
+
+function elemCat(z){
+  if (z===1||z===6||z===7||z===8||z===15||z===16||z===34) return 'nonmetal';
+  if ([2,10,18,36,54,86,118].indexOf(z)>=0) return 'noble';
+  if ([9,17,35,53,117].indexOf(z)>=0) return 'halogen';
+  if ([3,11,19,37,55,87].indexOf(z)>=0) return 'alkali';
+  if ([4,12,20,38,56,88].indexOf(z)>=0) return 'alkaline';
+  if (z>=57&&z<=71) return 'lanth';
+  if (z>=89&&z<=103) return 'actinide';
+  if ([21,22,23,24,25,26,27,28,29,30,39,40,41,42,43,44,45,46,47,48,72,73,74,75,76,77,78,79,80,104,105,106,107,108,109,110,111,112].indexOf(z)>=0) return 'trans';
+  if ([5,14,32,33,51,52,85].indexOf(z)>=0) return 'metalloid';
+  if (z>=0) return 'post';
+}
+const CAT_LABEL={nonmetal:'Nonmetal',noble:'Noble gas',halogen:'Halogen',alkali:'Alkali metal',alkaline:'Alkaline earth',lanth:'Lanthanide',actinide:'Actinide',trans:'Transition metal',metalloid:'Metalloid',post:'Post-transition metal'};
+const CAT_COLOR={nonmetal:'#22d3ee',noble:'#a78bfa',halogen:'#60a5fa',alkali:'#f87171',alkaline:'#fbbf24',lanth:'#fb7185',actinide:'#c084fc',trans:'#f59e0b',metalloid:'#34d399',post:'#a3e635'};
 class ClassWizEngine {
   constructor() {
     this.expression = "";
@@ -727,6 +1135,15 @@ class ClassWizEngine {
     this.fractionDisplayMode = false;
     this.soundEnabled = true;
     this.variables = { A:0,B:0,C:0,D:0,E:0,F:0,x:0,y:0,z:0,M:0 };
+    this.periodic = ELEMENTS;
+    this.formulas = FORMULAS;
+    this.massTab = {};
+    ELEMENTS.forEach(e=>this.massTab[e[1]]=e[3]);
+    this.graphState = { fn:null, expr:'', cx:0, span:12, ymin:-6, ymax:6, trace:false, traceX:null };
+    this.solveTab = 0;
+    this.frmCat = 'all';
+    this.selZ = null;
+    this._graphRaf = false;
 
     this.constants = [
       [
@@ -852,7 +1269,29 @@ class ClassWizEngine {
       tblSlotStart:id('tblSlotStart'), tblSlotEnd:id('tblSlotEnd'), tblSlotStep:id('tblSlotStep'),
       tblGenerate:id('tblGenerate'), tableGrid:id('tableGrid'),
       dpadTrackpad:id('dpadTrackpad'), arrowUp:id('arrowUp'), arrowDown:id('arrowDown'),
-      arrowLeft:id('arrowLeft'), arrowRight:id('arrowRight')
+      arrowLeft:id('arrowLeft'), arrowRight:id('arrowRight'),
+      graphOverlay:id('graphOverlay'), closeGraph:id('closeGraph'),
+      graphFnInput:id('graphFnInput'), graphPlotBtn:id('graphPlotBtn'),
+      graphPresets:id('graphPresets'), graphStage:id('graphStage'),
+      graphCanvas:id('graphCanvas'), graphReadout:id('graphReadout'),
+      gIn:id('gIn'), gOut:id('gOut'), gReset:id('gReset'), gTrace:id('gTrace'),
+      solveOverlay:id('solveOverlay'), closeSolve:id('closeSolve'),
+      stEq:id('stEq'), stSys2:id('stSys2'), stSys3:id('stSys3'),
+      solvePaneEq:id('solvePaneEq'), solvePaneSys2:id('solvePaneSys2'), solvePaneSys3:id('solvePaneSys3'),
+      solveEqInput:id('solveEqInput'), solveEqBtn:id('solveEqBtn'), solveEqResult:id('solveEqResult'),
+      s2a1:id('s2a1'), s2b1:id('s2b1'), s2c1:id('s2c1'),
+      s2a2:id('s2a2'), s2b2:id('s2b2'), s2c2:id('s2c2'),
+      solveSys2Btn:id('solveSys2Btn'), solveSys2Result:id('solveSys2Result'),
+      s3a1:id('s3a1'), s3b1:id('s3b1'), s3c1:id('s3c1'), s3d1:id('s3d1'),
+      s3a2:id('s3a2'), s3b2:id('s3b2'), s3c2:id('s3c2'), s3d2:id('s3d2'),
+      s3a3:id('s3a3'), s3b3:id('s3b3'), s3c3:id('s3c3'), s3d3:id('s3d3'),
+      solveSys3Btn:id('solveSys3Btn'), solveSys3Result:id('solveSys3Result'),
+      chemOverlay:id('chemOverlay'), closeChem:id('closeChem'),
+      chemSearch:id('chemSearch'), chemClearBtn:id('chemClearBtn'),
+      ptableGrid:id('ptableGrid'), chemDetail:id('chemDetail'),
+      molarInput:id('molarInput'), molarOut:id('molarOut'),
+      formOverlay:id('formOverlay'), closeForm:id('closeForm'),
+      frmSearch:id('frmSearch'), frmList:id('frmList')
     };
   }
 
@@ -917,6 +1356,7 @@ class ClassWizEngine {
     this.dom.btnQrCalc.addEventListener('click',()=>{ this.qrMode='calc'; this.setQrTab('calc'); this.renderQrCode(); });
     this.dom.btnQrSearch.addEventListener('click',()=>{ this.qrMode='search'; this.setQrTab('search'); this.renderQrCode(); });
     this.dom.qrCanvas.addEventListener('click',()=>this.copyQrData());
+    this.bindModuleEvents();
     window.addEventListener('keydown',e=>this.handlePhysicalKeyboard(e));
     window.addEventListener('resize',()=>this.fitToScreen());
     window.addEventListener('orientationchange',()=>setTimeout(()=>this.fitToScreen(),250));
@@ -949,6 +1389,8 @@ class ClassWizEngine {
   animateButton(btn){ this.playKeySound(); btn.classList.add('active-press'); setTimeout(()=>btn.classList.remove('active-press'),100); }
 
   handlePhysicalKeyboard(e){
+    const t=e.target;
+    if (t && (t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable)) return;
     if (e.key>='0'&&e.key<='9') this.handleKeyPress(e.key);
     else if (e.key==='.') this.handleKeyPress('DOT');
     else if (e.key==='+') this.handleKeyPress('ADD');
@@ -1018,10 +1460,10 @@ class ClassWizEngine {
           this.cursorPos--;
         }
         break;
-      case 'LEFT': if (this.cursorPos>0) this.cursorPos--; break;
-      case 'RIGHT': if (this.cursorPos<this.expression.length) this.cursorPos++; break;
-      case 'UP': this.navigateHistory(-1); break;
-      case 'DOWN': this.navigateHistory(1); break;
+      case 'LEFT': if (!this.graphKey('LEFT')) { if (this.cursorPos>0) this.cursorPos--; } break;
+      case 'RIGHT': if (!this.graphKey('RIGHT')) { if (this.cursorPos<this.expression.length) this.cursorPos++; } break;
+      case 'UP': if (!this.graphKey('UP')) this.navigateHistory(-1); break;
+      case 'DOWN': if (!this.graphKey('DOWN')) this.navigateHistory(1); break;
       case 'OPTN': isShift?this.openQrCodeOverlay():this.openOptnMenu(); break;
       case 'CALC': isShift?this.solveEquation():this.evaluateExpression(); break;
       case 'INTEGRAL': this.insertToken(isShift?"d/dx(":"∫("); break;
@@ -1050,6 +1492,10 @@ class ClassWizEngine {
         else { this.variables.M += (parseFloat(this.result)||0); }
         break;
       case 'CONST': this.openConstOverlay(); break;
+      case 'GRAPH': this.openGraphOverlay(); break;
+      case 'SOLVE': this.openSolveOverlay(); break;
+      case 'CHEM': this.openChemOverlay(); break;
+      case 'FORM': this.openFormOverlay(); break;
       case '7': isShift?this.openConstOverlay():this.insertToken("7"); break;
       case '8': isShift?this.openConvOverlay():this.insertToken("8"); break;
       case '9': isShift?this.insertToken("("):this.insertToken("9"); break;
@@ -1074,7 +1520,8 @@ class ClassWizEngine {
   }
 
   closeAllOverlays(){
-    ['menuOverlay','optnOverlay','constOverlay','convOverlay','memoryOverlay','historyOverlay','qrOverlay','tableOverlay']
+    ['menuOverlay','optnOverlay','constOverlay','convOverlay','memoryOverlay','historyOverlay','qrOverlay','tableOverlay',
+     'graphOverlay','solveOverlay','chemOverlay','formOverlay']
       .forEach(k=>this.dom[k].classList.add('hidden'));
   }
 
@@ -1822,6 +2269,494 @@ class ClassWizEngine {
       }
       grid.innerHTML=html;
     } catch(e){ this.dom.tableGrid.innerHTML='<div class="tbl-empty">Cannot generate table</div>'; }
+  }
+
+  bindModuleEvents(){
+    const D=this.dom;
+    D.closeGraph.addEventListener('click',()=>{ D.graphOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeSolve.addEventListener('click',()=>{ D.solveOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeChem.addEventListener('click',()=>{ D.chemOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeForm.addEventListener('click',()=>{ D.formOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.graphPlotBtn.addEventListener('click',()=>this.plotGraph(D.graphFnInput.value));
+    D.graphFnInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); this.plotGraph(D.graphFnInput.value); } });
+    D.graphPresets.querySelectorAll('.graph-chip').forEach(ch=>{
+      ch.addEventListener('click',()=>{ D.graphFnInput.value=ch.getAttribute('data-fn'); this.plotGraph(ch.getAttribute('data-fn')); });
+    });
+    D.gIn.addEventListener('click',()=>this.graphZoom(1/1.4));
+    D.gOut.addEventListener('click',()=>this.graphZoom(1.4));
+    D.gReset.addEventListener('click',()=>{
+      this.graphState.cx=0; this.graphState.span=12; this.graphState.trace=false; this.graphState.traceX=null;
+      D.gTrace.classList.remove('active'); this.drawGraph();
+    });
+    D.gTrace.addEventListener('click',()=>this.setTrace(!this.graphState.trace));
+    this.initGraphStage();
+    const setSolve=idx=>{
+      this.solveTab=idx;
+      [D.stEq,D.stSys2,D.stSys3].forEach((t,i)=>t.classList.toggle('active',i===idx));
+      [D.solvePaneEq,D.solvePaneSys2,D.solvePaneSys3].forEach((p,i)=>p.classList.toggle('hidden',i!==idx));
+    };
+    D.stEq.addEventListener('click',()=>setSolve(0));
+    D.stSys2.addEventListener('click',()=>setSolve(1));
+    D.stSys3.addEventListener('click',()=>setSolve(2));
+    D.solveEqInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); this.runSolveEq(); } });
+    D.solveEqBtn.addEventListener('click',()=>this.runSolveEq());
+    D.solveSys2Btn.addEventListener('click',()=>this.runSolveSys2());
+    D.solveSys3Btn.addEventListener('click',()=>this.runSolveSys3());
+    D.chemSearch.addEventListener('input',()=>this.renderPeriodic(D.chemSearch.value));
+    D.chemClearBtn.addEventListener('click',()=>{ D.chemSearch.value=''; this.renderPeriodic(''); });
+    D.ptableGrid.addEventListener('click',e=>{
+      const t=e.target, cell=t.closest?t.closest('.pcell[data-z]'):null;
+      if(cell) this.selectElement(parseInt(cell.getAttribute('data-z')));
+    });
+    D.molarInput.addEventListener('input',()=>this.updateMolar());
+    D.frmSearch.addEventListener('input',()=>this.renderFormulas());
+    document.querySelectorAll('#formOverlay .frm-tab').forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        this.frmCat=tab.getAttribute('data-cat');
+        document.querySelectorAll('#formOverlay .frm-tab').forEach(t=>t.classList.toggle('active',t===tab));
+        this.renderFormulas();
+      });
+    });
+  }
+
+  compileGraphFn(expr){
+    let t=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/\^/g,'**')
+      .replace(/√\(/g,'sqrt(').replace(/∛\(/g,'cbrt(')
+      .replace(/sin⁻¹\(/g,'asin(').replace(/cos⁻¹\(/g,'acos(').replace(/tan⁻¹\(/g,'atan(')
+      .replace(/Abs\(/g,'abs(').replace(/³/g,'**3').replace(/²/g,'**2').replace(/⁻¹/g,'**-1')
+      .replace(/π/g,'('+Math.PI+')')
+      .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,'($1*10**($2))')
+      .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,'$1('+Math.E+')')
+      .replace(/(\d)(\(|[A-Za-z])/g,'$1*$2')
+      .replace(/\)\(/g,')*(').replace(/\)([A-Za-z])/g,')*$1');
+    ['A','B','C','D','E','F','M','y','z'].forEach(v=>{
+      t=t.replace(new RegExp('(?<![A-Za-z])'+v+'(?![A-Za-z])','g'),'('+this.variables[v]+')');
+    });
+    const R=this.angleModes[this.angleIndex]==='DEG'?Math.PI/180:(this.angleModes[this.angleIndex]==='GRAD'?Math.PI/200:1);
+    const pro='var sin=x=>Math.sin(x*'+R+'),cos=x=>Math.cos(x*'+R+'),tan=x=>Math.tan(x*'+R+'),asin=x=>Math.asin(x)/'+R+',acos=x=>Math.acos(x)/'+R+',atan=x=>Math.atan(x)/'+R+',sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp;';
+    return new Function('x','"use strict";'+pro+'return ('+t+');');
+  }
+
+  fmtNum(x){
+    if(typeof x!=='number'||!isFinite(x)) return '—';
+    if(Math.abs(x)<1e-9) return '0';
+    const a=Math.abs(x);
+    if(a>=1e13||a<1e-8) return x.toExponential(6).replace('e','×10^');
+    return String(parseFloat(x.toPrecision(8)));
+  }
+
+  niceStep(r){
+    if(!(r>0)) return 1;
+    const p=Math.pow(10,Math.floor(Math.log10(r)));
+    const d=r/p;
+    return (d<1.5?1:d<3?2:d<7?5:10)*p;
+  }
+
+  roundRoot(x){ return Math.abs(x)<1e-9?0:parseFloat(x.toPrecision(9)); }
+
+  openGraphOverlay(){
+    this.closeAllOverlays();
+    this.dom.graphOverlay.classList.remove('hidden');
+    let v=this.dom.graphFnInput.value||this.expression||'';
+    v=v.trim();
+    if(!v) this.dom.graphFnInput.value='x^2';
+    if(this.dom.graphFnInput.focus) this.dom.graphFnInput.focus();
+    this.plotGraph(this.dom.graphFnInput.value||'x^2');
+  }
+
+  plotGraph(expr){
+    expr=(expr||'').trim()||'x';
+    try{
+      this.graphState.fn=this.compileGraphFn(expr);
+      this.graphState.expr=expr;
+      this.graphState.cx=0; this.graphState.span=12; this.graphState.traceX=null;
+      this.graphState.trace=false; this.dom.gTrace.classList.remove('active');
+      this.drawGraph();
+    }catch(err){ this.dom.graphReadout.textContent='Cannot plot: '+this.dom.graphFnInput.value; }
+  }
+
+  drawGraph(){
+    const cv=this.dom.graphCanvas;
+    if(!cv||typeof cv.getContext!=='function') return;
+    const stage=this.dom.graphStage;
+    const dpr=window.devicePixelRatio||1;
+    const W=Math.max(2,stage.clientWidth||stage.offsetWidth||320);
+    const H=Math.max(2,stage.clientHeight||stage.offsetHeight||260);
+    if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){ try{ cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);}catch(err){} }
+    const ctx=cv.getContext('2d');
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0b1526'; ctx.fillRect(0,0,W,H);
+    const g=this.graphState, f=g.fn;
+    if(!f){ this.dom.graphReadout.textContent=''; return; }
+    if(!g.trace) this.dom.graphReadout.textContent='';
+    const x0=g.cx-g.span/2, x1=g.cx+g.span/2;
+    const N=Math.max(120,Math.floor(W/2)), ys=[];
+    for(let k=0;k<=N;k++){
+      const x=x0+g.span*k/N;
+      try{ const yv=f(x); if(isFinite(yv)&&Math.abs(yv)<1e7) ys.push(yv);}catch(err){}
+    }
+    let ymin=ys.length?Math.min.apply(null,ys):-5, ymax=ys.length?Math.max.apply(null,ys):5;
+    if(!isFinite(ymin)||!isFinite(ymax)){ ymin=-5; ymax=5; }
+    if(ymax-ymin<1e-9){ const m=(ymax+ymin)/2; ymin=m-0.5; ymax=m+0.5; }
+    const pad=(ymax-ymin)*0.15; ymin-=pad; ymax+=pad;
+    g.ymin=ymin; g.ymax=ymax;
+    const px=x=>(x-x0)*(W/g.span), py=y=>(ymax-y)*(H/(ymax-ymin));
+    const xStep=this.niceStep(g.span/3), yStep=this.niceStep((ymax-ymin)/3);
+    ctx.lineWidth=1; ctx.strokeStyle='rgba(51,65,85,.65)';
+    ctx.beginPath();
+    for(let x=Math.ceil(x0/xStep)*xStep;x<=x1;x+=xStep){ const a=px(x); if(a<-2||a>W+2)continue; ctx.moveTo(a,0); ctx.lineTo(a,H); }
+    for(let y=Math.ceil(ymin/yStep)*yStep;y<=ymax;y+=yStep){ const b=py(y); if(b<-2||b>H+2)continue; ctx.moveTo(0,b); ctx.lineTo(W,b); }
+    ctx.stroke();
+    const axX=px(0), axY=py(0);
+    ctx.strokeStyle='rgba(103,232,249,.35)';
+    ctx.beginPath();
+    if(axX>-2&&axX<W+2){ ctx.moveTo(axX,0); ctx.lineTo(axX,H); }
+    if(axY>-2&&axY<H+2){ ctx.moveTo(0,axY); ctx.lineTo(W,axY); }
+    ctx.stroke();
+    ctx.fillStyle='#64748b'; ctx.font='8px sans-serif';
+    for(let x=Math.ceil(x0/xStep)*xStep;x<=x1;x+=xStep){
+      const a=px(x); if(a<-2||a>W+2||Math.abs(x)<1e-9) continue;
+      ctx.fillText(this.fmtNum(x),a+2,axY-2<=8?axY+8:axY-2);
+    }
+    ctx.lineWidth=2; ctx.strokeStyle='#22d3ee'; ctx.shadowColor='rgba(34,211,238,.5)'; ctx.shadowBlur=6;
+    const dx=g.span/W; let pen=false;
+    ctx.beginPath();
+    for(let i=0;i<=W;i++){
+      const x=x0+dx*i; let y;
+      try{ y=f(x); }catch(err){ pen=false; continue; }
+      if(!isFinite(y)||Math.abs(y)>1e7){ pen=false; continue; }
+      const xx=px(x), yy=py(y);
+      if(!isFinite(yy)){ pen=false; continue; }
+      if(!pen){ ctx.moveTo(xx,yy); pen=true; }
+      else ctx.lineTo(xx,yy);
+    }
+    ctx.stroke(); ctx.shadowBlur=0;
+    if(g.trace&&g.traceX!=null){
+      const tx=g.traceX; let ty;
+      try{ ty=f(tx); }catch(err){ ty=NaN; }
+      if(isFinite(ty)){
+        const xp=px(tx), yp=py(ty);
+        ctx.strokeStyle='rgba(251,191,36,.8)'; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.moveTo(xp,0); ctx.lineTo(xp,H); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(xp,yp,4,0,Math.PI*2); ctx.fill();
+        this.dom.graphReadout.textContent='x = '+this.fmtNum(tx)+'    y = '+this.fmtNum(ty);
+      } else this.dom.graphReadout.textContent='x = '+this.fmtNum(tx)+'    y = undefined';
+    }
+  }
+
+  graphZoom(f,focusX){
+    const g=this.graphState, fn=g.fn;
+    if(!fn){ return; }
+    const x0=g.cx-g.span/2;
+    const c=(focusX!=null&&isFinite(focusX))?focusX:g.cx;
+    const frac=(c-x0)/g.span;
+    g.span=Math.min(1e9,Math.max(1e-6,g.span*f));
+    g.cx=c-frac*g.span+g.span/2;
+    this.drawGraph();
+  }
+
+  setTrace(on){
+    const g=this.graphState;
+    g.trace=on;
+    if(on&&g.traceX==null) g.traceX=g.cx;
+    this.dom.gTrace.classList.toggle('active',on);
+    this.drawGraph();
+  }
+
+  graphKey(key){
+    try{
+      if(this.dom.graphOverlay.classList.contains&&this.dom.graphOverlay.classList.contains('hidden')) return false;
+    }catch(err){ return false; }
+    const g=this.graphState, f=g.fn;
+    if(!f) return false;
+    if(key==='UP'){ this.graphZoom(1/1.4); return true; }
+    if(key==='DOWN'){ this.graphZoom(1.4); return true; }
+    if(key==='LEFT'||key==='RIGHT'){
+      if(!g.trace) return true;
+      const dx=g.span*0.05;
+      const nx=g.traceX==null?g.cx:g.traceX+(key==='RIGHT'?dx:-dx);
+      const halo=g.span/2;
+      g.traceX=Math.min(g.cx+halo,Math.max(g.cx-halo,nx));
+      this.drawGraph(); return true;
+    }
+    return false;
+  }
+
+  initGraphStage(){
+    const stage=this.dom.graphStage;
+    const g=this.graphState;
+    const pointers={};
+    let lastDist=0, panning=false, pStart=null;
+    const W=()=>stage.clientWidth||stage.offsetWidth||320;
+    const rect=()=>{ try{ return stage.getBoundingClientRect(); }catch(err){ return {left:0,top:0,width:W(),height:300}; } };
+    const toX=cx=>{ const r=rect(); return g.cx-g.span/2+((cx-r.left)/W())*g.span; };
+    const redraw=()=>{
+      if(this._graphRaf) return;
+      this._graphRaf=true;
+      const raf=window.requestAnimationFrame||(cb=>setTimeout(cb,16));
+      raf(()=>{ this._graphRaf=false; this.drawGraph(); });
+    };
+    stage.addEventListener('pointerdown',e=>{
+      pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+      if(Object.keys(pointers).length===1){ panning=true; pStart={x:e.clientX,pf:toX(e.clientX)}; }
+      if(Object.keys(pointers).length===2){
+        const p=Object.keys(pointers).map(k=>pointers[k]);
+        lastDist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y); pStart=null;
+      }
+    });
+    stage.addEventListener('pointermove',e=>{
+      pointers[e.pointerId]=pointers[e.pointerId]||{x:e.clientX,y:e.clientY};
+      pointers[e.pointerId].x=e.clientX; pointers[e.pointerId].y=e.clientY;
+      const p=Object.keys(pointers).map(k=>pointers[k]);
+      if(p.length===2&&lastDist>0){
+        const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);
+        if(d>0) this.graphZoom(lastDist/d,toX((p[0].x+p[1].x)/2));
+        lastDist=d; return;
+      }
+      if(p.length===1){
+        if(g.trace){ g.traceX=toX(e.clientX); redraw(); return; }
+        if(panning&&pStart){
+          const pxU=W()/g.span;
+          g.cx=pStart.pf-(e.clientX-pStart.x)/pxU;
+          redraw();
+        }
+      }
+    });
+    stage.addEventListener('pointerup',e=>{
+      delete pointers[e.pointerId];
+      if(Object.keys(pointers).length<2) lastDist=0;
+      if(Object.keys(pointers).length===1){
+        const rest=Object.keys(pointers)[0], p=pointers[rest];
+        if(g.trace){ g.traceX=toX(p.x); this.drawGraph(); }
+      }
+      if(panning){ panning=false; pStart=null; }
+    });
+    stage.addEventListener('pointercancel',()=>{ for(const k in pointers) delete pointers[k]; panning=false; lastDist=0; });
+    stage.addEventListener('wheel',e=>{
+      e.preventDefault();
+      const c=toX(e.clientX);
+      this.graphZoom(e.deltaY>0?1.2:1/1.2,c);
+    },{passive:false});
+  }
+
+  /* ---------- SOLVE module ---------- */
+  openSolveOverlay(){
+    this.closeAllOverlays();
+    this.dom.solveOverlay.classList.remove('hidden');
+    if(!this.dom.solveEqInput.value) this.dom.solveEqInput.value=this.expression||'';
+  }
+
+  solveEq(expr){
+    expr=(expr||'').trim();
+    if(!expr) return {error:'Enter an equation.'};
+    let lhs=expr, rhs='0';
+    const eqIdx=expr.indexOf('=');
+    if(eqIdx>=0){ lhs=expr.slice(0,eqIdx); rhs=expr.slice(eqIdx+1); }
+    if(!lhs.trim()) return {error:'Enter an expression in x.'};
+    let Fl,Fr;
+    try{
+      Fl=this.compileGraphFn(lhs.trim());
+      Fr=rhs.trim()?this.compileGraphFn(rhs.trim()):()=>0;
+    }catch(err){ return {error:'Syntax error in "'+lhs.trim()+' = '+rhs.trim()+'"'}; }
+    const F=x=>Fl(x)-Fr(x);
+    const seen=[];
+    for(let s=-50;s<=50+1e-9;s+=0.5){
+      let x=s, ok=false;
+      for(let i=0;i<80;i++){
+        let fx;
+        try{ fx=F(x); }catch(err){ break; }
+        if(!isFinite(fx)) break;
+        if(Math.abs(fx)<1e-9){ seen.push(this.roundRoot(x)); ok=true; break; }
+        const h=1e-6*(1+Math.abs(x));
+        let df=NaN;
+        try{ df=(F(x+h)-F(x-h))/(2*h); }catch(err){}
+        if(!isFinite(df)||Math.abs(df)<1e-14) break;
+        const nx=x-fx/df;
+        if(!isFinite(nx)) break;
+        if(Math.abs(nx-x)<1e-12){ const r=this.roundRoot(nx); if(Math.abs(F(r))<1e-8){ seen.push(r); } ok=true; break; }
+        x=nx;
+      }
+    }
+    const roots=[];
+    seen.forEach(x=>{ if(roots.every(q=>Math.abs(q-x)>1e-5)) roots.push(x); });
+    roots.sort((a,b)=>a-b);
+    return roots.slice(0,12).map(x=>({x,f:F(x)}));
+  }
+
+  runSolveEq(){
+    const expr=(this.dom.solveEqInput.value||'').trim()||(this.expression||'');
+    this.dom.solveEqInput.value=expr;
+    const roots=this.solveEq(expr);
+    const out=this.dom.solveEqResult;
+    if(roots.error){ out.textContent=roots.error; return; }
+    if(!roots.length){ out.textContent='No real solutions found.'; return; }
+    out.textContent=roots.map(r=>'x ≈ '+this.fmtNum(r.x)).join('\n')+'\n('+roots.length+' real root'+(roots.length>1?'s':'')+')';
+  }
+
+  solveSystem2(a1,b1,c1,a2,b2,c2){
+    const det=a1*b2-a2*b1;
+    if(Math.abs(det)<1e-12) return {error:'No unique solution (det = 0)'};
+    const x=(c1*b2-c2*b1)/det, y=(a1*c2-a2*c1)/det;
+    return {x:this.roundRoot(x),y:this.roundRoot(y),det};
+  }
+
+  solveSystem3(rows){
+    const M=rows.map(r=>r.slice()), n=rows.length===3?3:rows.length;
+    for(let col=0;col<n;col++){
+      let piv=col;
+      for(let r=col+1;r<n;r++) if(Math.abs(M[r][col])>Math.abs(M[piv][col])) piv=r;
+      if(Math.abs(M[piv][col])<1e-12) return {error:'No unique solution (det = 0)'};
+      const tmp=M[col]; M[col]=M[piv]; M[piv]=tmp;
+      for(let r=col+1;r<n;r++){
+        const f=M[r][col]/M[col][col];
+        for(let c=col;c<=n;c++) M[r][c]-=f*M[col][c];
+      }
+    }
+    const x=new Array(n);
+    for(let r=n-1;r>=0;r--){
+      let s=M[r][n];
+      for(let c=r+1;c<n;c++) s-=M[r][c]*x[c];
+      x[r]=s/M[r][r];
+    }
+    const v=x.map(r=>this.roundRoot(r));
+    if(n===2) return {x:v[0],y:v[1]};
+    if(n===3) return {x:v[0],y:v[1],z:v[2]};
+    return v;
+  }
+
+  runSolveSys2(){
+    const get=id=>parseFloat(this.dom[id].value);
+    const v=[get('s2a1'),get('s2b1'),get('s2c1'),get('s2a2'),get('s2b2'),get('s2c2')];
+    if(v.some(n=>!isFinite(n))){ this.dom.solveSys2Result.textContent='Enter all six coefficients.'; return; }
+    const r=this.solveSystem2.apply(this,v);
+    this.dom.solveSys2Result.textContent=r.error?r.error:('x = '+r.x+'\ny = '+r.y);
+  }
+
+  runSolveSys3(){
+    const get=id=>parseFloat(this.dom[id].value);
+    const ids=['s3a1','s3b1','s3c1','s3d1','s3a2','s3b2','s3c2','s3d2','s3a3','s3b3','s3c3','s3d3'];
+    const v=ids.map(id=>get(id));
+    if(v.some(n=>!isFinite(n))){ this.dom.solveSys3Result.textContent='Enter all twelve values.'; return; }
+    const rows=[v.slice(0,4),v.slice(4,8),v.slice(8,12)];
+    const r=this.solveSystem3(rows);
+    this.dom.solveSys3Result.textContent=r.error?r.error:('x = '+r.x+'\ny = '+r.y+'\nz = '+r.z);
+  }
+
+  /* ---------- CHEM module ---------- */
+  openChemOverlay(){
+    this.closeAllOverlays();
+    this.dom.chemOverlay.classList.remove('hidden');
+    this.renderPeriodic(this.dom.chemSearch.value);
+  }
+
+  renderPeriodic(q){
+    const S=this.periodic, grid=this.dom.ptableGrid;
+    const pos=z=>{
+      if(z===1) return [0,0];
+      if(z===2) return [0,17];
+      if(z>=3&&z<=10){ const r={3:1,4:2,5:13,6:14,7:15,8:16,9:17,10:18}[z]; return [1,r-1]; }
+      if(z>=11&&z<=18){ const r={11:1,12:2,13:13,14:14,15:15,16:16,17:17,18:18}[z]; return [2,r-1]; }
+      if(z>=19&&z<=36){ return [3,z<=30?z-19:z-31+12]; }
+      if(z>=37&&z<=54){ return [4,z<=48?z-37:z-49+12]; }
+      if(z>=55&&z<=56){ return [5,z-55]; }
+      if(z>=72&&z<=86){ return [5,z-72+3]; }
+      if(z>=57&&z<=71){ return [7,z-57+2]; }
+      if(z>=87&&z<=88){ return [6,z-87]; }
+      if(z>=104&&z<=118){ return [6,z-104+3]; }
+      if(z>=89&&z<=103){ return [8,z-89+2]; }
+      return [0,0];
+    };
+    const gridZ=[];
+    for(let r=0;r<9;r++) gridZ.push(new Array(18).fill(null));
+    S.forEach(e=>{ const p=pos(e[0]); gridZ[p[0]][p[1]]=e; });
+    const hq=(q||'').trim().toLowerCase();
+    const show=new Set();
+    if(hq) S.forEach(e=>{ if(String(e[0])===hq||String(e[0]).indexOf(hq)===0||e[1].toLowerCase().indexOf(hq)===0||e[2].toLowerCase().indexOf(hq)>=0) show.add(e[0]); });
+    let html='';
+    const selZ=this.selZ;
+    for(let r=0;r<9;r++){
+      for(let c=0;c<18;c++){
+        const e=gridZ[r][c];
+        if(!e){ html+='<div class="pcell blank"></div>'; continue; }
+        const cat=elemCat(e[0]), hide=!!hq&&!show.has(e[0]);
+        html+='<div class="pcell pcat-'+cat+(hide?' hide':'')+(selZ===e[0]?' sel':'')+'" data-z="'+e[0]+'">'
+          +'<span class="pn">'+e[0]+'</span><span class="sym">'+e[1]+'</span><span class="pm">'+e[3]+'</span></div>';
+      }
+    }
+    grid.innerHTML=html;
+    if(hq&&!show.size) this.dom.chemDetail.innerHTML='<div class="app-empty">No element matches.</div>';
+  }
+
+  selectElement(z){
+    this.selZ=z;
+    this.renderPeriodic(this.dom.chemSearch.value);
+    this.renderChemDetail(z);
+  }
+
+  renderChemDetail(z){
+    const e=this.periodic.find(p=>p[0]===z);
+    if(!e) return;
+    const cat=elemCat(z);
+    const d=this.dom.chemDetail;
+    d.classList.remove('hidden');
+    d.innerHTML='<div class="big-sym" style="background:'+CAT_COLOR[cat]+'">'+e[1]+'</div>'
+      +'<div><div class="d-name">'+e[2]+'</div>'
+      +'<div class="d-row">Atomic number <b>'+z+'</b></div>'
+      +'<div class="d-row">Category: <b>'+CAT_LABEL[cat]+'</b></div>'
+      +'<div class="d-row">Atomic mass <b>'+e[3]+' u</b></div></div>';
+  }
+
+  parseFormula(f){
+    const s=(f||'').replace(/[·\s]/g,'');
+    if(!s) return null;
+    const massOf=sym=>{ const m=this.massTab[sym]; return m===undefined?null:m; };
+    let i=0;
+    const factor=()=>{ let n=0; while(i<s.length&&/\d/.test(s[i])){ n=n*10+ +s[i]; i++; } return n||1; };
+    const block=()=>{
+      let total=0;
+      while(i<s.length){
+        const ch=s[i];
+        if(ch==='('){ i++; const inner=block(); if(i<s.length&&s[i]===')') i++; else return NaN; total+=inner*factor(); continue; }
+        if(ch===')') return total;
+        if(!/[A-Z]/.test(ch)) return NaN;
+        let sym=null;
+        if(i+1<s.length&&/[a-z]/.test(s[i+1])){ const two=s.slice(i,i+2); if(massOf(two)!==null) sym=two; }
+        if(sym===null){ sym=ch; if(massOf(ch)===null) return NaN; }
+        i+=sym.length;
+        const n=factor(), m=massOf(sym);
+        if(m===null||!isFinite(n)||n<1||n>1e3) return NaN;
+        total+=m*n;
+      }
+      return total;
+    };
+    const val=block();
+    if(!isFinite(val)||i!==s.length) return null;
+    return {mass:parseFloat(val.toPrecision(9))};
+  }
+
+  updateMolar(){
+    const inp=this.dom.molarInput.value;
+    const r=this.parseFormula(inp);
+    this.dom.molarOut.textContent=r?('M('+inp.toUpperCase().replace(/[^A-Za-z0-9()]/g,'')+') = '+r.mass+' g/mol'):(inp?'Unknown formula':'');
+  }
+
+  /* ---------- FORM module ---------- */
+  openFormOverlay(){
+    this.closeAllOverlays();
+    this.frmCat=this.frmCat||'all';
+    this.dom.formOverlay.classList.remove('hidden');
+    document.querySelectorAll('#formOverlay .frm-tab').forEach(t=>t.classList.toggle('active',(t.getAttribute('data-cat')||'all')===this.frmCat));
+    this.renderFormulas();
+  }
+
+  renderFormulas(){
+    const q=(this.dom.frmSearch.value||'').trim().toLowerCase();
+    const cat=this.frmCat||'all';
+    const list=this.formulas.filter(f=>(cat==='all'||f.cat===cat)&&(!q||(f.t+' '+f.f+' '+f.d).toLowerCase().indexOf(q)>=0));
+    if(!list.length){ this.dom.frmList.innerHTML='<div class="app-empty">No formulas match.</div>'; return; }
+    this.dom.frmList.innerHTML=list.map(f=>'<div class="frm-card"><h4>'+f.t+'<span class="frm-badge">'+f.cat+'</span></h4><div class="f">'+f.f+'</div><div class="d">'+f.d+'</div></div>').join('');
   }
 
   updateDisplay(){
