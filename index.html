@@ -970,6 +970,10 @@ class ClassWizEngine {
   }
 
   renderQrCode(){
+    if (typeof qrcode !== 'function'){
+      this.dom.qrHint.textContent='QR not available in this browser';
+      return;
+    }
     try {
       const expr=this.expression||this.result||'0';
       const q=encodeURIComponent(expr);
