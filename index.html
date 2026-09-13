@@ -293,6 +293,25 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 ::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:rgba(0,0,0,.2); }
 ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); border-radius:2px; }
+
+/* ---------- Install button ---------- */
+.install-btn {
+  position:fixed; right:10px; bottom:10px; z-index:999;
+  display:flex; align-items:center; gap:5px;
+  padding:5px 9px; border-radius:999px;
+  background:rgba(21,25,34,.8); border:1px solid rgba(51,65,85,.75);
+  color:var(--cyan-400); font-size:10.5px; font-weight:700; line-height:1;
+  cursor:pointer; user-select:none;
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  outline:none; -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 12px rgba(0,0,0,.5);
+  opacity:.92; transition:opacity .15s ease,transform .15s ease;
+}
+.install-btn:hover { opacity:1; transform:translateY(-1px); }
+.install-btn svg { width:11px; height:11px; }
+.install-btn .ib-x { color:var(--slate-400); font-size:10px; font-weight:700; padding:0 0 0 5px; }
+.install-btn .ib-x:hover { color:var(--rose-400); }
+.install-btn.ib-msg { width:auto; max-width:190px; color:var(--amber-300); }
 </style>
 </head>
 <body>
@@ -504,6 +523,12 @@ sub { font-size:.7em; } sup { font-size:.7em; }
     <span class="cyan">ClassWiz FX-991EX</span>
   </div>
 </div>
+
+<button id="installBtn" class="install-btn hidden" title="Install app">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+  <span id="ibLabel">Install</span>
+  <span id="ibDismiss" class="ib-x" title="Don't ask again">✕</span>
+</button>
 
 <script>
 class ClassWizEngine {
@@ -1094,6 +1119,50 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW registration failed:',e));
   });
 }
+
+(function(){
+  try {
+    const btn=document.getElementById('installBtn');
+    if (!btn) return;
+    const label=document.getElementById('ibLabel');
+    const dismiss=document.getElementById('ibDismiss');
+    const STORE_KEY='casio_install_dismissed';
+    const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent||'')&&!window.MSStream;
+    const isStandalone=()=>window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+    let deferred=null;
+
+    const hide=()=>btn.classList.add('hidden');
+    const show=()=>{
+      if (!isStandalone() && !localStorage.getItem(STORE_KEY)) btn.classList.remove('hidden');
+    };
+
+    window.addEventListener('beforeinstallprompt',e=>{
+      e.preventDefault(); deferred=e; show();
+    });
+    window.addEventListener('appinstalled',()=>{ hide(); deferred=null; });
+    window.addEventListener('display-modechange',()=>{ if(isStandalone()) hide(); });
+
+    btn.addEventListener('click',()=>{
+      if (deferred){
+        deferred.prompt();
+        deferred.userChoice.then(c=>{ if(c.outcome==='accepted') hide(); deferred=null; hide(); }).catch(()=>hide());
+      } else if (isIOS){
+        const msg='Share ■ then tap "Add to Home Screen"';
+        label.textContent='Add to Home Screen';
+        btn.classList.add('ib-msg');
+        setTimeout(()=>{ label.textContent='Install'; btn.classList.remove('ib-msg'); },3500);
+      }
+    });
+    dismiss.addEventListener('click',e=>{
+      e.stopPropagation();
+      try{ localStorage.setItem(STORE_KEY,'1'); }catch(err){}
+      hide();
+    });
+
+    if (isStandalone()) hide();
+    else if (isIOS) setTimeout(show,1200);
+  } catch(e){}
+})();
 </script>
 </body>
 </html>
