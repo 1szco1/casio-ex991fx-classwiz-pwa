@@ -1,11 +1,12 @@
-const CACHE_NAME = "casio-fx991ex-v8";
+const CACHE_NAME = "casio-fx991ex-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./apple-touch-icon.png"
+  "./apple-touch-icon.png",
+  "./og-image.png"
 ];
 
 self.addEventListener("install", (event) => {
