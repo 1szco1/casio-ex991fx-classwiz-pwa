@@ -230,11 +230,14 @@ body {
 .hist-res  { color:var(--amber-400); font-weight:700; text-align:right; font-size:12px; }
 .hist-empty { color:var(--slate-500); font-style:italic; text-align:center; padding:16px 0; }
 
+.qr-overlay { position:fixed; inset:0; z-index:9999; background:rgba(8,14,28,.96); display:flex; align-items:center; justify-content:center; padding:14px; }
+.qr-modal { background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:14px; width:100%; max-width:320px; display:flex; flex-direction:column; align-items:center; box-shadow:0 18px 50px rgba(0,0,0,.6); }
 .qr-box { background:#fff; padding:8px; border-radius:6px; margin:auto; }
-.qr-box canvas { display:block; width:172px; height:172px; image-rendering:pixelated; cursor:pointer; }
+.qr-box canvas { display:block; width:min(64vw, 240px); height:min(64vw, 240px); image-rendering:pixelated; cursor:pointer; }
 .qr-tab { font-size:8px; padding:2px 6px; border-radius:4px; background:var(--slate-900); color:var(--slate-400); cursor:pointer; border:1px solid transparent; outline:none; -webkit-tap-highlight-color:transparent; }
 .qr-tab.active { background:var(--slate-800); color:var(--amber-300); font-weight:700; border-color:rgba(245,158,11,.3); }
-.qr-hint { font-size:9px; color:var(--cyan-400); font-weight:700; margin-top:5px; min-height:11px; }
+.qr-hint { font-size:9px; color:var(--cyan-400); font-weight:700; margin-top:5px; min-height:11px; word-break:break-all; text-align:center; }
+.qr-caption { font-size:8px; color:var(--slate-400); margin-top:2px; }
 
 /* ---------- Keypad ---------- */
 .keys { display:flex; flex-direction:column; gap:8px; }
@@ -423,23 +426,6 @@ sub { font-size:.7em; } sup { font-size:.7em; }
         <div id="optnList" class="list-col"></div>
       </div>
 
-      <!-- QR -->
-      <div id="qrOverlay" class="overlay hidden" style="align-items:center; justify-content:center;">
-        <div class="ov-head" style="width:100%;">
-          <span class="ov-title amber">ClassWiz QR Code</span>
-          <div class="row aic gap2">
-            <button id="btnQrCalc" class="qr-tab active">Open</button>
-            <button id="btnQrSearch" class="qr-tab">Search</button>
-            <button id="closeQr" class="ov-close">✕</button>
-          </div>
-        </div>
-        <div class="qr-box">
-          <canvas id="qrCanvas" width="8" height="8" title="Tap to copy"></canvas>
-        </div>
-        <span id="qrHint" class="qr-hint">Tap QR to copy</span>
-        <span style="font-size:8px;color:var(--slate-400);margin-top:2px;">Scan with a phone camera</span>
-      </div>
-
       <!-- MEMORY -->
       <div id="memoryOverlay" class="overlay hidden">
         <div class="ov-head"><span class="ov-title pink">Memory Registers (RCL)</span><button id="closeMemory" class="ov-close">✕</button></div>
@@ -548,6 +534,25 @@ sub { font-size:.7em; } sup { font-size:.7em; }
   <div class="footer">
     <span>Natural V.P.A.M. · 552 Functions</span>
     <span class="cyan">ClassWiz FX-991EX</span>
+  </div>
+</div>
+
+<!-- QR (full-screen modal, outside the scaled calculator) -->
+<div id="qrOverlay" class="qr-overlay hidden">
+  <div class="qr-modal">
+    <div class="ov-head" style="width:100%;gap:6px;">
+      <span class="ov-title amber">ClassWiz QR Code</span>
+      <div class="row aic gap2">
+        <button id="btnQrCalc" class="qr-tab active">Open</button>
+        <button id="btnQrSearch" class="qr-tab">Search</button>
+        <button id="closeQr" class="ov-close">✕</button>
+      </div>
+    </div>
+    <div class="qr-box">
+      <canvas id="qrCanvas" width="8" height="8" title="Tap to copy"></canvas>
+    </div>
+    <span id="qrHint" class="qr-hint">Tap QR to copy</span>
+    <span class="qr-caption">Scan with a phone camera</span>
   </div>
 </div>
 
