@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 /* ---------- Reset / base ---------- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 :root {
   --slate-100:#f1f5f9; --slate-200:#e2e8f0; --slate-300:#cbd5e1; --slate-400:#94a3b8;
@@ -33,9 +33,10 @@ html,body { height:100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Arial, sans-serif;
   touch-action: manipulation;
-  user-select: none; -webkit-user-select: none;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   background:#07090e; color:var(--slate-100);
-  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:12px;
+  height:100%; min-height:100vh; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; padding:16px;
 }
 
 .font-lcd { font-family:"Courier New", Consolas, ui-monospace, monospace; }
@@ -53,6 +54,7 @@ body {
 .calc-casing {
   width:100%; max-width:450px; border-radius:24px; padding:18px;
   display:flex; flex-direction:column; gap:8px; position:relative;
+  flex-shrink:0; transform-origin:center center; will-change:transform;
   background:#151922;
   background-image:
     radial-gradient(rgba(255,255,255,.03) 1px, transparent 0),
@@ -234,6 +236,7 @@ body {
   position:relative; width:100%; height:32px;
   display:flex; align-items:center; justify-content:center; white-space:nowrap;
   border:none; cursor:pointer; color:#f3f4f6;
+  outline:none; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none;
   transition:transform .04s cubic-bezier(.4,0,.2,1),box-shadow .04s ease;
   box-shadow:0 3px 0 #090b10,0 4px 6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2);
 }
@@ -293,7 +296,7 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 </style>
 </head>
 <body>
-<div class="calc-casing">
+<div id="calcCasing" class="calc-casing">
 
   <div class="calc-faceplate">
     <!-- Header -->
@@ -509,6 +512,7 @@ class ClassWizEngine {
     this.cursorPos = 0;
     this.result = "0";
     this.lastAnswer = 0;
+    this.previousAnswer = 0;
     this.isPoweredOn = true;
     this.shiftActive = false;
     this.alphaActive = false;
@@ -589,6 +593,7 @@ class ClassWizEngine {
     this.bindEvents();
     this.initTrackpad();
     this.updateDisplay();
+    this.fitToScreen();
   }
 
   playKeySound() {
@@ -611,6 +616,7 @@ class ClassWizEngine {
   initDOM() {
     const id = x => document.getElementById(x);
     this.dom = {
+      calcCasing:id('calcCasing'),
       lcdDisplayFrame:id('lcdDisplayFrame'), lcdStatusRibbon:id('lcdStatusRibbon'),
       lcdScreenContent:id('lcdScreenContent'), exprDisplay:id('exprDisplay'),
       resultDisplay:id('resultDisplay'), indShift:id('indShift'), indAlpha:id('indAlpha'),
@@ -685,6 +691,17 @@ class ClassWizEngine {
     this.dom.closeConv.addEventListener('click',()=>this.dom.convOverlay.classList.add('hidden'));
     this.dom.closeQr.addEventListener('click',()=>this.dom.qrOverlay.classList.add('hidden'));
     window.addEventListener('keydown',e=>this.handlePhysicalKeyboard(e));
+    window.addEventListener('resize',()=>this.fitToScreen());
+    window.addEventListener('orientationchange',()=>setTimeout(()=>this.fitToScreen(),250));
+  }
+
+  fitToScreen(){
+    try {
+      const el=this.dom.calcCasing, pad=16;
+      const sw=window.innerWidth, sh=window.innerHeight;
+      const scale=Math.max(0.5, Math.min(1, (sw-pad)/el.offsetWidth, (sh-pad)/el.offsetHeight));
+      el.style.transform=`scale(${scale})`;
+    } catch(e){}
   }
 
   animateButton(btn){ this.playKeySound(); btn.classList.add('active-press'); setTimeout(()=>btn.classList.remove('active-press'),100); }
@@ -887,23 +904,45 @@ class ClassWizEngine {
     if (!this.expression.trim()) return;
     try {
       let s=this.expression;
-      s=s.replace(/×10\^/g,"*10**")
+      s=s.replace(/PreAns/g,`(${this.previousAnswer})`)
+         .replace(/Ans/g,`(${this.lastAnswer})`)
+         .replace(/≈/g,"")
+         .replace(/×10\^/g,"*10**")
          .replace(/×/g,"*").replace(/÷/g,"/")
          .replace(/\(-\)/g,"-")
-         .replace(/Ans/g,`(${this.lastAnswer})`)
+         .replace(/(\d)([√∛€π])/g,"$1*$2")
          .replace(/π/g,`(${Math.PI})`)
          .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
          .replace(/Abs\(/g,"abs(")
          .replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
          .replace(/²/g,"**2").replace(/³/g,"**3").replace(/⁻¹/g,"**-1")
+         .replace(/RanInt\((-?\d+),(-?\d+)\)/g,
+            (m,a,b)=>{ a=+a;b=+b; const lo=Math.min(a,b),hi=Math.max(a,b); return Math.floor(Math.random()*(hi-lo+1))+lo; })
+         .replace(/(\d+)nPr(\d+)/g,(m,n,r)=>{ n=+n;r=+r; let p=1; for(let i=0;i<r;i++) p*=n-i; return p; })
+         .replace(/(\d+)nCr(\d+)/g,(m,n,r)=>{ n=+n;r=Math.min(+r,n-r); let p=1; for(let i=0;i<r;i++) p=p*(n-i)/(i+1); return Math.round(p); })
+         .replace(/GCD\((-?\d+),(-?\d+)\)/g,(m,a,b)=>this.gcd(+a,+b))
+         .replace(/FACT\((-?\d+)\)/g,(m,n)=>this.factorial(+n))
+         .replace(/°'"/g,"°")
+         .replace(/(\d+(?:\.\d+)?)°(\d+)°(\d+)°/g,(m,d,mn,sc)=>(+d)+((+mn)/60)+((+sc)/3600))
+         .replace(/(\d+(?:\.\d+)?)°/g,(m,d)=>(+d))
+         .replace(/(\d+(?:\.\d+)?)%/g,(m,v)=>(+v)/100)
          .replace(/Rnd#/g,`(${Math.random()})`);
 
-      // standalone e -> Euler's number (not part of a function name)
-      s=s.replace(/(^|[^A-Za-z])e(?![A-Za-z(])/g,`$1(${Math.E})`);
+      // scientific notation (constant values like 6.626e-34) -> *10**
+      s=s.replace(/(\d+(?:\.\d+)?)[eE]([+-]?\d+)/g,"($1*10**($2))");
+
+      // standalone e -> Euler's number (whole token only, never part of a number)
+      s=s.replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`);
+
+      // implicit multiplication: 2(..., ...(...), )(...
+      s=s.replace(/(\d)\(/g,"$1*(").replace(/\)(\d|\(|[A-Za-z])/g,")*$1");
 
       Object.keys(this.variables).forEach(v=>{
-        s=s.replace(new RegExp(`\\b${v}\\b`,'g'),`(${this.variables[v]})`);
+        s=s.replace(new RegExp(`(?<![A-Za-z])${v}(?![A-Za-z])`,'g'),`(${this.variables[v]})`);
       });
+
+      // implicit multiplication again (variables just substituted: 2x -> 2(0))
+      s=s.replace(/(\d)\(/g,"$1*(").replace(/\)\(/g,")*(");
 
       s=s.replace(/(\d+)!/g,(m,n)=>this.factorial(parseInt(n)));
       s=s.replace(/\^/g,"**");
@@ -924,7 +963,9 @@ class ClassWizEngine {
 
       if (typeof res==='number' && isFinite(res)){
         res=parseFloat(res.toPrecision(12));
+        if (res===0) res=0;
         this.result=res.toString();
+        this.previousAnswer=this.lastAnswer;
         this.lastAnswer=res;
         this.fractionDisplayMode=false;
         this.history.unshift({ expr:this.expression, res:this.result });
@@ -939,10 +980,26 @@ class ClassWizEngine {
 
   factorial(n){ if(n<0)return NaN; let r=1; for(let i=2;i<=n;i++) r*=i; return r; }
 
+  gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+
   solveEquation(){
     try {
-      let expr=this.expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/\^/g,"**");
-      const f=xv=>Function('x',`"use strict";return (${expr.replace(/x/g,`(${xv})`)});`)();
+      let s=this.expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/\^/g,"**")
+         .replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
+         .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
+         .replace(/Abs\(/g,"abs(").replace(/³/g,"**3").replace(/²/g,"**2").replace(/⁻¹/g,"**-1")
+         .replace(/π/g,`(${Math.PI})`)
+         .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,"($1*10**($2))")
+         .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`);
+      ['A','B','C','D','E','F','M','y','z'].forEach(v=>{
+        s=s.replace(new RegExp(`(?<![A-Za-z])${v}(?![A-Za-z])`,'g'),`(${this.variables[v]})`);
+      });
+      const A=this.angleModes[this.angleIndex];
+      const R=A==='DEG'?Math.PI/180:(A==='GRAD'?Math.PI/200:1);
+      const pro=`var sin=v=>Math.sin(v*${R}),cos=v=>Math.cos(v*${R}),tan=v=>Math.tan(v*${R}),asin=v=>Math.asin(v)/${R},acos=v=>Math.acos(v)/${R},atan=v=>Math.atan(v)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp;`;
+      const f=xv=>{ let t=s.replace(/(?<![A-Za-z])x(?![A-Za-z])/g,`(${xv})`);
+        t=t.replace(/(\d)\(/g,"$1*(").replace(/\)\(/g,")*(");
+        return Function('x',`"use strict";${pro}return (${t});`)(); };
       let x=1,h=1e-5;
       for (let i=0;i<100;i++){
         const y=f(x), dy=(f(x+h)-f(x-h))/(2*h);
