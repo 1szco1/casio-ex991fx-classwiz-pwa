@@ -154,23 +154,26 @@ body {
 .ind-mode  { font-size:9px; color:#334155; text-transform:uppercase; margin-left:4px; }
 .ind-m { font-style:italic; font-weight:700; color:#020617; }
 
-.lcd-content { flex:1; position:relative; z-index:10; overflow:hidden; padding:8px 10px 10px; display:flex; flex-direction:column; justify-content:flex-end; gap:3px; }
+.lcd-content { flex:1; position:relative; z-index:10; overflow:hidden; padding:6px 10px 8px; }
 .lcd-content::before {
-  content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
-  background:repeating-linear-gradient(180deg,transparent 0 21px,rgba(51,65,85,.16) 21px 22px);
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.10) 47%,rgba(255,255,255,0) 64%),
+             radial-gradient(120% 80% at 50% 0%,rgba(255,255,255,.25),rgba(255,255,255,0) 60%);
 }
 .expr-display {
-  text-align:right; font-size:15px; color:#1e293b;
-  white-space:nowrap; overflow-x:auto; overflow-y:hidden;
-  min-height:21px; line-height:21px; padding:0 2px; position:relative; z-index:1;
-  scrollbar-width:none;
+  position:relative; z-index:1; height:100%; overflow-y:auto; overflow-x:hidden;
+  text-align:left; font-size:14px; color:#1f2937; padding-right:2px;
+  scrollbar-width:thin; scrollbar-color:rgba(51,65,85,.3) transparent;
 }
-.expr-display::-webkit-scrollbar { display:none; }
-.result-display {
-  text-align:right; font-size:25px; font-weight:700; color:#020617;
-  line-height:1.15; padding:0 2px; position:relative; z-index:1;
-  white-space:normal; overflow-wrap:anywhere;
-}
+.expr-display::-webkit-scrollbar { width:5px; }
+.expr-display::-webkit-scrollbar-thumb { background:rgba(51,65,85,.3); border-radius:3px; }
+.h-line { display:block; white-space:normal; overflow-wrap:anywhere; line-height:1.35; margin-bottom:4px; }
+.h-expr { color:#334155; }
+.h-sep { color:#334155; }
+.h-res { font-weight:700; color:#020617; }
+.cur-line { min-height:19px; }
+.base-line { font-size:10px; color:#7c2d12; font-weight:600; letter-spacing:.3px; margin-top:2px; }
+.result-display { display:none; }
 .cursor {
   display:inline-block; width:2px; height:17px; margin-left:1px; background:rgba(15,23,42,.85);
   vertical-align:middle; animation:blink 1s steps(1) infinite;
@@ -3694,12 +3697,24 @@ class ClassWizEngine {
   updateDisplay(){
     if (!this.isPoweredOn) return;
     const cur='<span class="cursor"></span>';
-    const exprHtml=this.expression.length?this.renderMathStr(this.expression):'';
-    this.dom.exprDisplay.innerHTML=exprHtml+cur;
-    this.dom.exprDisplay.scrollLeft=this.dom.exprDisplay.scrollWidth;
+    const R=s=>this.renderMathStr(s);
+    const histLines=(this.history||[]).slice(1).slice(-11).map(h=>{
+      const hr=(typeof h.res==='string')?h.res:String(h.res);
+      return '<div class="h-line"><span class="h-expr">'+R(h.expr)+'</span><span class="h-sep"> = </span><span class="h-res">'+R(hr)+'</span></div>';
+    }).join('');
+    const exprHtml=this.expression.length?R(this.expression):'';
     let val=(this._showingExact&&this.exactForm)?this.exactForm:this.result;
     if (typeof val==='string'&&/^-?\d+(\.\d+)?$/.test(val)) val=this.groupDigits(val);
-    this.dom.resultDisplay.innerHTML=this.renderMathStr(val);
+    const valHtml=(typeof val==='string'&&val!=='')?R(val):'';
+    let curLine='<div class="h-line cur-line">';
+    if (exprHtml){
+      curLine+=exprHtml+cur;
+      if (valHtml) curLine+='<span class="h-sep"> = </span><span class="h-res">'+valHtml+'</span>';
+    } else {
+      curLine+='<span class="h-res">'+(valHtml||'0')+'</span>'+cur;
+    }
+    curLine+='</div>';
+    let baseHtml='';
     if (this.activeMode==='BASE' && typeof this.baseVal==='number' && isFinite(this.baseVal)){
       const b=this.baseVal, neg=b<0, ai=Math.abs(b), int=Math.round(ai), isInt=Math.abs(ai-int)<Math.max(1e-9,Math.abs(ai)*1e-10);
       let extra;
@@ -3712,8 +3727,11 @@ class ClassWizEngine {
       } else {
         extra='DEC: '+this.fmtNum(b)+' (HEX/OCT/BIN apply to integers)';
       }
-      this.dom.resultDisplay.innerHTML+='<br><span style="font-size:10px;color:var(--amber-300);font-weight:600;letter-spacing:.3px">'+extra+'</span>';
+      baseHtml='<div class="base-line">'+extra+'</div>';
     }
+    this.dom.exprDisplay.innerHTML=histLines+curLine+baseHtml;
+    this.dom.exprDisplay.scrollTop=this.dom.exprDisplay.scrollHeight;
+    this.dom.resultDisplay.innerHTML='';
     this.dom.indShift.classList.toggle('active',this.shiftActive);
     this.dom.indAlpha.classList.toggle('active',this.alphaActive);
     this.dom.indAngle.textContent=this.angleModes[this.angleIndex];
