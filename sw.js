@@ -1,4 +1,4 @@
-const CACHE_NAME = "casio-fx991ex-v22";
+const CACHE_NAME = "casio-fx991ex-v23";
 const APP_SHELL = [
   "./",
   "./index.html",

@@ -1097,6 +1097,7 @@ class ClassWizEngine {
     this.alphaActive = false;
     this.storeMode = false;
     this.activeMode = 'COMP';
+    this.mainMode = 'COMP';
     this.angleModes = ['DEG','RAD','GRAD'];
     this.angleIndex = 0;
     this.fractionDisplayMode = false;
@@ -1350,7 +1351,7 @@ class ClassWizEngine {
     this.dom.btnHistoryToggle.addEventListener('click',()=>{ this.dom.historyOverlay.classList.remove('hidden'); this.renderHistory(); });
     this.dom.closeHistory.addEventListener('click',()=>this.dom.historyOverlay.classList.add('hidden'));
     this.dom.btnClearHistory.addEventListener('click',()=>{ this.history=[]; this.renderHistory(); });
-    this.dom.closeTable.addEventListener('click',()=>{ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.activeMode='COMP'; this.dom.indMode.textContent='COMP'; this.updateDisplay(); });
+    this.dom.closeTable.addEventListener('click',()=>{ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.exitAppMode(); this.updateDisplay(); });
     this.dom.tblGenerate.addEventListener('click',()=>this.generateTable());
     this.dom.tblSlotStart.addEventListener('click',()=>this.setTableSlot(0));
     this.dom.tblSlotEnd.addEventListener('click',()=>this.setTableSlot(1));
@@ -1440,7 +1441,7 @@ class ClassWizEngine {
 
     if (this.tableEditing && this.activeMode==='TABLE'){
       if (key==='ON'){ this.expression=""; this.cursorPos=0; this.result="0"; this.closeAllOverlays(); }
-      else if (key==='MENU'){ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.activeMode='COMP'; this.dom.indMode.textContent='COMP'; this.result="0"; }
+      else if (key==='MENU'){ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.exitAppMode(); this.result="0"; }
       else if (key==='EQUALS'){ this.generateTable(); }
       else { this.handleTableKey(key); }
       this.updateDisplay();
@@ -1541,7 +1542,11 @@ class ClassWizEngine {
 
   setMode(id){
     this.activeMode=id;
-    this.dom.indMode.textContent=id;
+    const overlayApps=['TABLE','EQN','STAT','MAT','VCT','INEQ','RATIO','DIST','SHEET'];
+    if (overlayApps.indexOf(id)===-1){
+      this.mainMode=id;
+      this.dom.indMode.textContent=id;
+    }
     if (id==='TABLE'){
       this.expression=""; this.cursorPos=0; this.result="TABLE f(X)";
       this.tableEditing=true; this.tableEditSlot=0; this.tableParams=['1','5','1'];
@@ -1561,6 +1566,11 @@ class ClassWizEngine {
     if (id==='DIST'){ this.openDistOverlay(); return; }
     if (id==='SHEET'){ this.openSheetOverlay(); return; }
     this.expression=""; this.cursorPos=0; this.result="0"; this.updateDisplay();
+  }
+
+  exitAppMode(){
+    this.activeMode=this.mainMode;
+    this.dom.indMode.textContent=this.mainMode;
   }
 
   insertToken(token){
@@ -2329,7 +2339,7 @@ class ClassWizEngine {
       this.generateTable();
       return;
     }
-    else if (key==='MENU'){ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.activeMode='COMP'; this.dom.indMode.textContent='COMP'; }
+    else if (key==='MENU'){ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.exitAppMode(); }
     this.tableParams[slot]=cur;
     this.renderTableParams();
     this.updateDisplay();
@@ -2374,10 +2384,10 @@ class ClassWizEngine {
 
   bindModuleEvents(){
     const D=this.dom;
-    D.closeGraph.addEventListener('click',()=>{ D.graphOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeSolve.addEventListener('click',()=>{ D.solveOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeChem.addEventListener('click',()=>{ D.chemOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeForm.addEventListener('click',()=>{ D.formOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeGraph.addEventListener('click',()=>{ D.graphOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeSolve.addEventListener('click',()=>{ D.solveOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeChem.addEventListener('click',()=>{ D.chemOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeForm.addEventListener('click',()=>{ D.formOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
     D.graphPlotBtn.addEventListener('click',()=>this.plotGraph(D.graphFnInput.value));
     D.graphFnInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); this.plotGraph(D.graphFnInput.value); } });
     D.graphPresets.querySelectorAll('.graph-chip').forEach(ch=>{
@@ -2423,13 +2433,13 @@ class ClassWizEngine {
 
     bindModeEvents(){
     const D=this.dom;
-    D.closeStat.addEventListener('click',()=>{ D.statOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeMat.addEventListener('click',()=>{ D.matOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeVct.addEventListener('click',()=>{ D.vctOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeIneq.addEventListener('click',()=>{ D.ineqOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeRatio.addEventListener('click',()=>{ D.ratioOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeDist.addEventListener('click',()=>{ D.distOverlay.classList.add('hidden'); this.updateDisplay(); });
-    D.closeSheet.addEventListener('click',()=>{ D.sheetOverlay.classList.add('hidden'); this.updateDisplay(); });
+    D.closeStat.addEventListener('click',()=>{ D.statOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeMat.addEventListener('click',()=>{ D.matOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeVct.addEventListener('click',()=>{ D.vctOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeIneq.addEventListener('click',()=>{ D.ineqOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeRatio.addEventListener('click',()=>{ D.ratioOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeDist.addEventListener('click',()=>{ D.distOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
+    D.closeSheet.addEventListener('click',()=>{ D.sheetOverlay.classList.add('hidden'); this.exitAppMode(); this.updateDisplay(); });
     D.statCalcBtn.addEventListener('click',()=>this.calcStats());
     D.statData.addEventListener('input',()=>this.calcStats());
     [[D.m2t,2],[D.m3t,3],[D.m4t,4]].forEach(([t,n])=>t.addEventListener('click',()=>this.setMatDims(n)));
