@@ -1,7 +1,9 @@
-const CACHE_NAME = "casio-fx991ex-v21";
+const CACHE_NAME = "casio-fx991ex-v22";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./panels.css",
+  "./qr.js",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
@@ -26,13 +28,16 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          return response;
-        })
-        .catch(() => caches.match(event.request).then((c) => c || caches.match("./index.html")))
+      caches.match(event.request).then((cached) => {
+        const network = fetch(event.request)
+          .then((response) => {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            return response;
+          })
+          .catch(() => cached);
+        return cached || network;
+      })
     );
     return;
   }
