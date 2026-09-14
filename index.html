@@ -57,6 +57,7 @@ body {
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  .cursor { animation:blink 1s steps(1) infinite !important; }
 }
 .hidden { display:none !important; }
 
@@ -2000,6 +2001,16 @@ class ClassWizEngine {
     }catch(e){}
   }
 
+  autoCloseParens(s){
+    let open=0;
+    for (let k=0;k<s.length;k++){
+      const ch=s.charAt(k);
+      if (ch==='(') open++;
+      else if (ch===')') open=Math.max(0,open-1);
+    }
+    return open>0 ? s+')'.repeat(open) : s;
+  }
+
   evaluateExpression(){
     if (!this.expression.trim()) return;
     const lastCh=this.expression.trim().slice(-1);
@@ -2008,9 +2019,10 @@ class ClassWizEngine {
     if (dref!==undefined){ this.result=dref; this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
     const factM=this.expression.match(/^FACT\((\d+)\)$/);
     if (factM){ this.result=this.primeFactors(+factM[1]); this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
+    const closed=this.autoCloseParens(this.expression.trim());
     if (this.activeMode==='CMPLX'){
       try {
-        const z=this.evalComplex(this.expression);
+        const z=this.evalComplex(closed);
         if (z===null){ this.result="Syntax ERROR"; }
         else if (!isFinite(z.re)||!isFinite(z.im)){ this.result="Math ERROR"; }
         else { this.result=this.cplxStr(z); this.baseVal=Math.hypot(z.re,z.im); }
@@ -2019,7 +2031,7 @@ class ClassWizEngine {
       this.updateDisplay(); return;
     }
     try {
-      let s=this.expandAdvanced(this.baseConvert(this.expression));
+      let s=this.expandAdvanced(this.baseConvert(closed));
       s=s.replace(/PreAns/g,`(${this.previousAnswer})`)
          .replace(/Ans/g,`(${this.lastAnswer})`)
          .replace(/Rnd#/g,`(${Math.random()})`);
@@ -3737,13 +3749,16 @@ class ClassWizEngine {
       const hr=(typeof h.res==='string')?h.res:String(h.res);
       return '<div class="h-line"><span class="h-expr">'+R(h.expr)+'</span><span class="h-sep"> = </span><span class="h-res">'+R(hr)+'</span></div>';
     }).join('');
-    const exprHtml=this.expression.length?R(this.expression):'';
+    const pos=Math.max(0,Math.min(this.cursorPos,this.expression.length));
+    const exprHtml=this.expression.length
+      ?R(this.expression.slice(0,pos)+'\uFFFC'+this.expression.slice(pos)).split('\uFFFC').join(cur)
+      :'';
     let val=(this._showingExact&&this.exactForm)?this.exactForm:this.result;
     if (typeof val==='string'&&/^-?\d+(\.\d+)?$/.test(val)) val=this.groupDigits(val);
     const valHtml=(typeof val==='string'&&val!=='')?R(val):'';
     let curLine='<div class="h-line cur-line">';
     if (exprHtml){
-      curLine+=exprHtml+cur;
+      curLine+=exprHtml;
       if (valHtml) curLine+='<span class="h-sep"> = </span><span class="h-res">'+valHtml+'</span>';
     } else {
       curLine+='<span class="h-res">'+(valHtml||'0')+'</span>'+cur;
