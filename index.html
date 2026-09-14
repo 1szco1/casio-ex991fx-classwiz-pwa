@@ -2015,11 +2015,11 @@ class ClassWizEngine {
     if (!this.expression.trim()) return;
     const lastCh=this.expression.trim().slice(-1);
     if ('+×÷-=^'.indexOf(lastCh)>=0) return;
-    const dref=this.evalDataRef(this.expression.trim());
-    if (dref!==undefined){ this.result=dref; this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
-    const factM=this.expression.match(/^FACT\((\d+)\)$/);
-    if (factM){ this.result=this.primeFactors(+factM[1]); this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
     const closed=this.autoCloseParens(this.expression.trim());
+    const dref=this.evalDataRef(closed);
+    if (dref!==undefined){ this.result=dref; this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
+    const factM=closed.match(/^FACT\((\d+)\)$/);
+    if (factM){ this.result=this.primeFactors(+factM[1]); this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
     if (this.activeMode==='CMPLX'){
       try {
         const z=this.evalComplex(closed);
@@ -2128,13 +2128,14 @@ class ClassWizEngine {
 
   solveEquation(){
     try {
-      let s=this.expression.replace(/×/g,"*").replace(/÷/g,"/").replace(/\^/g,"**")
+      let s=this.autoCloseParens(this.expression
+        .replace(/×/g,"*").replace(/÷/g,"/").replace(/\^/g,"**")
 .replace(/ⁿ√\(/g,"root(").replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
          .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
          .replace(/Abs\(/g,"abs(").replace(/³/g,"**3").replace(/²/g,"**2").replace(/⁻¹/g,"**-1")
          .replace(/π/g,`(${Math.PI})`)
          .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,"($1*10**($2))")
-         .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`);
+         .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`));
       ['A','B','C','D','E','F','M','y','z'].forEach(v=>{
         s=s.replace(new RegExp(`(?<![A-Za-z])${v}(?![A-Za-z])`,'g'),`(${this.variables[v]})`);
       });
@@ -3119,6 +3120,7 @@ class ClassWizEngine {
           return '('+sum+')';
         });
         expr=expr.replace(/\b([A-F])([0-9]{1,2})\b/g,(_,col,row)=>this.sheetRefVal(col+row));
+        expr=this.autoCloseParens(expr);
         if(!/^[0-9A-Za-z.+\-*/()]*$/.test(expr)){ cell.val=0; cell.error=true; return; }
         try{ const v=new Function('return ('+expr+')')(); cell.val=typeof v==='number'?v:0; cell.error=!isFinite(v); }
         catch(e){ cell.val=0; cell.error=true; }
@@ -3179,7 +3181,7 @@ class ClassWizEngine {
   }
 
   plotGraph(expr){
-    expr=(expr||'').trim()||'x';
+    expr=this.autoCloseParens(String(expr||'').trim())||'x';
     try{
       this.graphState.fn=this.compileGraphFn(expr);
       this.graphState.expr=expr;
