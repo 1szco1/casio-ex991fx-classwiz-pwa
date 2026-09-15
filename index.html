@@ -1001,55 +1001,55 @@ const ELEMENTS=[
 ];
 
 const FORMULAS=[
-{cat:"Math",t:"Quadratic formula",f:"x = (−b ± √(b² − 4ac)) ⁄ 2a",d:"Roots of ax² + bx + c = 0. Discriminant D = b² − 4ac."},
-{cat:"Math",t:"Pythagorean theorem",f:"a² + b² = c²",d:"Right triangle: c is the hypotenuse."},
-{cat:"Math",t:"Distance",f:"d = √((x₂ − x₁)² + (y₂ − y₁)²)",d:"Distance between two points on a plane."},
-{cat:"Math",t:"Midpoint",f:"M = ( (x₁+x₂)/2 , (y₁+y₂)/2 )",d:"Midpoint of a segment."},
-{cat:"Math",t:"Slope",f:"m = (y₂ − y₁) ⁄ (x₂ − x₁)",d:"Slope of the line through two points."},
-{cat:"Math",t:"Circle area",f:"A = πr²",d:"Area enclosed by a circle of radius r."},
-{cat:"Math",t:"Circumference",f:"C = 2πr",d:"Perimeter of a circle in degrees/radians mode agnostic."},
-{cat:"Math",t:"Rectangle area",f:"A = l × w",d:"Area of a rectangle."},
-{cat:"Math",t:"Triangle area",f:"A = ½ b h",d:"Area of a triangle with base b and height h."},
-{cat:"Math",t:"Trapezoid area",f:"A = ½ (a + b)h",d:"Area with parallel sides a, b and height h."},
-{cat:"Math",t:"Sphere volume",f:"V = ⁴⁄₃ π r³",d:"Volume of a sphere."},
-{cat:"Math",t:"Cylinder volume",f:"V = π r² h",d:"Volume of a cylinder."},
-{cat:"Math",t:"Cone volume",f:"V = ⅓ π r² h",d:"Volume of a cone."},
-{cat:"Math",t:"Arithmetic series",f:"Sₙ = n⁄2 (2a + (n−1)d)",d:"Sum of first n terms, first term a, common diff d."},
-{cat:"Math",t:"Geometric series",f:"Sₙ = a(1 − rⁿ) ⁄ (1 − r)",d:"Sum of n terms, ratio r ≠ 1."},
-{cat:"Math",t:"Trig identity",f:"sin²θ + cos²θ = 1",d:"Pythagorean identity for any angle θ."},
-{cat:"Math",t:"Law of sines",f:"sin A ⁄ a = sin B ⁄ b = sin C ⁄ c",d:"Sides a, b, c opposite angles A, B, C."},
-{cat:"Math",t:"Compound interest",f:"A = P(1 + r⁄n)^(nt)",d:"P principal, r annual rate, n compounds per year."},
-{cat:"Physics",t:"Newton's 2nd law",f:"F = m a",d:"Net force on a body."},
-{cat:"Physics",t:"Weight",f:"W = m g",d:"g ≈ 9.81 m/s² on Earth."},
-{cat:"Physics",t:"Kinetic energy",f:"KE = ½ m v²",d:"Energy of motion."},
-{cat:"Physics",t:"Potential energy",f:"PE = m g h",d:"Gravitational potential energy."},
-{cat:"Physics",t:"Work",f:"W = F d cos θ",d:"Work done by force F over distance d at angle θ."},
-{cat:"Physics",t:"Power",f:"P = W ⁄ t",d:"Work per unit time (watts)."},
-{cat:"Physics",t:"Momentum",f:"p = m v",d:"Linear momentum."},
-{cat:"Physics",t:"Speed",f:"v = d ⁄ t",d:"Average speed."},
-{cat:"Physics",t:"Kinematics",f:"v = u + a t",d:"Final velocity u→v with constant acceleration."},
-{cat:"Physics",t:"Kinematics",f:"s = u t + ½ a t²",d:"Displacement with constant acceleration."},
-{cat:"Physics",t:"Kinematics",f:"v² = u² + 2 a s",d:"Constant acceleration relation."},
-{cat:"Physics",t:"Newton's gravity",f:"F = G m₁m₂ ⁄ r²",d:"Gravitational attraction."},
-{cat:"Physics",t:"Ohm's law",f:"V = I R",d:"Voltage = current × resistance."},
-{cat:"Physics",t:"Electric power",f:"P = V I",d:"Electrical power."},
-{cat:"Physics",t:"Coulomb's law",f:"F = k q₁q₂ ⁄ r²",d:"Force between point charges."},
-{cat:"Physics",t:"Ideal gas law",f:"P V = n R T",d:"n moles at temperature T (Kelvin)."},
-{cat:"Physics",t:"Centripetal force",f:"F = m v² ⁄ r",d:"Force keeping circular motion."},
-{cat:"Physics",t:"Thin lens",f:"1⁄f = 1⁄u + 1⁄v",d:"Focal length f, object u, image v."},
-{cat:"Chemistry",t:"Moles",f:"n = m ⁄ M",d:"Mass m divided by molar mass M (g/mol)."},
-{cat:"Chemistry",t:"Particles",f:"N = n × Nₐ",d:"Nₐ = 6.022×10²³ mol⁻¹ (Avogadro)."},
-{cat:"Chemistry",t:"Concentration",f:"c = n ⁄ V",d:"Amount per litre of solution."},
-{cat:"Chemistry",t:"Dilution",f:"c₁V₁ = c₂V₂",d:"Dilute a stock solution."},
-{cat:"Chemistry",t:"Density",f:"ρ = m ⁄ V",d:"Mass per unit volume."},
-{cat:"Chemistry",t:"pH scale",f:"pH = −log₁₀[H⁺]",d:"Acidity; pOH = 14 − pH at 25 °C."},
-{cat:"Chemistry",t:"Percent yield",f:"% = (actual ⁄ theoretical) × 100",d:"Efficiency of a reaction."},
-{cat:"Chemistry",t:"Mass percent",f:"% = m(solute) ⁄ m(solution) × 100",d:"Composition of a solution."},
-{cat:"Chemistry",t:"Boyle's law",f:"P₁V₁ = P₂V₂",d:"Constant temperature, n constant."},
-{cat:"Chemistry",t:"Charles's law",f:"V₁ ⁄ T₁ = V₂ ⁄ T₂",d:"Constant pressure (T in Kelvin)."},
-{cat:"Chemistry",t:"Gay-Lussac",f:"P₁ ⁄ T₁ = P₂ ⁄ T₂",d:"Constant volume (T in Kelvin)."},
-{cat:"Chemistry",t:"Combined gas law",f:"P₁V₁ ⁄ T₁ = P₂V₂ ⁄ T₂",d:"All quantities changing."},
-{cat:"Chemistry",t:"Heat",f:"q = m c ΔT",d:"Heat gained/lost, c = specific heat."}
+{cat:"Math",t:"Quadratic formula",f:"x = (−b ± √(b² − 4ac)) ⁄ 2a",d:"Roots of ax² + bx + c = 0. Discriminant D = b² − 4ac.",def:null},
+{cat:"Math",t:"Pythagorean theorem",f:"a² + b² = c²",d:"Right triangle: c is the hypotenuse.",def:{b:3,c:5}},
+{cat:"Math",t:"Distance",f:"d = √((x₂ − x₁)² + (y₂ − y₁)²)",d:"Distance between two points on a plane.",def:{x2:4,x1:1,y2:3,y1:1}},
+{cat:"Math",t:"Midpoint",f:"M = ( (x₁+x₂)/2 , (y₁+y₂)/2 )",d:"Midpoint of a segment.",def:{x1:1,x2:5,y1:2,y2:4}},
+{cat:"Math",t:"Slope",f:"m = (y₂ − y₁) ⁄ (x₂ − x₁)",d:"Slope of the line through two points.",def:{y2:5,y1:1,x2:4,x1:2}},
+{cat:"Math",t:"Circle area",f:"A = πr²",d:"Area enclosed by a circle of radius r.",def:{r:3}},
+{cat:"Math",t:"Circumference",f:"C = 2πr",d:"Perimeter of a circle in degrees/radians mode agnostic.",def:{r:3}},
+{cat:"Math",t:"Rectangle area",f:"A = l × w",d:"Area of a rectangle.",def:{l:4,w:5}},
+{cat:"Math",t:"Triangle area",f:"A = ½ b h",d:"Area of a triangle with base b and height h.",def:{b:6,h:4}},
+{cat:"Math",t:"Trapezoid area",f:"A = ½ (a + b)h",d:"Area with parallel sides a, b and height h.",def:{a:3,b:5,h:4}},
+{cat:"Math",t:"Sphere volume",f:"V = ⁴⁄₃ π r³",d:"Volume of a sphere.",def:{r:3}},
+{cat:"Math",t:"Cylinder volume",f:"V = π r² h",d:"Volume of a cylinder.",def:{r:3,h:5}},
+{cat:"Math",t:"Cone volume",f:"V = ⅓ π r² h",d:"Volume of a cone.",def:{r:3,h:6}},
+{cat:"Math",t:"Arithmetic series",f:"Sₙ = n⁄2 (2a + (n−1)d)",d:"Sum of first n terms, first term a, common diff d.",def:{n:5,a:2,d:3}},
+{cat:"Math",t:"Geometric series",f:"Sₙ = a(1 − rⁿ) ⁄ (1 − r)",d:"Sum of n terms, ratio r ≠ 1.",def:{a:2,r:2,n:4}},
+{cat:"Math",t:"Trig identity",f:"sin²θ + cos²θ = 1",d:"Pythagorean identity for any angle θ.",def:null},
+{cat:"Math",t:"Law of sines",f:"sin A ⁄ a = sin B ⁄ b = sin C ⁄ c",d:"Sides a, b, c opposite angles A, B, C.",def:null},
+{cat:"Math",t:"Compound interest",f:"A = P(1 + r⁄n)^(nt)",d:"P principal, r annual rate, n compounds per year.",def:{P:1000,r:0.05,n:12,t:10}},
+{cat:"Physics",t:"Newton's 2nd law",f:"F = m a",d:"Net force on a body.",def:{m:2,a:3}},
+{cat:"Physics",t:"Weight",f:"W = m g",d:"g ≈ 9.81 m/s² on Earth.",def:{m:5,g:9.81}},
+{cat:"Physics",t:"Kinetic energy",f:"KE = ½ m v²",d:"Energy of motion.",def:{m:2,v:3}},
+{cat:"Physics",t:"Potential energy",f:"PE = m g h",d:"Gravitational potential energy.",def:{m:2,g:9.81,h:3}},
+{cat:"Physics",t:"Work",f:"W = F d cos θ",d:"Work done by force F over distance d at angle θ (radians).",def:{F:10,d:5,θ:0}},
+{cat:"Physics",t:"Power",f:"P = W ⁄ t",d:"Work per unit time (watts).",def:{W:100,t:10}},
+{cat:"Physics",t:"Momentum",f:"p = m v",d:"Linear momentum.",def:{m:3,v:4}},
+{cat:"Physics",t:"Speed",f:"v = d ⁄ t",d:"Average speed.",def:{d:100,t:20}},
+{cat:"Physics",t:"Kinematics",f:"v = u + a t",d:"Final velocity u→v with constant acceleration.",def:{u:0,a:2,t:3}},
+{cat:"Physics",t:"Kinematics",f:"s = u t + ½ a t²",d:"Displacement with constant acceleration.",def:{u:0,a:2,t:3}},
+{cat:"Physics",t:"Kinematics",f:"v² = u² + 2 a s",d:"Constant acceleration relation.",def:{u:0,a:2,s:4}},
+{cat:"Physics",t:"Newton's gravity",f:"F = G m₁m₂ ⁄ r²",d:"Gravitational attraction.",def:{G:6.674e-11,m1:5.972e24,m2:7.342e22,r:3.844e8}},
+{cat:"Physics",t:"Ohm's law",f:"V = I R",d:"Voltage = current × resistance.",def:{I:0.5,R:12}},
+{cat:"Physics",t:"Electric power",f:"P = V I",d:"Electrical power.",def:{V:12,I:0.5}},
+{cat:"Physics",t:"Coulomb's law",f:"F = k q₁q₂ ⁄ r²",d:"Force between point charges.",def:{k:8.99e9,q1:1e-6,q2:1e-6,r:0.1}},
+{cat:"Physics",t:"Ideal gas law",f:"P V = n R T",d:"n moles at temperature T (Kelvin).",def:{V:0.1,n:1,R:8.314,T:298}},
+{cat:"Physics",t:"Centripetal force",f:"F = m v² ⁄ r",d:"Force keeping circular motion.",def:{m:2,v:5,r:2}},
+{cat:"Physics",t:"Thin lens",f:"1⁄f = 1⁄u + 1⁄v",d:"Focal length f, object u, image v.",def:{u:20,v:20}},
+{cat:"Chemistry",t:"Moles",f:"n = m ⁄ M",d:"Mass m divided by molar mass M (g/mol).",def:{m:9,M:18}},
+{cat:"Chemistry",t:"Particles",f:"N = n × Nₐ",d:"Nₐ = 6.022×10²³ mol⁻¹ (Avogadro).",def:{n:2,NA:6.02214076e23}},
+{cat:"Chemistry",t:"Concentration",f:"c = n ⁄ V",d:"Amount per litre of solution.",def:{n:0.5,V:2}},
+{cat:"Chemistry",t:"Dilution",f:"c₁V₁ = c₂V₂",d:"Dilute a stock solution.",def:{V1:0.2,c2:2,V2:0.05}},
+{cat:"Chemistry",t:"Density",f:"ρ = m ⁄ V",d:"Mass per unit volume.",def:{m:1,V:0.001}},
+{cat:"Chemistry",t:"pH scale",f:"pH = −log₁₀[H⁺]",d:"Acidity; pOH = 14 − pH at 25 °C.",def:{H:1e-7}},
+{cat:"Chemistry",t:"Percent yield",f:"% = (actual ⁄ theoretical) × 100",d:"Efficiency of a reaction.",def:{actual:45,theoretical:50}},
+{cat:"Chemistry",t:"Mass percent",f:"% = m(solute) ⁄ m(solution) × 100",d:"Composition of a solution.",def:{solute:20,solution:80}},
+{cat:"Chemistry",t:"Boyle's law",f:"P₁V₁ = P₂V₂",d:"Constant temperature, n constant.",def:{V1:4,P2:2,V2:8}},
+{cat:"Chemistry",t:"Charles's law",f:"V₁ ⁄ T₁ = V₂ ⁄ T₂",d:"Constant pressure (T in Kelvin).",def:{T1:300,V2:3,T2:600}},
+{cat:"Chemistry",t:"Gay-Lussac",f:"P₁ ⁄ T₁ = P₂ ⁄ T₂",d:"Constant volume (T in Kelvin).",def:{T1:300,P2:3,T2:600}},
+{cat:"Chemistry",t:"Combined gas law",f:"P₁V₁ ⁄ T₁ = P₂V₂ ⁄ T₂",d:"All quantities changing.",def:{V1:4,P2:2,V2:8,T1:300,T2:600}},
+{cat:"Chemistry",t:"Heat",f:"q = m c ΔT",d:"Heat gained/lost, c = specific heat.",def:{m:2,c:4186,dT:10}}
 ];
 
 function elemCat(z){
@@ -1070,6 +1070,7 @@ class ClassWizEngine {
   constructor() {
     this.expression = "";
     this.cursorPos = 0;
+    this.dmsPhase = 0;
     this.result = "0";
     this.lastAnswer = 0;
     this.previousAnswer = 0;
@@ -1431,6 +1432,9 @@ class ClassWizEngine {
       return;
     }
 
+    const dmsKeep=['0','1','2','3','4','5','6','7','8','9','DOT','DMS'];
+    if (dmsKeep.indexOf(key)<0) this.dmsPhase=0;
+
     switch(key){
       case 'SHIFT': this.shiftActive=!this.shiftActive; this.alphaActive=false; break;
       case 'ALPHA': this.alphaActive=!this.alphaActive; this.shiftActive=false; break;
@@ -1473,7 +1477,7 @@ class ClassWizEngine {
       case 'LOG': this.insertToken(isShift?"10^(":"log("); break;
       case 'LN': this.insertToken(isShift?"exp(":"ln("); break;
       case 'NEG': this.insertToken(isShift?"FACT(":(isAlpha?"A":"(-)")); break;
-      case 'DMS': this.insertToken(isShift?"DMS(":(isAlpha?"B":"°'\"")); break;
+      case 'DMS': if(isShift){ this.insertToken("DMS("); } else if(isAlpha){ this.insertToken("B"); } else { this.insertToken(["°","'",'"'][this.dmsPhase%3]); this.dmsPhase++; } break;
       case 'HYP': this.insertToken(isShift?"Abs(":(isAlpha?"C":"sinh(")); break;
       case 'SIN': this.insertToken(isShift?"sin⁻¹(":(isAlpha?"D":"sin(")); break;
       case 'COS': this.insertToken(isShift?"cos⁻¹(":(isAlpha?"E":"cos(")); break;
@@ -2276,8 +2280,8 @@ class ClassWizEngine {
       .replace(/(\d+)nCr(\d+)/g,(m,n,r)=>{ n=+n;r=Math.min(+r,n-r); let p=1; for(let i=0;i<r;i++) p=p*(n-i)/(i+1); return Math.round(p); })
       .replace(/GCD\((-?\d+),(-?\d+)\)/g,(m,a,b)=>this.gcd(+a,+b))
       .replace(/LCM\((-?\d+),(-?\d+)\)/g,(m,a,b)=>Math.abs(+a*+b/this.gcd(+a,+b)))
-      .replace(/°'"/g,"°")
-      .replace(/(\d+(?:\.\d+)?)°(\d+)°(\d+)°/g,(m,d,mn,sc)=>(+d)+((+mn)/60)+((+sc)/3600))
+      .replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)'(\d+(?:\.\d+)?)"/g,(m,d,mn,sc)=>(+d)+((+mn)/60)+((+sc)/3600))
+      .replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)'/g,(m,d,mn)=>(+d)+((+mn)/60))
       .replace(/(\d+(?:\.\d+)?)°/g,(m,d)=>(+d))
       .replace(/(\d+(?:\.\d+)?)%/g,(m,v)=>(+v)/100)
       .replace(/\{you:([^}]+)\}/g,(m,v)=>{
@@ -3396,6 +3400,7 @@ class ClassWizEngine {
     const f=this.formulas[idx]; if(!f) return;
     this.frmSolver=this.buildFormula(f.f);
     this.frmSolver.frm=f;
+    this.frmSolver.def=(f.def||{});
     this.dom.frmCalcTitle.textContent=f.t;
     this.dom.frmCalcFormula.textContent=f.f;
     const tsel=this.dom.frmTarget; tsel.innerHTML='';
@@ -3410,8 +3415,9 @@ class ClassWizEngine {
   syncSolverInputs(){
     const S=this.frmSolver; if(!S) return;
     S.target=this.dom.frmTarget.value||S.vars[0];
+    const defs=S.def||{};
     this.dom.frmCalcInputs.innerHTML=S.vars.filter(v=>v!==S.target)
-      .map(v=>'<div class="fi-row"><span class="fi-name">'+this.esc(v)+'</span><input class="fi-val" id="fi'+this.fiId(v)+'" value="1" inputmode="decimal"></div>').join('');
+      .map(v=>'<div class="fi-row"><span class="fi-name">'+this.esc(v)+'</span><input class="fi-val" id="fi'+this.fiId(v)+'" value="'+String(defs[v]!==undefined?defs[v]:1)+'" inputmode="decimal"></div>').join('');
     this.dom.frmCalcOut.textContent='';
   }
 
@@ -3506,6 +3512,9 @@ class ClassWizEngine {
     const mT='§'+ti+'§';
     const escRE=v=>v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
     const sub=s=>s.replace(new RegExp(escRE(mT),'g'),'(T)')
+      .replace(/\blog10\(/g,'Math.log10(').replace(/\blog\(/g,'Math.log10(').replace(/\bln\(/g,'Math.log(')
+      .replace(/\bsin\(/g,'Math.sin(').replace(/\bcos\(/g,'Math.cos(').replace(/\btan\(/g,'Math.tan(')
+      .replace(/\bsqrt\(/g,'Math.sqrt(').replace(/\babs\(/g,'Math.abs(').replace(/\bexp\(/g,'Math.exp(')
       .replace(/§(\d+)§/g,(mm,ix)=>{ const k=params.findIndex(p=>p.mark===mm); return k>=0?names[k]:'0'; })
       .replace(/\(PI\)/g,'('+Math.PI+')');
     const fof=eqR=>new Function(...names,'T',`"use strict";return ((${sub(S.eqL)}) - (${sub(eqR)}));`);
