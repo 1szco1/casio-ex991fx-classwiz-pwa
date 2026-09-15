@@ -133,13 +133,6 @@ body {
   box-shadow:inset 0 4px 10px rgba(0,0,0,.8),inset 0 -2px 4px rgba(255,255,255,.25);
 }
 .lcd-display-frame.power-off { background:#111411; box-shadow:inset 0 0 20px rgba(0,0,0,.95); }
-.lcd-glare {
-  position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9;
-  background:linear-gradient(-25deg,transparent 0 38%,rgba(255,255,255,.16) 47% 53%,transparent 62% 100%),
-             linear-gradient(120deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.06) 50%,rgba(255,255,255,0) 60%);
-  opacity:.8; mix-blend-mode:screen;
-}
-
 .lcd-ribbon {
   display:flex; align-items:center; justify-content:space-between;
   font-size:11px; font-weight:700; color:#1e293b;
@@ -161,11 +154,6 @@ body {
 .ind-m { font-style:italic; font-weight:700; color:#020617; }
 
 .lcd-content { flex:1; position:relative; z-index:10; overflow:hidden; padding:6px 10px 8px; }
-.lcd-content::before {
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.10) 47%,rgba(255,255,255,0) 64%),
-             radial-gradient(120% 80% at 50% 0%,rgba(255,255,255,.25),rgba(255,255,255,0) 60%);
-}
 .expr-display {
   position:relative; z-index:1; height:100%; overflow-y:auto; overflow-x:hidden;
   text-align:left; font-size:14px; color:#1f2937; padding-right:2px;
@@ -255,14 +243,13 @@ sub { font-size:.6em; vertical-align:sub; line-height:0; }
 .btn-casio::before {
   content:""; position:absolute; left:8%; width:84%; height:55%; top:1px; pointer-events:none;
   border-radius:inherit;
-  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0));
-  mix-blend-mode:soft-light; opacity:.7;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  opacity:.85;
 }
 .btn-casio:active, .btn-casio.active-press {
   transform:translateY(2px);
-  border-bottom-width:1px; border-top-width:0; border-top-color:rgba(255,255,255,.08);
-  box-shadow:0 0 2px 1px rgba(0,0,0,.6),inset 0 2px 3px rgba(0,0,0,.4);
-  filter:brightness(.92);
+  border-bottom-width:1px;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.55);
 }
 .btn-casio-num { height:36px; }
 .btn-casio-num.btn-white { border-bottom-color:rgba(3,6,14,.55); }
@@ -304,10 +291,10 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 .dpad-arrow-down { bottom:7px; left:50%; transform:translateX(-50%); border-width:6px 5px 0 5px; border-color:#cbd5e1 transparent transparent transparent; }
 .dpad-arrow-left { left:7px; top:50%; transform:translateY(-50%); border-width:5px 6px 5px 0; border-color:transparent #cbd5e1 transparent transparent; }
 .dpad-arrow-right{ right:7px; top:50%; transform:translateY(-50%); border-width:5px 0 5px 6px; border-color:transparent transparent transparent #cbd5e1; }
-.dpad-arrow.highlight.dpad-arrow-up   { border-color:transparent transparent #38bdf8 transparent; filter:drop-shadow(0 0 4px rgba(56,189,248,.9)); }
-.dpad-arrow.highlight.dpad-arrow-down { border-color:#38bdf8 transparent transparent transparent; filter:drop-shadow(0 0 4px rgba(56,189,248,.9)); }
-.dpad-arrow.highlight.dpad-arrow-left { border-color:transparent #38bdf8 transparent transparent; filter:drop-shadow(0 0 4px rgba(56,189,248,.9)); }
-.dpad-arrow.highlight.dpad-arrow-right{ border-color:transparent transparent transparent #38bdf8; filter:drop-shadow(0 0 4px rgba(56,189,248,.9)); }
+.dpad-arrow.highlight.dpad-arrow-up   { border-color:transparent transparent #38bdf8 transparent; }
+.dpad-arrow.highlight.dpad-arrow-down { border-color:#38bdf8 transparent transparent transparent; }
+.dpad-arrow.highlight.dpad-arrow-left { border-color:transparent #38bdf8 transparent transparent; }
+.dpad-arrow.highlight.dpad-arrow-right{ border-color:transparent transparent transparent #38bdf8; }
 
 /* ---------- Footer ---------- */
 .footer { display:flex; justify-content:space-between; align-items:center; font-size:8px; color:var(--slate-400); padding:2px 4px 0; border-top:1px solid rgba(30,41,59,.8); font-family:ui-monospace,monospace; }
@@ -366,7 +353,6 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 
     <!-- LCD -->
     <div id="lcdDisplayFrame" class="lcd-display-frame">
-      <div class="lcd-glare"></div>
 
       <div id="lcdStatusRibbon" class="lcd-ribbon font-lcd">
         <div class="ribbon-left">
@@ -474,7 +460,8 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 
       <!-- OPTN -->
       <div id="optnOverlay" class="overlay faded hidden">
-        <div class="ov-head"><span class="ov-title cyan">OPTN Options</span><button id="closeOptn" class="ov-close">✕</button></div>
+        <div class="ov-head"><span class="ov-title cyan">Function Catalog (OPTN)</span><button id="closeOptn" class="ov-close">✕</button></div>
+        <input id="optnSearch" class="optn-search" placeholder="Search functions:  √  ∫  Σ  arcsin  log₂  LCM …" autocomplete="off" spellcheck="false">
         <div id="optnList" class="list-col"></div>
       </div>
 
@@ -1100,6 +1087,8 @@ class ClassWizEngine {
     this.mainMode = 'COMP';
     this.angleModes = ['DEG','RAD','GRAD'];
     this.angleIndex = 0;
+    this._renderCache = new Map();
+    this._fnCache = new Map();
     this.fractionDisplayMode = false;
     this.soundEnabled = true;
     this.variables = { A:0,B:0,C:0,D:0,E:0,F:0,x:0,y:0,z:0,M:0 };
@@ -1627,23 +1616,75 @@ class ClassWizEngine {
 
   openOptnMenu(){
     const list=this.dom.optnList; list.innerHTML="";
-    const options=[
-      { label:"1: Hyperbolic sinh(", action:()=>this.insertToken("sinh(") },
-      { label:"2: Hyperbolic cosh(", action:()=>this.insertToken("cosh(") },
-      { label:"3: Integral ∫(", action:()=>this.insertToken("∫(") },
-      { label:"4: Sum Σ(", action:()=>this.insertToken("Σ(") },
-      { label:"5: Product ∏(", action:()=>this.insertToken("∏(") },
-      { label:"6: Derivative d/dx(", action:()=>this.insertToken("d/dx(") },
-      { label:"7: Polynomial Rec(", action:()=>this.insertToken("Rec(") },
-      { label:"8: Polar Pol(", action:()=>this.insertToken("Pol(") },
-      { label:"9: Fraction ⇄", action:()=>this.toggleStandardDecimal() },
-      { label:"10: Eng Notation", action:()=>this.toggleEngNotation(1) }
+    const F=[
+      { g:"Basic", items:[
+        { l:"x²  Square", t:"²" }, { l:"x³  Cube", t:"³" }, { l:"x⁻¹  Inverse", t:"⁻¹" },
+        { l:"√(  Square root", t:"√(" }, { l:"∛(  Cube root", t:"∛(" }, { l:"ⁿ√(  nth root", t:"ⁿ√(" },
+        { l:"^(  Power", t:"^(" }, { l:"10^(  10^x", t:"10^(" }, { l:"exp(  e^x", t:"exp(" },
+        { l:"%  Percent", t:"%" }, { l:"π  Pi", t:"π" }, { l:"e  Napier's", t:"e" },
+        { l:"i  Imaginary (CMPLX)", t:"i" }, { l:"(−)  Negative", t:"(−)" },
+        { l:"Abs(  Absolute", t:"Abs(" }, { l:"Fraction slash", t:"/" },
+      ]},
+      { g:"Trigonometry (DEG/RAD/GRAD)", items:[
+        { l:"sin(", t:"sin(" }, { l:"cos(", t:"cos(" }, { l:"tan(", t:"tan(" },
+        { l:"sin⁻¹(  arcsin", t:"sin⁻¹(" }, { l:"cos⁻¹(  arccos", t:"cos⁻¹(" }, { l:"tan⁻¹(  arctan", t:"tan⁻¹(" },
+        { l:"arcsin(", t:"arcsin(" }, { l:"arccos(", t:"arccos(" }, { l:"arctan(", t:"arctan(" },
+        { l:"DMS(  deg°min′sec″", t:"DMS(" }, { l:"°  degree sign", t:"°" },
+      ]},
+      { g:"Hyperbolic", items:[
+        { l:"sinh(", t:"sinh(" }, { l:"cosh(", t:"cosh(" }, { l:"tanh(", t:"tanh(" },
+        { l:"sinh⁻¹(  asinh", t:"sinh⁻¹(" }, { l:"cosh⁻¹(  acosh", t:"cosh⁻¹(" }, { l:"tanh⁻¹(  atanh", t:"tanh⁻¹(" },
+      ]},
+      { g:"Logarithms & Exponents", items:[
+        { l:"log10(  base-10", t:"log10(" }, { l:"log(  base-10", t:"log(" },
+        { l:"log2(  base-2", t:"log2(" }, { l:"log(x,base)  two-arg", t:"log(" },
+        { l:"ln(  natural", t:"ln(" }, { l:"exp(  e^x", t:"exp(" },
+      ]},
+      { g:"Calculus & Series", items:[
+        { l:"∫(  definite integral", t:"∫(" }, { l:"d/dx(  derivative", t:"d/dx(" },
+        { l:"Σ(  summation", t:"Σ(" }, { l:"∏(  product", t:"∏(" },
+      ]},
+      { g:"Number & Combinatorics", items:[
+        { l:"nPr  permutation", t:"nPr" }, { l:"nCr  combination", t:"nCr" }, { l:"!  factorial", t:"!" },
+        { l:"GCD(", t:"GCD(" }, { l:"LCM(", t:"LCM(" }, { l:"FACT(  prime factors", t:"FACT(" },
+        { l:"RanInt(  random integer", t:"RanInt(" }, { l:"Rnd#  random number", t:"Rnd#" }, { l:"Rnd(  round", t:"Rnd(" },
+      ]},
+      { g:"Coordinate Conversion", items:[
+        { l:"Pol(  → r,θ", t:"Pol(" }, { l:"Rec(  → x,y", t:"Rec(" },
+      ]},
+      { g:"Complex mode (CMPLX)", items:[
+        { l:"i", t:"i" }, { l:"Real part Re(", t:"Re(" }, { l:"Imaginary Im(", t:"Im(" },
+        { l:"Conjugate Conjg(", t:"Conjg(" }, { l:"Argument arg(", t:"arg(" },
+      ]},
+      { g:"Variables & Memory", items:[
+        { l:"x  variable", t:"x" }, { l:"y  variable", t:"y" }, { l:"Ans  last answer", t:"Ans" }, { l:"PreAns  second-last", t:"PreAns" },
+      ]},
     ];
-    options.forEach(o=>{
-      const b=document.createElement('button'); b.className="optn-item"; b.textContent=o.label;
-      b.onclick=()=>{ o.action(); this.dom.optnOverlay.classList.add('hidden'); this.updateDisplay(); };
-      list.appendChild(b);
-    });
+    const q=document.getElementById('optnSearch');
+    const render=(fl="")=>{
+      let html="";
+      F.forEach(gr=>{
+        const hits=gr.items.filter(it=>it.l.toLowerCase().includes(fl)||it.t.toLowerCase().includes(fl));
+        if(!hits.length) return;
+        html+='<div class="optn-group">'+gr.g+"</div>";
+        hits.forEach(it=>{
+          html+='<button class="optn-item" data-t="'+it.t.replace(/"/g,'&quot;')+'"><span class="optn-t">'+this.esc(it.t)+'</span> — '+it.l+"</button>";
+        });
+      });
+      if(!html) html='<div class="optn-item" style="color:var(--slate-500)">No matches</div>';
+      list.innerHTML=html;
+      list.querySelectorAll('button.optn-item').forEach(b=>{
+        b.onclick=()=>{ this.insertToken(b.getAttribute('data-t')); this.closeAllOverlays(); this.dom.optnOverlay.classList.add('hidden'); this.updateDisplay(); };
+      });
+    };
+    if (q){
+      if (q.value) q.value="";
+      if (!q._wired){
+        q._wired=true;
+        q.addEventListener('input',()=>render(q.value.toLowerCase()));
+      }
+    }
+    render();
     this.dom.optnOverlay.classList.remove('hidden');
   }
 
@@ -1733,7 +1774,7 @@ class ClassWizEngine {
     if (dref!==undefined){ this.result=dref; this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
     const factM=closed.match(/^FACT\((\d+)\)$/);
     if (factM){ this.result=this.primeFactors(+factM[1]); this.exactForm=null; this._showingExact=false; this.updateDisplay(); return; }
-    if (this.activeMode==='CMPLX'){
+    if (this.activeMode==='CMPLX' && /(?<![A-Za-z])i(?![A-Za-z])/.test(closed)){
       try {
         const z=this.evalComplex(closed);
         if (z===null){ this.result="Syntax ERROR"; }
@@ -1754,7 +1795,7 @@ class ClassWizEngine {
       });
 
       // implicit multiplication again (variables just substituted: 2x -> 2(0))
-      s=s.replace(/(\d)\(/g,"$1*(").replace(/\)\(/g,")*(");
+      s=s.replace(/(?<![\dA-Za-z])(\d+)\(/g,"$1*(").replace(/\)\(/g,")*(");
 
       s=s.replace(/(\d+)!/g,(m,n)=>this.factorial(parseInt(n)));
       s=s.replace(/\^/g,"**");
@@ -1766,8 +1807,8 @@ class ClassWizEngine {
       const ctx={
         sin:x=>Math.sin(toRad(x)), cos:x=>Math.cos(toRad(x)), tan:x=>Math.tan(toRad(x)),
         asin:x=>fromRad(Math.asin(x)), acos:x=>fromRad(Math.acos(x)), atan:x=>fromRad(Math.atan(x)),
-        sinh:Math.sinh, cosh:Math.cosh, tanh:Math.tanh, abs:Math.abs,
-        sqrt:Math.sqrt, cbrt:Math.cbrt, log:(x,b)=>b===undefined?Math.log10(x):Math.log(x)/Math.log(b), ln:Math.log, exp:Math.exp,
+        sinh:Math.sinh, cosh:Math.cosh, tanh:Math.tanh, asinh:Math.asinh, acosh:Math.acosh, atanh:Math.atanh, abs:Math.abs,
+        sqrt:Math.sqrt, cbrt:Math.cbrt, log:(x,b)=>b===undefined?Math.log10(x):Math.log(x)/Math.log(b), ln:Math.log, exp:Math.exp, log2:Math.log2, log10:Math.log10,
         root:(a,b)=>b===undefined?Math.sqrt(a):Math.pow(b,1/a),
         DMS:x=>{ const g=x<0, s=Math.abs(x); let d=Math.floor(s), mf=(s-d)*60, m=Math.floor(mf);
           let sc=Math.round((mf-m)*60*100)/100;
@@ -1841,32 +1882,67 @@ class ClassWizEngine {
 
   solveEquation(){
     try {
-      let s=this.autoCloseParens(this.expression
+      let s=this.autoCloseParens(String(this.expression||'').trim())
         .replace(/×/g,"*").replace(/÷/g,"/").replace(/\^/g,"**")
-.replace(/ⁿ√\(/g,"root(").replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
-         .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
-         .replace(/Abs\(/g,"abs(").replace(/³/g,"**3").replace(/²/g,"**2").replace(/⁻¹/g,"**-1")
-         .replace(/π/g,`(${Math.PI})`)
-         .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,"($1*10**($2))")
-         .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`));
+        .replace(/ⁿ√\(/g,"root(").replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
+        .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
+        .replace(/arcsin\(/g,"asin(").replace(/arccos\(/g,"acos(").replace(/arctan\(/g,"atan(")
+        .replace(/sinh⁻¹\(/g,"asinh(").replace(/cosh⁻¹\(/g,"acosh(").replace(/tanh⁻¹\(/g,"atanh(")
+        .replace(/Abs\(/g,"abs(").replace(/³/g,"**3").replace(/²/g,"**2").replace(/⁻¹/g,"**-1")
+        .replace(/π/g,`(${Math.PI})`)
+        .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,"($1*10**($2))")
+        .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`);
+      if (!s) { this.result="Cannot Solve"; this.updateDisplay(); return; }
+      let eqAt=-1, depth=0;
+      for (let k=0;k<s.length;k++){
+        const ch=s.charAt(k);
+        if (ch==='(') depth++;
+        else if (ch===')') depth=Math.max(0,depth-1);
+        else if (ch==='='&&depth===0){ eqAt=k; break; }
+      }
+      let lhs, rhs;
+      if (eqAt>=0){ lhs=s.slice(0,eqAt); rhs=s.slice(eqAt+1); }
+      else { lhs=s; rhs='0'; }
+      const eq=`${lhs}-(${rhs})`;
       ['A','B','C','D','E','F','M','y','z'].forEach(v=>{
         s=s.replace(new RegExp(`(?<![A-Za-z])${v}(?![A-Za-z])`,'g'),`(${this.variables[v]})`);
       });
       const A=this.angleModes[this.angleIndex];
       const R=A==='DEG'?Math.PI/180:(A==='GRAD'?Math.PI/200:1);
-      const pro=`var sin=v=>Math.sin(v*${R}),cos=v=>Math.cos(v*${R}),tan=v=>Math.tan(v*${R}),asin=v=>Math.asin(v)/${R},acos=v=>Math.acos(v)/${R},atan=v=>Math.atan(v)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp;`;
-      const f=xv=>{ let t=s.replace(/(?<![A-Za-z])x(?![A-Za-z])/g,`(${xv})`);
-        t=t.replace(/(\d)\(/g,"$1*(").replace(/\)\(/g,")*(");
+      const pro=`var sin=v=>Math.sin(v*${R}),cos=v=>Math.cos(v*${R}),tan=v=>Math.tan(v*${R}),asin=v=>Math.asin(v)/${R},acos=v=>Math.acos(v)/${R},atan=v=>Math.atan(v)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp,sinh=Math.sinh,cosh=Math.cosh,tanh=Math.tanh,asinh=Math.asinh,acosh=Math.acosh,atanh=Math.atanh;`;
+      const f=xv=>{ let t=eq.replace(/(?<![A-Za-z])x(?![A-Za-z])/g,`(${xv})`)
+        .replace(/(?<![\dA-Za-z])(\d+)\(/g,"$1*(").replace(/\)\(/g,")*(");
         return Function('x',`"use strict";${pro}return (${t});`)(); };
-      let x=1,h=1e-5;
-      for (let i=0;i<100;i++){
-        const y=f(x), dy=(f(x+h)-f(x-h))/(2*h);
-        if (Math.abs(dy)<1e-12) break;
-        const nx=x-y/dy;
-        if (Math.abs(nx-x)<1e-9){ x=nx; break; }
-        x=nx;
+      const h=1e-5;
+      const step=x0=>{
+        let x=x0;
+        for (let i=0;i<120;i++){
+          const y=f(x), dy=(f(x+h)-f(x-h))/(2*h);
+          if (!isFinite(y)||!isFinite(dy)) break;
+          if (Math.abs(dy)<1e-12) break;
+          const nx=x-y/dy;
+          if (!isFinite(nx)) break;
+          if (Math.abs(nx-x)<1e-9){ x=nx; break; }
+          if (Math.abs(x)>1e10) { x=nx; break; }
+          x=nx;
+        }
+        return { x, res:Math.abs(f(x)) };
+      };
+      const unitStep=A==='DEG'?30:(A==='GRAD'?(200/6):Math.PI/6);
+      let guessList=[0,unitStep,2*unitStep,3*unitStep,4*unitStep,5*unitStep,6*unitStep,unitStep/2,0.5,1.5,-unitStep,-1];
+      let best=null, bestRes=Infinity;
+      for (const g0 of guessList){
+        const r=step(g0);
+        if (r.res<bestRes-1e-12||(Math.abs(r.res-bestRes)<=1e-9&&best!==null&&Math.abs(r.x)<Math.abs(best.x))){ bestRes=r.res; best=r; }
       }
-      this.result=`x = ${parseFloat(x.toFixed(6))}`;
+      if (best===null||!isFinite(best.x)){ this.result="Cannot Solve"; this.updateDisplay(); return; }
+      const xv=parseFloat(best.x.toPrecision(10));
+      const resl=parseFloat(best.res.toPrecision(4));
+      if (resl<=1e-6){
+        this.result=(Number.isInteger(xv)&&Math.abs(xv)<1e15)?`x = ${xv}`:`x = ${this.fmtNum(xv)}`;
+      } else {
+        this.result=`x = ${this.fmtNum(xv)}   (L−R = ${this.fmtNum(-resl)})`;
+      }
     } catch(e){ this.result="Cannot Solve"; }
     this.updateDisplay();
   }
@@ -1956,6 +2032,11 @@ class ClassWizEngine {
   }
 
   renderMathStr(raw){
+    const cache=this._renderCache;
+    if (cache.size){
+      const hit=cache.get(raw);
+      if (hit!==undefined) return hit;
+    }
     const esc=this.esc.bind(this);
     const matchG=this.findGroup.bind(this);
     const splitT=this.splitTop.bind(this);
@@ -2101,7 +2182,10 @@ class ClassWizEngine {
         return nodes.map(x=>x.h).join('');
       } catch(e){ return esc(str); }
     };
-    return parse(String(raw));
+    const out=parse(String(raw));
+    if (cache.size>=512) cache.delete(cache.keys().next().value);
+    cache.set(raw,out);
+    return out;
   }
 
   rationalApprox(v,maxD){
@@ -2187,6 +2271,8 @@ class ClassWizEngine {
       .replace(/(\d)([√∛€π])/g,"$1*$2")
       .replace(/π/g,`(${Math.PI})`)
       .replace(/sin⁻¹\(/g,"asin(").replace(/cos⁻¹\(/g,"acos(").replace(/tan⁻¹\(/g,"atan(")
+      .replace(/arcsin\(/g,"asin(").replace(/arccos\(/g,"acos(").replace(/arctan\(/g,"atan(")
+      .replace(/sinh⁻¹\(/g,"asinh(").replace(/cosh⁻¹\(/g,"acosh(").replace(/tanh⁻¹\(/g,"atanh(")
       .replace(/Abs\(/g,"abs(")
 .replace(/ⁿ√\(/g,"root(").replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
       .replace(/²/g,"**2").replace(/³/g,"**3").replace(/⁻¹/g,"**-1")
@@ -2195,6 +2281,7 @@ class ClassWizEngine {
       .replace(/(\d+)nPr(\d+)/g,(m,n,r)=>{ n=+n;r=+r; let p=1; for(let i=0;i<r;i++) p*=n-i; return p; })
       .replace(/(\d+)nCr(\d+)/g,(m,n,r)=>{ n=+n;r=Math.min(+r,n-r); let p=1; for(let i=0;i<r;i++) p=p*(n-i)/(i+1); return Math.round(p); })
       .replace(/GCD\((-?\d+),(-?\d+)\)/g,(m,a,b)=>this.gcd(+a,+b))
+      .replace(/LCM\((-?\d+),(-?\d+)\)/g,(m,a,b)=>Math.abs(+a*+b/this.gcd(+a,+b)))
       .replace(/°'"/g,"°")
       .replace(/(\d+(?:\.\d+)?)°(\d+)°(\d+)°/g,(m,d,mn,sc)=>(+d)+((+mn)/60)+((+sc)/3600))
       .replace(/(\d+(?:\.\d+)?)°/g,(m,d)=>(+d))
@@ -2206,7 +2293,7 @@ class ClassWizEngine {
       })
       .replace(/(\d+(?:\.\d+)?)[eE]([+-]?\d+)/g,"($1*10**($2))")
       .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,`$1(${Math.E})`)
-      .replace(/(\d)\(/g,"$1*(").replace(/\)(\d|\(|[A-Za-z])/g,")*$1");
+      .replace(/(?<![\dA-Za-z])(\d+)\(/g,"$1*(").replace(/\)(\d|\(|[A-Za-z])/g,")*$1");
   }
 
   expandAdvanced(s){
@@ -2215,9 +2302,17 @@ class ClassWizEngine {
     const R=this.angleModes[this.angleIndex]==='DEG'?Math.PI/180:(this.angleModes[this.angleIndex]==='GRAD'?Math.PI/200:1);
     const pro=`var sin=x=>Math.sin(x*${R}),cos=x=>Math.cos(x*${R}),tan=x=>Math.tan(x*${R}),asin=x=>Math.asin(x)/${R},acos=x=>Math.acos(x)/${R},atan=x=>Math.atan(x)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,root=(a,b)=>b===undefined?Math.sqrt(a):Math.pow(b,1/a),abs=Math.abs,log=(x,b)=>b===undefined?Math.log10(x):Math.log(b)/Math.log(x),ln=Math.log,exp=Math.exp,sinh=Math.sinh,cosh=Math.cosh,tanh=Math.tanh,asinh=Math.asinh,acosh=Math.acosh,atanh=Math.atanh;`;
     const evLoc=(body,vn,val)=>{
-      const prep=b=>b.replace(new RegExp(`(?<![A-Za-z])${vn}(?![A-Za-z])`,'g'),`(${vn})`)
-        .replace(/(\d)\(/g,"$1*(").replace(/\)\(/g,")*(");
-      return Function(vn,`"use strict";${pro}return (${prep(body)});`)(val);
+      const fkey=this.angleIndex+'|'+vn+'|'+body;
+      let f=this._fnCache.get(fkey);
+      if (!f){
+        const prep=b=>b.replace(new RegExp(`(?<![A-Za-z])${vn}(?![A-Za-z])`,'g'),`(${vn})`)
+          .replace(/³/g,"**3").replace(/²/g,"**2").replace(/⁻¹/g,"**-1").replace(/\^/g,"**")
+          .replace(/(?<![\dA-Za-z])(\d+)\(/g,"$1*(").replace(/\)\(/g,")*(");
+        f=Function(vn,`"use strict";${pro}return (${prep(body)});`);
+        if (this._fnCache.size>=512) this._fnCache.delete(this._fnCache.keys().next().value);
+        this._fnCache.set(fkey,f);
+      }
+      return f(val);
     };
     const evalNum=(t)=>{
       try { const v=evLoc(t,'x',0); return +v; } catch(e) { return NaN; }
@@ -2352,6 +2447,8 @@ class ClassWizEngine {
       let t=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/\^/g,'**')
         .replace(/√\(/g,'sqrt(').replace(/∛\(/g,'cbrt(')
         .replace(/sin⁻¹\(/g,'asin(').replace(/cos⁻¹\(/g,'acos(').replace(/tan⁻¹\(/g,'atan(')
+        .replace(/arcsin\(/g,'asin(').replace(/arccos\(/g,'acos(').replace(/arctan\(/g,'atan(')
+        .replace(/sinh⁻¹\(/g,'asinh(').replace(/cosh⁻¹\(/g,'acosh(').replace(/tanh⁻¹\(/g,'atanh(')
         .replace(/Abs\(/g,'abs(').replace(/³/g,'**3').replace(/²/g,'**2').replace(/⁻¹/g,'**-1')
         .replace(/π/g,'('+Math.PI+')')
         .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,'($1*10**($2))')
@@ -2359,7 +2456,7 @@ class ClassWizEngine {
       const pro=`var sin=x=>Math.sin(x*${R}),cos=x=>Math.cos(x*${R}),tan=x=>Math.tan(x*${R}),asin=x=>Math.asin(x)/${R},acos=x=>Math.acos(x)/${R},atan=x=>Math.atan(x)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp;`;
       const f=(xv)=>{
         let b=t.replace(/(?<![A-Za-z])x(?![A-Za-z])/g,'('+xv+')');
-        b=b.replace(/(\d)\(/g,'$1*(').replace(/\)\(/g,')*(');
+        b=b.replace(/(?<![\dA-Za-z])(\d+)\(/g,'$1*(').replace(/\)\(/g,')*(');
         return Function('x',`"use strict";${pro}return (${b});`)();
       };
       const start=parseFloat(this.tableParams[0]), end=parseFloat(this.tableParams[1]), step=parseFloat(this.tableParams[2]);
@@ -2481,7 +2578,8 @@ class ClassWizEngine {
     const C=(re,im)=>({re,im}), z=C(0,1);
     let i=0,toks=[];
     const numRe=/^((\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)/;
-    const fnRe=/^(sin|cos|tan|exp|ln|abs|arg|conj|re|im)/;
+    const fnNames={ sin:'sin',cos:'cos',tan:'tan',exp:'exp',ln:'ln',log:'ln',abs:'abs',arg:'arg',conj:'conj',conjg:'conj',re:'re',im:'im' };
+    const fnRe=/^([A-Za-z]+)/;
     while(i<s.length){
       const ch=s[i];
       if('+-*/^(),'.indexOf(ch)>=0){ toks.push({t:'op',v:ch}); i++; continue; }
@@ -2489,7 +2587,7 @@ class ClassWizEngine {
       const m=s.slice(i).match(numRe);
       if(m){ toks.push({t:'num',v:parseFloat(m[1])}); i+=m[1].length; continue; }
       const fn=s.slice(i).match(fnRe);
-      if(fn){ toks.push({t:'fn',v:fn[1]}); i+=fn[1].length; continue; }
+      if(fn){ const f=fn[1].toLowerCase(); const name=fnNames[f]||f; toks.push({t:'fn',v:name}); i+=fn[1].length; continue; }
       return null;
     }
     toks.push({t:'end'});
@@ -2852,17 +2950,19 @@ class ClassWizEngine {
     let t=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/\^/g,'**')
       .replace(/√\(/g,'sqrt(').replace(/∛\(/g,'cbrt(')
       .replace(/sin⁻¹\(/g,'asin(').replace(/cos⁻¹\(/g,'acos(').replace(/tan⁻¹\(/g,'atan(')
+      .replace(/arcsin\(/g,'asin(').replace(/arccos\(/g,'acos(').replace(/arctan\(/g,'atan(')
+      .replace(/sinh⁻¹\(/g,'asinh(').replace(/cosh⁻¹\(/g,'acosh(').replace(/tanh⁻¹\(/g,'atanh(')
       .replace(/Abs\(/g,'abs(').replace(/³/g,'**3').replace(/²/g,'**2').replace(/⁻¹/g,'**-1')
       .replace(/π/g,'('+Math.PI+')')
       .replace(/(-?\d+(?:\.\d+)?)e([+-]?\d+)/g,'($1*10**($2))')
       .replace(/([^A-Za-z]|^)e(?![0-9A-Za-z(])/g,'$1('+Math.E+')')
-      .replace(/(\d)(\(|[A-Za-z])/g,'$1*$2')
+      .replace(/(?<![\dA-Za-z])(\d+)(\(|[A-Za-z])/g,'$1*$2')
       .replace(/\)\(/g,')*(').replace(/\)([A-Za-z])/g,')*$1');
     ['A','B','C','D','E','F','M','y','z'].forEach(v=>{
       t=t.replace(new RegExp('(?<![A-Za-z])'+v+'(?![A-Za-z])','g'),'('+this.variables[v]+')');
     });
     const R=this.angleModes[this.angleIndex]==='DEG'?Math.PI/180:(this.angleModes[this.angleIndex]==='GRAD'?Math.PI/200:1);
-    const pro='var sin=x=>Math.sin(x*'+R+'),cos=x=>Math.cos(x*'+R+'),tan=x=>Math.tan(x*'+R+'),asin=x=>Math.asin(x)/'+R+',acos=x=>Math.acos(x)/'+R+',atan=x=>Math.atan(x)/'+R+',sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp;';
+    const pro='var sin=x=>Math.sin(x*'+R+'),cos=x=>Math.cos(x*'+R+'),tan=x=>Math.tan(x*'+R+'),asin=x=>Math.asin(x)/'+R+',acos=x=>Math.acos(x)/'+R+',atan=x=>Math.atan(x)/'+R+',sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=Math.log10,ln=Math.log,exp=Math.exp,sinh=Math.sinh,cosh=Math.cosh,tanh=Math.tanh,asinh=Math.asinh,acosh=Math.acosh,atanh=Math.atanh;';
     return new Function('x','"use strict";'+pro+'return ('+t+');');
   }
 
@@ -3324,7 +3424,7 @@ class ClassWizEngine {
   fiId(v){ return v.replace(/[^\w\u0370-\u03ff]/g,'_'); }
 
   buildFormula(f){
-    const FNs=['log10','asin','acos','atan','sinh','cosh','tanh','sin','cos','tan','ln','log','exp','sqrt','abs'];
+    const FNs=['log10','arcsin','arccos','arctan','asinh','acosh','atanh','asin','acos','atan','sinh','cosh','tanh','sin','cos','tan','ln','log','exp','sqrt','abs','cbrt'];
     const multis=['pct','dT','NA','pH','KE','PE','actual','theoretical','solute','solution'];
     const mSort=[...multis].sort((a,b)=>b.length-a.length);
     const fnSort=[...FNs].sort((a,b)=>b.length-a.length);
@@ -3342,7 +3442,7 @@ class ClassWizEngine {
       .replace(/Δ/g,'D').replace(/[ \u00a0]/g,'')
       .replace(/·/g,'*').replace(/×/g,'*').replace(/−/g,'-').replace(/÷/g,'/').replace(/⁄/g,'/')
       .replace(/√\(/g,'sqrt(').replace(/\^/g,'**').replace(/π/g,'(PI)')
-      .replace(/(\d)\(/g,'$1*(').replace(/(\d)([A-Za-z\u0370-\u03ff])/g,'$1*$2')
+      .replace(/(?<![\dA-Za-z])(\d+)\(/g,'$1*(').replace(/(?<![\dA-Za-z])(\d+)([A-Za-z\u0370-\u03ff])/g,'$1*$2')
       .replace(/log₁₀\(/g,'log10(')
       .replace(/[₀₁₂₃₄₅₆₇₈₉ₙ]/g,'');
     const [lhsUnt,rhsUnt]=clear(f).split('=');
@@ -3442,7 +3542,7 @@ class ClassWizEngine {
     const variants=pm?[S.eqR.replace(/±/g,'+'),S.eqR.replace(/±/g,'-')]:[S.eqR];
     const results=[];
     const R=this.angleModes[this.angleIndex]==='DEG'?Math.PI/180:(this.angleModes[this.angleIndex]==='GRAD'?Math.PI/200:1);
-    const pro=`var sin=x=>Math.sin(x*${R}),cos=x=>Math.cos(x*${R}),tan=x=>Math.tan(x*${R}),asin=x=>Math.asin(x)/${R},acos=x=>Math.acos(x)/${R},atan=x=>Math.atan(x)/${R},sqrt=Math.sqrt,log=(x,b)=>b===undefined?Math.log10(x):Math.log(b)/Math.log(x),log10=Math.log10,ln=Math.log,exp=Math.exp;`;
+    const pro=`var sin=x=>Math.sin(x*${R}),cos=x=>Math.cos(x*${R}),tan=x=>Math.tan(x*${R}),asin=x=>Math.asin(x)/${R},acos=x=>Math.acos(x)/${R},atan=x=>Math.atan(x)/${R},arcsin=x=>Math.asin(x)/${R},arccos=x=>Math.acos(x)/${R},arctan=x=>Math.atan(x)/${R},sqrt=Math.sqrt,cbrt=Math.cbrt,abs=Math.abs,log=(x,b)=>b===undefined?Math.log10(x):Math.log(b)/Math.log(x),log10=Math.log10,ln=Math.log,exp=Math.exp,sinh=Math.sinh,cosh=Math.cosh,tanh=Math.tanh,asinh=Math.asinh,acosh=Math.acosh,atanh=Math.atanh;`;
     variants.forEach(eqR=>{
       if(sub(S.eqL).trim()==='(T)'){
         try{ const fn=Function(...names,`${pro}return (${sub(eqR)});`); const r=fn(...args); if(isFinite(r)) results.push(r); }catch(e){}
