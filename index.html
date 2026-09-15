@@ -60,7 +60,6 @@ body {
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
-  .cursor { animation:blink 1s steps(1) infinite !important; }
 }
 .hidden { display:none !important; }
 
@@ -76,7 +75,7 @@ body {
 .calc-casing {
   width:100%; max-width:450px; border-radius:24px; padding:18px;
   display:flex; flex-direction:column; gap:8px; position:relative;
-  flex-shrink:0; transform-origin:center center; will-change:transform;
+  flex-shrink:0; transform-origin:center center;
   background:#151922;
   background-image:
     radial-gradient(rgba(255,255,255,.03) 1px, transparent 0),
@@ -144,9 +143,9 @@ body {
 .ind-badge {
   display:inline-flex; align-items:center; justify-content:center;
   width:14px; height:13px; font-size:9px; font-weight:800; border-radius:2px;
-  opacity:0; transform:scale(.8); line-height:1;
+  opacity:0; line-height:1;
 }
-.ind-badge.active { opacity:1; transform:scale(1); }
+.ind-badge.active { opacity:1; }
 .badge-s { background:#92400e; color:#fef3c7; }
 .badge-a { background:var(--rose-800); color:#ffe4e6; }
 .ind-angle { color:#0f172a; margin-left:2px; }
@@ -168,11 +167,13 @@ body {
 .cur-line { min-height:19px; }
 .base-line { font-size:10px; color:#7c2d12; font-weight:600; letter-spacing:.3px; margin-top:2px; }
 .result-display { display:none; }
+.expr-display, .expr-display *, .cur-line, .base-line {
+  user-select:text; -webkit-user-select:text; -webkit-touch-callout:default; cursor:text;
+}
 .cursor {
   display:inline-block; width:2px; height:17px; margin-left:1px; background:rgba(15,23,42,.85);
-  vertical-align:middle; animation:blink 1s steps(1) infinite;
+  vertical-align:middle;
 }
-@keyframes blink { 50% { opacity:0; } }
 
 /* ---------- Natural Textbook Display (WYSIWYG math typography) ---------- */
 .frac {
@@ -241,7 +242,6 @@ sub { font-size:.6em; vertical-align:sub; line-height:0; }
   box-shadow:0 1px 3px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.16);
 }
 .btn-casio:active, .btn-casio.active-press {
-  transform:translateY(2px);
   border-bottom-width:1px;
   box-shadow:inset 0 2px 6px rgba(0,0,0,.55);
 }
@@ -312,7 +312,7 @@ sub { font-size:.7em; } sup { font-size:.7em; }
   box-shadow:0 4px 12px rgba(0,0,0,.5);
   opacity:.92;
 }
-.install-btn:hover { opacity:1; transform:translateY(-1px); }
+.install-btn:hover { opacity:1; }
 .install-btn svg { width:11px; height:11px; }
 .install-btn .ib-x { color:var(--slate-400); font-size:10px; font-weight:700; padding:0 0 0 5px; }
 .install-btn .ib-x:hover { color:var(--rose-400); }
@@ -340,6 +340,9 @@ sub { font-size:.7em; } sup { font-size:.7em; }
         <button id="btnMemoryToggle" class="hdr-btn" title="Memory Variables"><span class="rcl-pill">RCL</span></button>
         <button id="btnHistoryToggle" class="hdr-btn" title="History">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </button>
+        <button id="btnGuideToggle" class="hdr-btn" title="Guide / Help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.3 9a2.8 2.8 0 0 1 5.43 1c0 1.8-2.73 2.3-2.73 3.9"/><circle cx="12" cy="17.4" r=".5" fill="currentColor"/></svg>
         </button>
         <div class="solar-cell"><div class="solar-lines"></div><span class="solar-txt">TWO WAY POWER</span></div>
       </div>
@@ -493,6 +496,64 @@ sub { font-size:.7em; } sup { font-size:.7em; }
           <button id="tblGenerate" class="tbl-btn" style="flex:1;">Generate ( = )</button>
         </div>
         <div id="tableGrid" class="tbl-grid"><div class="tbl-empty">Enter f(x), set limits, press &quot;=&quot;</div></div>
+      </div>
+
+      <!-- GUIDE -->
+      <div id="guideOverlay" class="overlay hidden">
+        <div class="ov-head"><span class="ov-title cyan">ClassWiz Guide</span><span class="ov-hint">Everything explained</span><button id="closeGuide" class="ov-close">✕</button></div>
+        <div class="guide-scroll">
+          <div class="guide-sub">Getting started</div>
+          <div class="guide-p">Type math exactly as it looks. Press <span class="k">AC</span> to clear, <span class="k">DEL</span> deletes the digit left of the cursor, <span class="k">=</span> evaluates. Answers are stored in <span class="k">Ans</span> and can be reused (type <span class="k">Ans</span> or press <span class="k">Ans</span> again).</div>
+          <div class="guide-p">Use the four arrows of the <b>REPLAY pad</b> to move the cursor; press <span class="k g">▲</span>/<span class="k g">▼</span> to recall previous calculations from history. Cursor is always in <b>insert mode</b> — characters insert, nothing overwrites.</div>
+
+          <div class="guide-sub">Modes (MENU)</div>
+          <div class="guide-p">Press <span class="k">MENU</span> to switch mode. Every mode keeps its own project:
+            <b>COMP</b> general calculation · <b>CMPLX</b> complex numbers · <b>BASE-N</b> binary/oct/dec/hex · <b>MATRIX</b> · <b>VECTOR</b> · <b>STATISTICS</b> · <b>DISTRIBUTION</b> · <b>SPREADSHEET</b> · <b>TABLE</b> f(x) table · <b>EQUATION</b> · <b>INEQUALITY</b> · <b>RATIO</b> a:b.</div>
+
+          <div class="guide-sub">SHIFT and ALPHA</div>
+          <div class="guide-p"><span class="k">SHIFT</span> arms the secondary (gold label) function of the next key. <span class="k">ALPHA</span> types the pink <i>variable letters</i>; press twice for <b>A-LOCK</b> so letters stay on. Pressing an un-shifted digit/operator exits both.</div>
+          <div class="guide-p">Quick reference of <b>SHIFT</b> functions: <span class="k">SOLVE</span>/<span class="k">SETUP</span> on SHIFT+DEL/ON · <span class="k">QR</span>=OPTN · <span class="k">d/dx</span>=∫dx · <span class="k">Σ</span>=x · <span class="k">∛</span>=√ · <span class="k">x!</span>=x⁻¹ · <span class="k">x³</span>=x² · <span class="k">ⁿ√x</span>=x^ · <span class="k">10^</span>=log · <span class="k">e^</span>=ln · <span class="k">FACT</span>=(−) · <span class="k">DMS</span>=°′″ · <span class="k">Abs</span>=hyp · <span class="k">sin⁻¹</span>=sin · <span class="k">cos⁻¹</span>=cos · <span class="k">tan⁻¹</span>=tan · <span class="k">STO</span>=RCL · <span class="k">i</span>=ENG · <span class="k">%</span>=( · <span class="k">,</span>=) · <span class="k">a b/c</span>=S⇔D · <span class="k">M−</span>=M+ · <span class="k">CONST</span>=CNST · <span class="k">CONV</span>=8 · <span class="k">nPr</span>=× · <span class="k">nCr</span>=÷ · <span class="k">Pol</span>=1 · <span class="k">Rec</span>=2 · <span class="k">Rnd</span>=3 · <span class="k">Mat</span>=4 · <span class="k">Vct</span>=5 · <span class="k">Stat</span>=6 · <span class="k">π</span>=×10^x · <span class="k">PreAns</span>=Ans.</div>
+
+          <div class="guide-sub">Natural textbook display</div>
+          <div class="guide-p">Fractions, powers, radicals, integrals, sums and products render as printed math, not flat text. <span class="k">^</span> starts a power — a letter or group like <b>x^(2y)</b> stays in the exponent. Write <span class="k">2^10</span>, <span class="k">10^(3)</span> or <span class="k">x^2</span> directly; <span class="k">x²</span>/<span class="k">x³</span> are hot keys.</div>
+          <div class="guide-p">The &#x25BC; base line (e.g. <b>Math▲▼</b>, DEG/GRAD/RAD indicator) shows the active angle unit. Press <span class="k">S⇔D</span> to switch exact ⇄ decimal and mixed-fraction forms.</div>
+
+          <div class="guide-sub">Integrals · sums · products · derivatives</div>
+          <div class="guide-p amber"><span class="k">∫</span> or the <span class="k">SHIFT</span>+<span class="k">x</span> parent key opens <b>∫(f(x),a,b)</b>. Type <span class="k">Σ</span>=<b>Σ(f(x),x,a,b)</b> for sums, <span class="k">∏(</span> for products, <span class="k">d/dx(f(x),a)</span> for the derivative at a. Function catalog has them all.</div>
+
+          <div class="guide-sub">Complex numbers (CMPLX)</div>
+          <div class="guide-p">Enter <b>a+bi</b> with <span class="k">i</span>. Use <b>Re(</b>, <b>Im(</b>, <b>Conjg(</b>, <b>arg(</b> for parts. Real-only input stays on the fast real evaluator; type <span class="k">√(−1)</span> to get <b>i</b>. Always near-exact: (1+i)² = 2i.</div>
+
+          <div class="guide-sub">Degrees · minutes · seconds (DMS)</div>
+          <div class="guide-p amber">Press <span class="k">°′″</span> to append <b>°</b>, press again for <b>′</b>, again for <b>″</b> (cycles). Example: <b>45 ° 30 ′ 15 ″ =</b> gives 45.50416667. Use <span class="k">SHIFT</span>+<span class="k">°′″</span> = <b>DMS(</b> to convert a decimal degree back to <b>°′″</b> notation.</div>
+
+          <div class="guide-sub">Solve · equations · inequalities · ratios</div>
+          <div class="guide-p"><span class="k">f(x)=0</span> (and the rows ⚗/ƒ(x)/y=f(x)) open the <b>all-in-one</b> panels: <b>SOLVE</b> solves almost any equation numerically (e.g. <b>x^2-3x+2=0</b>), <b>GRAPH</b> plots <b>y=f(x)</b>, <b>CHEM</b> is the periodic table, <b>FORM</b> computes physics/chemistry formulas with sensible defaults. MENU→EQUATION offers the 2×2 / 3×3 systems; MENU→INEQUALITY and MENU→RATIO are self-explanatory.</div>
+
+          <div class="guide-sub">Statistics · matrix · vector · spreadsheet (MENU)</div>
+          <div class="guide-p">STATISTICS: toggle <b>EDIT</b>, type data, then compute mean, sum, σ², σ, min/max, sum of squares, median and more. MATRIX: feed <b>MatA/MatB</b>, then det/inverse/Tᵀ/A×B. VECTOR: <b>VctA/VctB</b> with dot/cross products. SPREADSHEET supports A1-style cell references and <b>SUM(A1:A5)</b> with live recalc.</div>
+
+          <div class="guide-sub">Table (MENU → TABLE)</div>
+          <div class="guide-p">Enter <b>f(x)</b>, then tap Start / End / Step slots to set limits (e.g. 1 → 5 → 1) and press <b>Generate</b> — x and f(x) render side by side.</div>
+
+          <div class="guide-sub">Constants · conversions · chemistry</div>
+          <div class="guide-p"><span class="k">CNST</span> lists common constants (universal, electromagnetic, atomic, phys-chem — Planck, c, G, me …). <span class="k">SHIFT</span>+<span class="k">8</span> = <b>CONV</b> converts between length, area, volume, mass, temperature, pressure, energy, speed, force. <span class="k">⚗</span> opens a searchable periodic table with each element's properties.</div>
+
+          <div class="guide-sub">Memory</div>
+          <div class="guide-p"><span class="k">RCL</span> shows the A–Z / Ans registers, tap one to reuse it. <span class="k">SHIFT</span>+<span class="k">M+</span> = <b>M−</b>, and M+ adds to memory M. <span class="k">Ans</span> is the last result, <span class="k">PreAns</span> the one before. The header buttons open <b>Memory</b> and <b>History</b> panels too.</div>
+
+          <div class="guide-sub">Function catalog (OPTN) &amp; QR</div>
+          <div class="guide-p"><span class="k">OPTN</span> opens a searchable catalog of every function — try typing <b>∫</b>, <b>LCM</b>, <b>Pol(</b>, <b>arcsin</b>… It also holds the <b>Clipboard</b> group. The yellow <b>QR</b> (SHIFT+OPTN) button builds a scannable QR code of your work — tap the QR to copy it as text.</div>
+
+          <div class="guide-sub">Clipboard</div>
+          <div class="guide-p pink">Copy &amp; paste are fully supported. Press <b>Ctrl/Cmd+V</b> anywhere to insert the clipboard into the expression (✕ ÷ ^ π digits, even “2 * 3” text, are normalised). In OPTN → <b>Clipboard</b>: <b>Paste</b> reads the system clipboard, <b>Copy result</b> and <b>Copy expression</b> write to it. You can also long-press / select the display text directly.</div>
+
+          <div class="guide-sub">Offline &amp; install</div>
+          <div class="guide-p">The app works fully offline after the first visit — every asset is cached by the service worker (install via the browser’s “Install app” button). There are no ads and no network calls.</div>
+
+          <div class="guide-sub">Keyboard shortcuts</div>
+          <div class="guide-p">0-9 digits · <b>.</b> dot · <b>+ - * /</b> ops (⇄ × ÷) · <b>^</b> power · ( ) parens · <b>Enter/=</b> equals · <b>Backspace</b> delete · <b>Esc</b> clears / closes panels · <b>↑↓→←</b> navigate &amp; history · <b>Ctrl/Cmd+V</b> paste.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -957,6 +1018,9 @@ sub { font-size:.7em; } sup { font-size:.7em; }
 
 
 
+<div id="toast" class="toast hidden"></div>
+
+
 <script>
 const ELEMENTS=[
 [1,"H","Hydrogen",1.008],[2,"He","Helium",4.002602],[3,"Li","Lithium",6.94],[4,"Be","Beryllium",9.0121831],
@@ -1229,6 +1293,8 @@ class ClassWizEngine {
       indAngle:id('indAngle'), indM:id('indM'), indMode:id('indMode'),
       btnSoundToggle:id('btnSoundToggle'), soundIconOn:id('soundIconOn'), soundIconOff:id('soundIconOff'),
       btnMemoryToggle:id('btnMemoryToggle'), btnHistoryToggle:id('btnHistoryToggle'),
+      guideOverlay:id('guideOverlay'), closeGuide:id('closeGuide'), btnGuideToggle:id('btnGuideToggle'),
+      toast:id('toast'),
       menuOverlay:id('menuOverlay'), menuGrid:id('menuGrid'),
       constOverlay:id('constOverlay'), constList:id('constList'),
       constCategoryTabs:id('constCategoryTabs'), closeConst:id('closeConst'),
@@ -1333,6 +1399,8 @@ class ClassWizEngine {
     this.dom.btnMemoryToggle.addEventListener('click',()=>this.openMemoryView());
     this.dom.closeMemory.addEventListener('click',()=>this.dom.memoryOverlay.classList.add('hidden'));
     this.dom.btnHistoryToggle.addEventListener('click',()=>{ this.dom.historyOverlay.classList.remove('hidden'); this.renderHistory(); });
+    this.dom.btnGuideToggle.addEventListener('click',()=>this.dom.guideOverlay.classList.toggle('hidden'));
+    this.dom.closeGuide.addEventListener('click',()=>this.dom.guideOverlay.classList.add('hidden'));
     this.dom.closeHistory.addEventListener('click',()=>this.dom.historyOverlay.classList.add('hidden'));
     this.dom.btnClearHistory.addEventListener('click',()=>{ this.history=[]; this.renderHistory(); });
     this.dom.closeTable.addEventListener('click',()=>{ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.exitAppMode(); this.updateDisplay(); });
@@ -1356,6 +1424,13 @@ class ClassWizEngine {
     this.bindModuleEvents();
     this.bindModeEvents();
     window.addEventListener('keydown',e=>this.handlePhysicalKeyboard(e));
+    window.addEventListener('paste',e=>{
+      if(!this.isPoweredOn) return;
+      const pt=e.target;
+      if(pt&&(pt.tagName==='INPUT'||pt.tagName==='TEXTAREA'||pt.isContentEditable)) return;
+      const txt=(e.clipboardData&&e.clipboardData.getData('text'))||'';
+      if(txt){ e.preventDefault(); this.pasteText(txt); }
+    });
     window.addEventListener('resize',()=>this.fitToScreen());
     window.addEventListener('orientationchange',()=>setTimeout(()=>this.fitToScreen(),250));
     if (window.visualViewport){
@@ -1522,7 +1597,7 @@ class ClassWizEngine {
 
   closeAllOverlays(){
     ['menuOverlay','optnOverlay','constOverlay','convOverlay','memoryOverlay','historyOverlay','qrOverlay','tableOverlay',
-     'graphOverlay','solveOverlay','chemOverlay','formOverlay',
+     'guideOverlay','graphOverlay','solveOverlay','chemOverlay','formOverlay',
      'statOverlay','matOverlay','vctOverlay','ineqOverlay','ratioOverlay','distOverlay','sheetOverlay']
       .forEach(k=>this.dom[k].classList.add('hidden'));
   }
@@ -1657,6 +1732,9 @@ class ClassWizEngine {
       { g:"Variables & Memory", items:[
         { l:"x  variable", t:"x" }, { l:"y  variable", t:"y" }, { l:"Ans  last answer", t:"Ans" }, { l:"PreAns  second-last", t:"PreAns" },
       ]},
+      { g:"Clipboard", items:[
+        { l:"Paste from clipboard", t:"{clip:p}" }, { l:"Copy result  (=', Ans?)", t:"{clip:cr}" }, { l:"Copy expression", t:"{clip:ce}" },
+      ]},
     ];
     const q=document.getElementById('optnSearch');
     const render=(fl="")=>{
@@ -1672,7 +1750,7 @@ class ClassWizEngine {
       if(!html) html='<div class="optn-item" style="color:var(--slate-500)">No matches</div>';
       list.innerHTML=html;
       list.querySelectorAll('button.optn-item').forEach(b=>{
-        b.onclick=()=>{ this.insertToken(b.getAttribute('data-t')); this.closeAllOverlays(); this.dom.optnOverlay.classList.add('hidden'); this.updateDisplay(); };
+        b.onclick=()=>{ const t=b.getAttribute('data-t'); if(t==='{clip:p}') this.pasteClipboard(); else if(t==='{clip:cr}') this.copyResult(); else if(t==='{clip:ce}') this.copyExpression(); else this.insertToken(t); this.closeAllOverlays(); this.dom.optnOverlay.classList.add('hidden'); this.updateDisplay(); };
       });
     };
     if (q){
@@ -1751,6 +1829,44 @@ class ClassWizEngine {
       document.execCommand('copy'); document.body.removeChild(ta);
       done();
     }catch(e){}
+  }
+
+  copyToClipboard(txt){
+    const done=()=>this.flashToast(txt?'Copied ✓':'Nothing to copy');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done,()=>this.fallbackCopy(txt,done));
+    } else this.fallbackCopy(txt,done);
+  }
+
+  pasteText(raw){
+    if(!raw) return;
+    let s=String(raw).replace(/\s+/g,'')
+      .replace(/\*\*/g,'^')
+      .replace(/\*/g,'×')
+      .replace(/\//g,'÷')
+      .replace(/[\u2212\u2013\u2014]/g,'-')
+      .replace(/²/g,'^2').replace(/³/g,'^3');
+    if(!s) return;
+    this.insertToken(s);
+    this.updateDisplay();
+  }
+
+  pasteClipboard(){
+    if(navigator.clipboard&&navigator.clipboard.readText){
+      navigator.clipboard.readText().then(txt=>this.pasteText(txt||'')).catch(()=>this.flashToast('Clipboard read unavailable'));
+    } else this.flashToast('Clipboard read not supported');
+  }
+
+  copyResult(){ this.copyToClipboard(String(this.result).replace(/<[^>]*>/g,'')); }
+  copyExpression(){ this.copyToClipboard(this.expression); }
+
+  flashToast(msg){
+    const el=this.dom.toast;
+    if(!el) return;
+    el.textContent=msg;
+    el.classList.remove('hidden');
+    clearTimeout(this._toastT);
+    this._toastT=setTimeout(()=>el.classList.add('hidden'),1400);
   }
 
   autoCloseParens(s){
@@ -2125,7 +2241,7 @@ class ClassWizEngine {
               exp=parse(g.inner); i=g.end+1;
             } else if (/[-0-9πA-Za-z]/.test(str.charAt(i))){
               let j=i;
-              while(j<n&&/[-0-9π.]/.test(str.charAt(j))){ exp+=str.charAt(j); j++; }
+              while(j<n&&/[-0-9πA-Za-z.]/.test(str.charAt(j))){ exp+=str.charAt(j); j++; }
               exp=parse(exp)||'';
               i=j;
             }
