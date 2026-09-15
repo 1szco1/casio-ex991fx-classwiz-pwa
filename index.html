@@ -502,58 +502,219 @@ sub { font-size:.7em; } sup { font-size:.7em; }
       <div id="guideOverlay" class="overlay hidden">
         <div class="ov-head"><span class="ov-title cyan">ClassWiz Guide</span><span class="ov-hint">Everything explained</span><button id="closeGuide" class="ov-close">✕</button></div>
         <div class="guide-scroll">
-          <div class="guide-sub">Getting started</div>
-          <div class="guide-p">Type math exactly as it looks. Press <span class="k">AC</span> to clear, <span class="k">DEL</span> deletes the digit left of the cursor, <span class="k">=</span> evaluates. Answers are stored in <span class="k">Ans</span> and can be reused (type <span class="k">Ans</span> or press <span class="k">Ans</span> again).</div>
-          <div class="guide-p">Use the four arrows of the <b>REPLAY pad</b> to move the cursor; press <span class="k g">▲</span>/<span class="k g">▼</span> to recall previous calculations from history. Cursor is always in <b>insert mode</b> — characters insert, nothing overwrites.</div>
+  <div class="guide-toc">
+    <span class="gchip" data-go="g1">1 · Basics</span>
+    <span class="gchip" data-go="g2">2 · Modes &amp; keys</span>
+    <span class="gchip" data-go="g3">3 · Entering math</span>
+    <span class="gchip" data-go="g4">4 · Functions</span>
+    <span class="gchip" data-go="g5">5 · Calculus</span>
+    <span class="gchip" data-go="g6">6 · Complex</span>
+    <span class="gchip" data-go="g7">7 · DMS</span>
+    <span class="gchip" data-go="g8">8 · Number &amp; base-n</span>
+    <span class="gchip" data-go="g9">9 · Solve / EQN</span>
+    <span class="gchip" data-go="g10">10 · Modules</span>
+    <span class="gchip" data-go="g11">11 · Graph</span>
+    <span class="gchip" data-go="g12">12 · Chemistry</span>
+    <span class="gchip" data-go="g13">13 · Formulas</span>
+    <span class="gchip" data-go="g14">14 · Table</span>
+    <span class="gchip" data-go="g15">15 · Const &amp; Conv</span>
+    <span class="gchip" data-go="g16">16 · Memory</span>
+    <span class="gchip" data-go="g17">17 · QR</span>
+    <span class="gchip" data-go="g18">18 · Clipboard</span>
+    <span class="gchip" data-go="g19">19 · Offline</span>
+    <span class="gchip" data-go="g20">20 · Shortcuts</span>
+  </div>
 
-          <div class="guide-sub">Modes (MENU)</div>
-          <div class="guide-p">Press <span class="k">MENU</span> to switch mode. Every mode keeps its own project:
-            <b>COMP</b> general calculation · <b>CMPLX</b> complex numbers · <b>BASE-N</b> binary/oct/dec/hex · <b>MATRIX</b> · <b>VECTOR</b> · <b>STATISTICS</b> · <b>DISTRIBUTION</b> · <b>SPREADSHEET</b> · <b>TABLE</b> f(x) table · <b>EQUATION</b> · <b>INEQUALITY</b> · <b>RATIO</b> a:b.</div>
+  <div class="guide-cat" id="g1">1 · Basics</div>
 
-          <div class="guide-sub">SHIFT and ALPHA</div>
-          <div class="guide-p"><span class="k">SHIFT</span> arms the secondary (gold label) function of the next key. <span class="k">ALPHA</span> types the pink <i>variable letters</i>; press twice for <b>A-LOCK</b> so letters stay on. Pressing an un-shifted digit/operator exits both.</div>
-          <div class="guide-p">Quick reference of <b>SHIFT</b> functions: <span class="k">SOLVE</span>/<span class="k">SETUP</span> on SHIFT+DEL/ON · <span class="k">QR</span>=OPTN · <span class="k">d/dx</span>=∫dx · <span class="k">Σ</span>=x · <span class="k">∛</span>=√ · <span class="k">x!</span>=x⁻¹ · <span class="k">x³</span>=x² · <span class="k">ⁿ√x</span>=x^ · <span class="k">10^</span>=log · <span class="k">e^</span>=ln · <span class="k">FACT</span>=(−) · <span class="k">DMS</span>=°′″ · <span class="k">Abs</span>=hyp · <span class="k">sin⁻¹</span>=sin · <span class="k">cos⁻¹</span>=cos · <span class="k">tan⁻¹</span>=tan · <span class="k">STO</span>=RCL · <span class="k">i</span>=ENG · <span class="k">%</span>=( · <span class="k">,</span>=) · <span class="k">a b/c</span>=S⇔D · <span class="k">M−</span>=M+ · <span class="k">CONST</span>=CNST · <span class="k">CONV</span>=8 · <span class="k">nPr</span>=× · <span class="k">nCr</span>=÷ · <span class="k">Pol</span>=1 · <span class="k">Rec</span>=2 · <span class="k">Rnd</span>=3 · <span class="k">Mat</span>=4 · <span class="k">Vct</span>=5 · <span class="k">Stat</span>=6 · <span class="k">π</span>=×10^x · <span class="k">PreAns</span>=Ans.</div>
+  <div class="guide-sub">Power · clear · reset</div>
+  <div class="guide-p"><span class="k">ON</span> wakes the calculator (it starts on); <span class="k">SHIFT</span>+<span class="k">ON</span> is <b>RESET</b>. <span class="k">AC</span> clears the current line; <span class="k">SHIFT</span>+<span class="k">AC</span> does a <b>full reset</b> — it also clears every memory register (A–Z, M) and the whole history. <span class="k">SHIFT</span>+<span class="k">DEL</span> is <b>OFF</b> (power down); pressing any key wakes it again. <span class="k">DEL</span> alone deletes the character left of the cursor.</div>
 
-          <div class="guide-sub">Natural textbook display</div>
-          <div class="guide-p">Fractions, powers, radicals, integrals, sums and products render as printed math, not flat text. <span class="k">^</span> starts a power — a letter or group like <b>x^(2y)</b> stays in the exponent. Write <span class="k">2^10</span>, <span class="k">10^(3)</span> or <span class="k">x^2</span> directly; <span class="k">x²</span>/<span class="k">x³</span> are hot keys.</div>
-          <div class="guide-p">The &#x25BC; base line (e.g. <b>Math▲▼</b>, DEG/GRAD/RAD indicator) shows the active angle unit. Press <span class="k">S⇔D</span> to switch exact ⇄ decimal and mixed-fraction forms.</div>
+  <div class="guide-sub">Cursor &amp; editing</div>
+  <div class="guide-p">The cursor is always in <b>insert mode</b> — typed characters push the rest along, nothing is ever overwritten. The four arrows on the <b>REPLAY pad</b> move the cursor; <span class="k g">▲</span> / <span class="k g">▼</span> walk through past calculations. Matching brackets are handled for you: opening parentheses auto-close at evaluation, and implied multiplication is understood (<b>2π</b>, <b>3(5)</b>, <b>2x</b>). To delete inside, move the cursor right of the character and press <span class="k">DEL</span>.</div>
 
-          <div class="guide-sub">Integrals · sums · products · derivatives</div>
-          <div class="guide-p amber"><span class="k">∫</span> or the <span class="k">SHIFT</span>+<span class="k">x</span> parent key opens <b>∫(f(x),a,b)</b>. Type <span class="k">Σ</span>=<b>Σ(f(x),x,a,b)</b> for sums, <span class="k">∏(</span> for products, <span class="k">d/dx(f(x),a)</span> for the derivative at a. Function catalog has them all.</div>
+  <div class="guide-sub">Ans &amp; PreAns</div>
+  <div class="guide-p">The <span class="k">Ans</span> key pastes the <b>last result</b> into the current expression; <span class="k">SHIFT</span>+<span class="k">Ans</span> pastes <b>PreAns</b> (the result before that). Results stay exact-friendly: depending on the value you may keep a fraction or radical form.</div>
 
-          <div class="guide-sub">Complex numbers (CMPLX)</div>
-          <div class="guide-p">Enter <b>a+bi</b> with <span class="k">i</span>. Use <b>Re(</b>, <b>Im(</b>, <b>Conjg(</b>, <b>arg(</b> for parts. Real-only input stays on the fast real evaluator; type <span class="k">√(−1)</span> to get <b>i</b>. Always near-exact: (1+i)² = 2i.</div>
+  <div class="guide-sub">Header buttons</div>
+  <div class="guide-p">Top-right of the unit: the <b>speaker</b> toggles key-click sound, <b>RCL</b> opens the memory registers panel, the <b>clock</b> opens calculation history, and the <b>?</b> opens this guide.</div>
 
-          <div class="guide-sub">Degrees · minutes · seconds (DMS)</div>
-          <div class="guide-p amber">Press <span class="k">°′″</span> to append <b>°</b>, press again for <b>′</b>, again for <b>″</b> (cycles). Example: <b>45 ° 30 ′ 15 ″ =</b> gives 45.50416667. Use <span class="k">SHIFT</span>+<span class="k">°′″</span> = <b>DMS(</b> to convert a decimal degree back to <b>°′″</b> notation.</div>
+  <div class="guide-sub">Reading the display</div>
+  <div class="guide-p">The top ribbon shows <b>DEG/RAD/GRAD</b> (active angle unit), a highlighted <b>S</b> or <b>A</b> badge while SHIFT/ALPHA is armed, <b>M</b> when the M memory holds a value, and the current <b>mode</b> name (COMP, CMPLX, …). The bottom strip of the screen is a third line used e.g. by BASE-N mode.</div>
 
-          <div class="guide-sub">Solve · equations · inequalities · ratios</div>
-          <div class="guide-p"><span class="k">f(x)=0</span> (and the rows ⚗/ƒ(x)/y=f(x)) open the <b>all-in-one</b> panels: <b>SOLVE</b> solves almost any equation numerically (e.g. <b>x^2-3x+2=0</b>), <b>GRAPH</b> plots <b>y=f(x)</b>, <b>CHEM</b> is the periodic table, <b>FORM</b> computes physics/chemistry formulas with sensible defaults. MENU→EQUATION offers the 2×2 / 3×3 systems; MENU→INEQUALITY and MENU→RATIO are self-explanatory.</div>
+  <div class="guide-cat" id="g2">2 · Modes &amp; keys</div>
 
-          <div class="guide-sub">Statistics · matrix · vector · spreadsheet (MENU)</div>
-          <div class="guide-p">STATISTICS: toggle <b>EDIT</b>, type data, then compute mean, sum, σ², σ, min/max, sum of squares, median and more. MATRIX: feed <b>MatA/MatB</b>, then det/inverse/Tᵀ/A×B. VECTOR: <b>VctA/VctB</b> with dot/cross products. SPREADSHEET supports A1-style cell references and <b>SUM(A1:A5)</b> with live recalc.</div>
+  <div class="guide-sub">Modes (MENU)</div>
+  <div class="guide-p">Press <span class="k">MENU</span> to open the mode grid; each mode keeps an independent project.
+    <ul>
+      <li><b>1 COMP</b> — general calculation (default).</li>
+      <li><b>2 CMPLX</b> — complex <b>a + bi</b> arithmetic and functions.</li>
+      <li><b>3 BASE-N</b> — every result also shown as <b>DEC · HEX · OCT · BIN</b>.</li>
+      <li><b>4 MATRIX</b> — matrix A/B: determinants, inverse, transpose, products.</li>
+      <li><b>5 VECTOR</b> — 2D/3D vectors: dot, cross, sum, difference, norms, angle.</li>
+      <li><b>6 STATISTICS</b> — one/two-column data: mean, sums, σ/s, median, linear regression.</li>
+      <li><b>7 DISTRIBUTION</b> — normal N(μ, σ): z-score, P(X ≤ x), P(X &gt; x).</li>
+      <li><b>8 SPREADSHEET</b> — 6×12 grid with <b>=</b> formulas, cell refs and <b>SUM(A1:A3)</b>.</li>
+      <li><b>9 TABLE</b> — generate an f(x) value table over Start/End/Step.</li>
+      <li><b>A EQUATION</b> — 2×2 and 3×3 linear systems (opens the SOLVE panel).</li>
+      <li><b>B INEQUALITY</b> — linear and quadratic inequalities.</li>
+      <li><b>C RATIO</b> — solve <b>a : b = c : d</b> with one unknown.</li>
+    </ul></div>
 
-          <div class="guide-sub">Table (MENU → TABLE)</div>
-          <div class="guide-p">Enter <b>f(x)</b>, then tap Start / End / Step slots to set limits (e.g. 1 → 5 → 1) and press <b>Generate</b> — x and f(x) render side by side.</div>
+  <div class="guide-sub">SHIFT &amp; ALPHA</div>
+  <div class="guide-p"><span class="k">SHIFT</span> arms the gold secondary function on the next key (the badge <b>S</b> lights). <span class="k">ALPHA</span> types the pink <i>variable letter</i> (badge <b>A</b>); press <span class="k">ALPHA</span> twice for <b>A-LOCK</b> so letters stay armed. Any plain digit or operator releases both.</div>
 
-          <div class="guide-sub">Constants · conversions · chemistry</div>
-          <div class="guide-p"><span class="k">CNST</span> lists common constants (universal, electromagnetic, atomic, phys-chem — Planck, c, G, me …). <span class="k">SHIFT</span>+<span class="k">8</span> = <b>CONV</b> converts between length, area, volume, mass, temperature, pressure, energy, speed, force. <span class="k">⚗</span> opens a searchable periodic table with each element's properties.</div>
+  <div class="guide-sub">Key map (unshifted → SHIFT · ALPHA)</div>
+  <div class="guide-p">
+    <span class="k">OPTN</span> Optn ·<span class="k g">QR</span><span class="k">CALC</span> Calc ·<span class="k g">SOLVE</span><span class="k">∫dx</span> ∫( ·<span class="k g">d/dx</span><span class="k">x</span> x ·<span class="k g">Σ(</span><span class="k">▪/▪</span> fractional input ·<span class="k g">Standard ⇄ Decimal</span><span class="k">√▪</span> √( ·<span class="k g">∛(</span><span class="k">x⁻¹</span> inverse ·<span class="k g">x!</span><span class="k">x²</span> square ·<span class="k g">x³</span><span class="k">x•</span> power ^( ·<span class="k g">ⁿ√(</span><span class="k">log</span> log( ·<span class="k g">10^(</span><span class="k">ln</span> ln( ·<span class="k g">e^(</span><span class="k">(−)</span> negative ·<span class="k g">FACT(</span> <i>A</i><span class="k">°′″</span> DMS ·<span class="k g">DMS(</span> <i>B</i><span class="k">hyp</span> sinh( ·<span class="k g">Abs(</span> <i>C</i><span class="k">sin</span> sin( ·<span class="k g">sin⁻¹(</span> <i>D</i><span class="k">cos</span> cos( ·<span class="k g">cos⁻¹(</span> <i>E</i><span class="k">tan</span> tan( ·<span class="k g">tan⁻¹(</span> <i>F</i><span class="k">RCL</span> memory ·<span class="k g">STO</span><span class="k">ENG</span> eng notation ·<span class="k g">i</span><span class="k">(</span> ( ·<span class="k g">%</span><span class="k">)</span> ) ·<span class="k g">,</span> <i>x</i><span class="k">S⇔D</span> decimal ⇄ exact ·<span class="k g">a b/c</span> <i>y</i><span class="k">M+</span> add to M ·<span class="k g">M−</span> <i>M</i><span class="k">CNST</span> constants ·<span class="k g">CONST</span>.
+  </div>
+  <div class="guide-p">Number row shorthands: <span class="k g">Pol(</span>=1 · <span class="k g">Rec(</span>=2 · <span class="k g">Rnd(</span>=3 · <span class="k g">Mat(</span>=4 · <span class="k g">Vct(</span>=5 · <span class="k g">Stat(</span>=6 · <span class="k g">CONST</span>=7 · <span class="k g">CONV</span>=8 · <span class="k g">(</span>=9 · <span class="k g">Rnd#</span>=0 · <span class="k g">RanInt(</span>=. · <span class="k g">π</span> <i>e</i>=×10^x · <span class="k g">PreAns</span>=Ans · <span class="k g">GCD(</span>=− <i>z</i> · <span class="k g">Abs(</span>=+ · <span class="k g">nPr</span>=× · <span class="k g">nCr</span>=÷.</div>
 
-          <div class="guide-sub">Memory</div>
-          <div class="guide-p"><span class="k">RCL</span> shows the A–Z / Ans registers, tap one to reuse it. <span class="k">SHIFT</span>+<span class="k">M+</span> = <b>M−</b>, and M+ adds to memory M. <span class="k">Ans</span> is the last result, <span class="k">PreAns</span> the one before. The header buttons open <b>Memory</b> and <b>History</b> panels too.</div>
+  <div class="guide-sub">Angle unit</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">MENU</span> cycles <b>DEG → RAD → GRAD</b> (the ribbon updates). This unit is used by sin/cos/tan, their inverses, Pol/Rec, derivatives, and every solver/formula that touches angles.</div>
 
-          <div class="guide-sub">Function catalog (OPTN) &amp; QR</div>
-          <div class="guide-p"><span class="k">OPTN</span> opens a searchable catalog of every function — try typing <b>∫</b>, <b>LCM</b>, <b>Pol(</b>, <b>arcsin</b>… It also holds the <b>Clipboard</b> group. The yellow <b>QR</b> (SHIFT+OPTN) button builds a scannable QR code of your work — tap the QR to copy it as text.</div>
+  <div class="guide-cat" id="g3">3 · Entering math (natural display)</div>
 
-          <div class="guide-sub">Clipboard</div>
-          <div class="guide-p pink">Copy &amp; paste are fully supported. Press <b>Ctrl/Cmd+V</b> anywhere to insert the clipboard into the expression (✕ ÷ ^ π digits, even “2 * 3” text, are normalised). In OPTN → <b>Clipboard</b>: <b>Paste</b> reads the system clipboard, <b>Copy result</b> and <b>Copy expression</b> write to it. You can also long-press / select the display text directly.</div>
+  <div class="guide-sub">Powers &amp; roots</div>
+  <div class="guide-p"><span class="k">x•</span> (=<span class="k">^</span>) raises: type <span class="k g">2^10</span> or use <span class="k">^</span><span class="k">(</span> for a grouped exponent like <span class="k g">10^(3)</span> or <span class="k g">x^(2y)</span>. Super-scripted forms stay visible. Hot keys: <span class="k">x²</span>, <span class="k">SHIFT</span>+<span class="k">x²</span> = <span class="k">x³</span>, <span class="k">x⁻¹</span>, <span class="k">SHIFT</span>+<span class="k">x⁻¹</span> = <span class="k">!</span> factorial. Roots: <span class="k">√▪</span> begins <b>√(</b>, <span class="k">SHIFT</span>+<span class="k">√▪</span> = <b>∛(</b>, <span class="k">SHIFT</span>+<span class="k">x•</span> = <b>ⁿ√(</b> (n-th root).</div>
 
-          <div class="guide-sub">Offline &amp; install</div>
-          <div class="guide-p">The app works fully offline after the first visit — every asset is cached by the service worker (install via the browser’s “Install app” button). There are no ads and no network calls.</div>
+  <div class="guide-sub">Exponential &amp; scientific input</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">log</span> = <b>10^(</b>, <span class="k">SHIFT</span>+<span class="k">ln</span> = <b>e^( = exp(</b>. The <span class="k">×10^x</span> key inserts <b>×10^</b> for scientific notation (<b>6.022×10^23</b>); you can also write <b>6.022e23</b> in pasted text.</div>
 
-          <div class="guide-sub">Keyboard shortcuts</div>
-          <div class="guide-p">0-9 digits · <b>.</b> dot · <b>+ - * /</b> ops (⇄ × ÷) · <b>^</b> power · ( ) parens · <b>Enter/=</b> equals · <b>Backspace</b> delete · <b>Esc</b> clears / closes panels · <b>↑↓→←</b> navigate &amp; history · <b>Ctrl/Cmd+V</b> paste.</div>
-        </div>
+  <div class="guide-sub">Fractions &amp; decimals</div>
+  <div class="guide-p"><span class="k">▪/▪</span> inserts a fraction slash; type the numerator, the slash, the denominator — it renders stacked. <span class="k">S⇔D</span> switches between <b>exact</b> (fraction/radical) and <b>decimal</b> display. <span class="k">SHIFT</span>+<span class="k">S⇔D</span> toggles <b>mixed fraction ⇄ improper</b>, and <span class="k">SHIFT</span>+<span class="k">▪/▪</span> also switches the Standard ⇄ Decimal result format.</div>
+
+  <div class="guide-sub">Percent, negative, π, DMS</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">(</span> = <b>%</b> (so <b>50%</b> = 0.5, <b>200&nbsp;·&nbsp;10%</b> = 20). <span class="k">(−)</span> is the unary negative, distinct from subtraction. <span class="k">SHIFT</span>+<span class="k">×10^x</span> = <span class="k">π</span>, and with ALPHA armed that key gives <i>e</i>. <span class="k">°′″</span> appends degree/minutes/seconds — see §7.</div>
+
+  <div class="guide-cat" id="g4">4 · Functions (OPTN catalog)</div>
+
+  <div class="guide-sub">The catalog</div>
+  <div class="guide-p"><span class="k">OPTN</span> opens a searchable catalog of every available function; start typing (<b>∫</b>, <b>LCM</b>, <b>arcsin</b>, <b>Pol(</b>, …) to filter, then tap an entry to insert it. Groups:</div>
+  <div class="guide-p"><b>Basic</b>: <span class="k">x²</span> <span class="k">x³</span> <span class="k">x⁻¹</span> <span class="k">√(</span> <span class="k">∛(</span> <span class="k">ⁿ√(</span> <span class="k">^(</span> <span class="k">10^(</span> <span class="k">e^(</span> <span class="k">%</span> <span class="k">π</span> <span class="k">e</span> <span class="k">i</span> <span class="k">(−)</span> <span class="k">Abs(</span> fraction slash.</div>
+  <div class="guide-p"><b>Trigonometry</b>: sin cos tan · inverse (sin⁻¹/cos⁻¹/tan⁻¹) · arcsin/arccos/arctan · <span class="k">DMS(</span> · <span class="k">°</span>. <b>Hyperbolic</b>: sinh cosh tanh and their inverses.</div>
+  <div class="guide-p"><b>Logarithms &amp; exponents</b>: <span class="k">log10(</span> <span class="k">log(</span> <span class="k">log2(</span> <span class="k">log(x,base)</span> <span class="k">ln(</span> <span class="k">e^(</span>. Note <b>log(x,base)</b> takes an optional second argument: <span class="k g">log(8,2)=3</span>.</div>
+  <div class="guide-p"><b>Calculus &amp; series</b>: <span class="k">∫(</span> <span class="k">d/dx(</span> <span class="k">Σ(</span> <span class="k">∏(</span> (detail in §5).</div>
+  <div class="guide-p"><b>Number &amp; combinatorics</b>: <span class="k">nPr</span> <span class="k">nCr</span> <span class="k">!</span> <span class="k">GCD(</span> <span class="k">LCM(</span> <span class="k">FACT(</span> <span class="k">RanInt(</span> <span class="k">Rnd#</span> <span class="k">Rnd(</span>.</div>
+  <div class="guide-p"><b>Coordinate conversion</b>: <span class="k">Pol(</span> → (r, θ) and <span class="k">Rec(</span> → (x, y). <b>Complex</b>: <span class="k">i</span> <span class="k">Re(</span> <span class="k">Im(</span> <span class="k">Conjg(</span> <span class="k">arg(</span>.</div>
+  <div class="guide-p"><b>Variables &amp; memory</b>: x y Ans PreAns. <b>Clipboard</b>: paste / copy result / copy expression (see §18).</div>
+
+  <div class="guide-cat" id="g5">5 · Calculus &amp; series</div>
+
+  <div class="guide-sub">Integrals ∫</div>
+  <div class="guide-p">The <span class="k">∫dx</span> key or <span class="k">OPTN</span> inserts <b>∫(f(x) , a , b)</b>. The engine integrates numerically with an adaptive Simpson method, so difficult definite integrals are handled well. Example: <span class="k g">∫(ln(x)^3,1,100)</span> ≈ 41880.0... Use <i>x</i> as the variable; every other letter is a constant (0).</div>
+
+  <div class="guide-sub">Derivatives d/dx</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">∫dx</span> inserts <b>d/dx(f(x) , a)</b> — the numerical derivative at <i>x = a</i>.</div>
+
+  <div class="guide-sub">Sums Σ and products ∏</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">x</span> inserts <b>Σ(f(x) , var , start , end)</b>; the variable can be any letter. <span class="k">∏(</span> (in OPTN) works the same and multiplies instead of adds. Examples: <span class="k g">Σ(2^k,k,1,1000)</span>, <span class="k g">∏(k,k,1,5)=120</span>.</div>
+
+  <div class="guide-cat" id="g6">6 · Complex numbers (CMPLX)</div>
+
+  <div class="guide-p">Select <b>COMPLX</b> from MENU (or press <span class="k">SHIFT</span>+<span class="k">ENG</span> for <span class="k">i</span>). Type <b>a + bi</b> with implicit multiplication accepted (<b>2i</b>, <b>i</b>). Available: <span class="k">Re(</span> real part, <span class="k">Im(</span> imaginary part, <span class="k">Conjg(</span> conjugate, <span class="k">arg(</span> argument, <span class="k">Abs(</span> modulus — plus sin/cos/tan/exp/ln over the complex numbers. The result line also shows the <b>modulus ∠ argument</b> form.</div>
+  <div class="guide-p">Exactness holds automatically: <span class="k g">(1+1i)^2 = 2i</span>. A famous trap: <span class="k g">√(−1) = i</span>. Real-only input still evaluates on the fast real path; only when a bare <i>i</i> appears does it switch to complex evaluation.</div>
+
+  <div class="guide-cat" id="g7">7 · Degrees · minutes · seconds (DMS)</div>
+
+  <div class="guide-p">Press <span class="k">°′″</span> to append a degree sign; press it again to append minutes <b>′</b>, again for seconds <b>″</b> (it cycles). Example: <span class="k g">45 ° 30 ′ 15 ″ =</span> → <b>45.50416667</b>. <span class="k">SHIFT</span>+<span class="k">°′″</span> inserts <b>DMS(</b>, which converts a decimal degree back to <b>°′″</b> notation: <span class="k g">DMS(45.50416667)</span> → <b>45°30′15″</b>.</div>
+
+  <div class="guide-cat" id="g8">8 · Number &amp; combinatorics · base-n</div>
+
+  <div class="guide-sub">Combinatorics &amp; divisibility</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">×</span> = <b>nPr</b>, <span class="k">SHIFT</span>+<span class="k">÷</span> = <b>nCr</b>: <span class="k g">10nPr3 = 720</span>, <span class="k g">10nCr3 = 120</span>. <span class="k">SHIFT</span>+<span class="k">x⁻¹</span> = <b>!</b> factorial (<b>5! = 120</b>). <span class="k">SHIFT</span>+<span class="k">−</span> = <b>GCD(</b>, and <b>LCM(</b> is in OPTN. <span class="k">SHIFT</span>+<span class="k">(−)</span> = <b>FACT(</b> lists the prime factorization of an integer (<b>FACT(1024)</b> = 2×2×…×2).</div>
+
+  <div class="guide-sub">Random numbers</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">0</span> = <span class="k">Rnd#</span> — a uniform random 0…1. <span class="k">SHIFT</span>+<span class="k">.</span> = <b>RanInt(a,b)</b> — a random integer in [a,b] (<span class="k g">RanInt(1,6)</span> like a die). <span class="k">SHIFT</span>+<span class="k">3</span> = <b>Rnd(</b> rounds to the current display precision.</div>
+
+  <div class="guide-sub">BASE-N mode</div>
+  <div class="guide-p">In <b>BASE-N</b> mode every result is echoed on a base-line as <b>DEC · HEX · OCT · BIN</b> simultaneously (hexadecimal uses uppercase A–F with a − sign prefix for negatives). Non-integer values are shown as DEC with a note that the other bases apply to integers.</div>
+
+  <div class="guide-cat" id="g9">9 · Solve, equations, inequalities, ratios</div>
+
+  <div class="guide-sub">SOLVE (any equation)</div>
+  <div class="guide-p">The <span class="k">f(x)=0</span> key (or MENU → EQUATION) opens the solve panel. Type any single-variable equation using <i>x</i> — <span class="k g">x^2-5x+6=0</span>, <span class="k g">2x+3=11</span>, <span class="k g">sin(x)=0.5</span> — and press <b>Solve</b>. It finds a root numerically; real roots are reported as <b>x ≈ …</b>. The same panel has <b>2×2</b> and <b>3×3</b> linear-system tabs (form <b>a₁x + b₁y = c₁</b>).</div>
+
+  <div class="guide-sub">INEQUALITY</div>
+  <div class="guide-p">MENU → INEQUALITY: linear (<b>a x + b ◇ 0</b>) and quadratic (<b>a x² + b x + c ◇ 0</b>) with <b>&lt; &gt; ≤ ≥</b> selectors. It reports the solution interval or “All real numbers” / “No solution”, including the double-root special case (<b>x ≠ x₀</b>).</div>
+
+  <div class="guide-sub">RATIO</div>
+  <div class="guide-p">MENU → RATIO solves <b>a : b = c : d</b>. Leave <b>exactly one</b> box blank and press Solve — it finds the missing term (all four filled tests whether the equation is true).</div>
+
+  <div class="guide-cat" id="g10">10 · Module apps (STAT / MAT / VCT / DIST / SHEET)</div>
+
+  <div class="guide-sub">STATISTICS</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">6</span> or MENU → STATISTICS: the app focuses a data box. Paste or type numbers, each value on its own line (or split by spaces/commas/semicolons); <b>two columns</b> (or two values per row) enable <b>linear regression y = a + bx</b>. Press <b>Compute</b> for: n, x̄, Σx, Σx², min, max, median, population σ, sample s — and with two columns b, a, and the correlation r as well.</div>
+
+  <div class="guide-sub">MATRIX</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">4</span> or MENU → MATRIX: choose the shared dimension for <b>MatA</b> and <b>MatB</b>, fill both grids. Operations: <b>det(A)</b>, <b>det(B)</b>, <b>A⁻¹</b>, <b>Aᵀ</b> (transpose), <b>A×B</b> (product), <b>A+B</b>, <b>A−B</b>. Singular matrices report “Singular matrix (no inverse)”.</div>
+
+  <div class="guide-sub">VECTOR</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">5</span> or MENU → VECTOR: vectors A and B in 2D or 3D. Operations: <b>A · B</b> (dot → scalar), <b>A × B</b> (cross, 3D only), <b>A + B</b>, <b>A − B</b>, <b>|A|</b>, <b>|B|</b> (norms), and <b>angle</b> ∠(A,B) in degrees.</div>
+
+  <div class="guide-sub">DISTRIBUTION</div>
+  <div class="guide-p">MENU → DISTRIBUTION: normal distribution — enter <b>μ</b>, <b>σ</b> (&gt; 0) and <b>x</b>; you get the z-score, <b>P(X ≤ x)</b>, <b>P(X &gt; x)</b> and whether x sits below/above the mean.</div>
+
+  <div class="guide-sub">SPREADSHEET</div>
+  <div class="guide-p">MENU → SPREADSHEET: a 6×12 grid. Cells can hold plain numbers or formulas starting with <b>=</b>: references like <b>A1</b>, arithmetic with <b>+ − * / ( )</b>, and ranges like <b>=SUM(A1:A3)</b>. The grid recalculates live; cells that produce an error show “Error”.</div>
+
+  <div class="guide-cat" id="g11">11 · Graph (y = f(x))</div>
+
+  <div class="guide-p">The <span class="k c-cyan">y=f(x)</span> key opens the graph app. Type one or more functions separated by commas (<span class="k g">sin(x), x^2-3x+2, 1/x</span>), tap <b>Plot</b> (preset buttons fill common shapes). Tools: <b>+ / −</b> zoom in/out, <b>⟲</b> reset the view, <b>T</b> trace (a readout follows the curves). The current expression is shown on the screen. Escape or ✕ closes back to COMP.</div>
+
+  <div class="guide-cat" id="g12">12 · Chemistry (⚗ periodic table)</div>
+
+  <div class="guide-p">The <span class="k c-rose">⚗</span> key opens the periodic table. Use the search box (<b>Fe</b>, <b>Iron</b>, …), or browse and tap any element to see its details: atomic number, mass, category, group/period, electron configuration, electronegativity, density, melting/boiling points, and more. Category colors (alkali, halogen, noble, transition, lanthanide, actinide, …) match the standard legend.</div>
+
+  <div class="guide-cat" id="g13">13 · Formulas (ƒ(x) solver)</div>
+
+  <div class="guide-p">The purple <span class="k">ƒ(x)</span> key opens the formula library grouped by <b>Math</b>, <b>Physics</b> and <b>Chemistry</b> — e.g. Pythagorean theorem, rectangle area, Ohm’s law (<b>V = I·R</b>), weight (W = m·g), universal gravitation, ideal gas, electric power. Each formula ships with sensible default values; tap a formula, adjust any field, and press <b>Solve</b> to compute. You can also <b>leave one box blank</b> to solve for that quantity — one equation, one unknown, filled in for you. Trig/root/log functions inside formulas are wired to the engine, so formulas like the law of cosines evaluate directly.</div>
+
+  <div class="guide-cat" id="g14">14 · Table (MENU → TABLE)</div>
+
+  <div class="guide-p">MENU → TABLE: enter <b>f(x)</b> on the main line, then set the three slots <b>Start · End · Step</b> (e.g. 1 → 5 → 1) by tapping each slot and typing, and press <b>Generate ( = )</b>. The grid renders <b>x</b> and <b>f(x)</b> side by side for every step in range.</div>
+
+  <div class="guide-cat" id="g15">15 · Constants &amp; unit conversion</div>
+
+  <div class="guide-sub">Constants (CNST)</div>
+  <div class="guide-p">The <span class="k">CNST</span> key (or <span class="k">SHIFT</span>+<span class="k">7</span>) opens CODATA constants in four tabs: <b>Universal</b>, <b>Electromagnetic</b>, <b>Atomic</b>, <b>Phys-Chem</b> — speed of light <i>c</i>, Planck <i>h</i>, gravitational <i>G</i>, electron mass <i>me</i>, Avogadro, Rydberg, Boltzmann, … Tap one to insert it into the expression.</div>
+
+  <div class="guide-sub">Conversions (CONV)</div>
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">8</span> = CONV converts between units within eight categories: <b>length, area, volume, mass, temperature, pressure, energy, speed, force</b> (cm↔m, inches↔cm, gal↔L, lb↔kg, °C↔°F, bar↔Pa, cal↔J, km/h↔mph, kgf↔N, …). Enter a quantity, pick the pair, tap it — the factor is inserted into <b>Ans</b>-style evaluation.</div>
+
+  <div class="guide-cat" id="g16">16 · Memory &amp; history</div>
+
+  <div class="guide-p"><span class="k">RCL</span> (or the header <b>RCL</b> button) opens the register grid <b>A–Z, Ans, M</b>; tap a register to insert its value. <span class="k">SHIFT</span>+<span class="k">RCL</span> = <b>STO</b>: evaluate first, press STO, then a letter — the result is stored (<b>STO → [Var]</b>). <span class="k">M+</span> adds the current result to M, <span class="k">SHIFT</span>+<span class="k">M+</span> = <b>M−</b>. <b>Ans</b>/<b>PreAns</b> are themselves registers. The header <b>clock</b> opens history — every evaluated line is kept; <b>▲/▼</b> or tapping a line restores it; <b>Clear</b> empties the list (also done by <span class="k">SHIFT</span>+<span class="k">AC</span>).</div>
+
+  <div class="guide-cat" id="g17">17 · QR codes</div>
+
+  <div class="guide-p"><span class="k">SHIFT</span>+<span class="k">OPTN</span> opens the QR overlay with two modes: <b>Open</b> encodes your current expression/result (scan with a phone to open it in a calculator), <b>Search</b> encodes a web-search query (scan to search the web). Tap the QR code to copy its text payload.</div>
+
+  <div class="guide-cat" id="g18">18 · Clipboard</div>
+
+  <div class="guide-p">Bring text in or send results out:
+    <ul>
+      <li><b>Paste anywhere</b> — press <b>Ctrl/Cmd+V</b> anywhere on the page and the clipboard is inserted at the cursor, normalised: <b>*</b>→×, <b>/</b>→÷, <b>**</b>→^, <b>− / – / —</b>→−, <b>x² / x³</b>→^2 / ^3, whitespace removed. <b>“2 * 3”</b> pastes clean and evaluates to 6.</li>
+      <li><b>OPTN → Clipboard</b> — <b>Paste</b> reads the system clipboard (mobile-friendly), <b>Copy result</b> / <b>Copy expression</b> write the current line out.</li>
+      <li><b>Select text</b> — the display is selectable, so long-press to get the native Copy menu; note typing re-renders it immediately.</li>
+    </ul></div>
+
+  <div class="guide-cat" id="g19">19 · Offline &amp; installation</div>
+
+  <div class="guide-p">Everything ships as a single page plus a couple of static assets, all cached locally by the service worker the first time it loads. After one visit, the app works <b>fully offline</b> — open the served page with no connection and press “Install app” (or the header hint) to add it to your home screen / desktop. There are no ads and no network calls after the initial load.</div>
+
+  <div class="guide-cat" id="g20">20 · Keyboard shortcuts</div>
+
+  <div class="guide-p">When a hardware keyboard is available:
+    <ul>
+      <li><b>0–9</b> digits · <b>.</b> decimal point · <b>+ − * /</b> operators (⇄ × ÷)</li>
+      <li><b>^</b> power · <b>( )</b> parentheses</li>
+      <li><b>Enter</b> or <b>=</b> evaluate · <b>Backspace</b> delete left of cursor</li>
+      <li><b>Esc</b> clears the line / closes any open panel</li>
+      <li><b>↑ ↓ → ←</b> navigate the cursor (and <b>↑/↓</b> recall history)</li>
+      <li><b>Ctrl/Cmd+V</b> paste · <b>Ctrl/Cmd+C</b> works natively on selected display text</li>
+    </ul></div>
+</div>        </div>
       </div>
     </div>
   </div>
@@ -1399,8 +1560,16 @@ class ClassWizEngine {
     this.dom.btnMemoryToggle.addEventListener('click',()=>this.openMemoryView());
     this.dom.closeMemory.addEventListener('click',()=>this.dom.memoryOverlay.classList.add('hidden'));
     this.dom.btnHistoryToggle.addEventListener('click',()=>{ this.dom.historyOverlay.classList.remove('hidden'); this.renderHistory(); });
-    this.dom.btnGuideToggle.addEventListener('click',()=>this.dom.guideOverlay.classList.toggle('hidden'));
+    this.dom.btnGuideToggle.addEventListener('click',()=>{
+      this.dom.guideOverlay.classList.toggle('hidden');
+      if (this.dom.guideOverlay.classList.contains('hidden')===false){
+        const sc=this.dom.guideOverlay.querySelector('.guide-scroll'); if(sc) sc.scrollTop=0;
+      }
+    });
     this.dom.closeGuide.addEventListener('click',()=>this.dom.guideOverlay.classList.add('hidden'));
+    this.dom.guideOverlay.querySelectorAll('.gchip').forEach(ch=>{
+      ch.addEventListener('click',()=>{ const el=document.getElementById(ch.getAttribute('data-go')); if(el){ try{ el.scrollIntoView(); }catch(e){} } });
+    });
     this.dom.closeHistory.addEventListener('click',()=>this.dom.historyOverlay.classList.add('hidden'));
     this.dom.btnClearHistory.addEventListener('click',()=>{ this.history=[]; this.renderHistory(); });
     this.dom.closeTable.addEventListener('click',()=>{ this.dom.tableOverlay.classList.add('hidden'); this.tableEditing=false; this.exitAppMode(); this.updateDisplay(); });

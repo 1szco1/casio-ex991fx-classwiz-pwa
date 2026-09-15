@@ -319,3 +319,21 @@
   padding:6px 12px; border-radius:6px; border:1px solid var(--slate-700);
   pointer-events:none; white-space:nowrap; max-width:80vw; overflow:hidden; text-overflow:ellipsis;
 }
+
+.guide-toc {
+  position:sticky; top:0; z-index:3; display:flex; flex-wrap:wrap; gap:4px;
+  padding:6px 2px; background:#0f172a; border-bottom:1px solid var(--slate-800); margin:-4px -2px 8px;
+}
+.gchip {
+  display:inline-block; padding:3px 8px; border-radius:20px;
+  border:1px solid var(--slate-700); background:var(--slate-800);
+  color:var(--cyan-300); font-size:9.5px; font-weight:800; cursor:pointer;
+}
+.gchip:active { background:var(--slate-700); }
+.guide-cat {
+  font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--amber-300); border:1px solid rgba(251,191,36,.25); background:rgba(251,191,36,.06);
+  border-radius:6px; padding:5px 8px; margin:12px 0 6px;
+}
+.guide-p ul { margin:2px 0 6px; padding-left:16px; }
+.guide-p li { margin:2px 0; }
