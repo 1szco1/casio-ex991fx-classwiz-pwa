@@ -499,7 +499,110 @@ sub { font-size:.7em; } sup { font-size:.7em; }
       </div>
 
       <!-- GUIDE -->
-      <div id="guideOverlay" class="overlay hidden">
+      
+      </div>
+    </div>
+
+  <!-- Keys -->
+  <div class="keys">
+
+    <!-- Row: SHIFT / ALPHA / DPAD / MENU / ON -->
+    <div class="grid5" style="align-items:end;">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="SHIFT" class="btn-casio btn-shift-gold rounded-lg txs fw-b">SHIFT</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-alpha">A-LOCK</span></div><button data-key="ALPHA" class="btn-casio btn-alpha-pink rounded-lg txs fw-b">ALPHA</button></div>
+      <div class="key-cell">
+        <div class="lbl-container"><span class="lbl-replay">REPLAY</span></div>
+        <div id="dpadTrackpad" class="dpad-trackpad" title="Swipe or click quadrants">
+          <span id="arrowUp" class="dpad-arrow dpad-arrow-up"></span>
+          <span id="arrowLeft" class="dpad-arrow dpad-arrow-left"></span>
+          <span id="arrowRight" class="dpad-arrow dpad-arrow-right"></span>
+          <span id="arrowDown" class="dpad-arrow dpad-arrow-down"></span>
+        </div>
+      </div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SETUP</span></div><button data-key="MENU" class="btn-casio btn-grey-dark rounded-lg t10 fw-b">MENU</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RESET</span></div><button data-key="ON" class="btn-casio btn-grey-dark rounded-lg t10 fw-b c-amber">ON</button></div>
+    </div>
+
+    <!-- Function rows -->
+    <div class="grid6">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">QR</span></div><button data-key="OPTN" class="btn-casio btn-grey-dark rounded-md t10 fw-b">OPTN</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="CALC" class="btn-casio btn-grey-dark rounded-md t10 fw-b">CALC</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">d/dx</span></div><button data-key="INTEGRAL" class="btn-casio btn-grey-dark rounded-md txs fw-sb">∫dx</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Σ</span></div><button data-key="VARIABLE_X" class="btn-casio btn-grey-dark rounded-md txs fw-b c-rose">x</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">≫</span></div><button data-key="FRAC" class="btn-casio btn-grey-dark rounded-md txs fw-sb">▪/▪</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">∛</span></div><button data-key="SQRT" class="btn-casio btn-grey-dark rounded-md txs fw-sb">√▪</button></div>
+    </div>
+
+    <div class="grid6">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">x!</span></div><button data-key="INVERSE" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x⁻¹</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">x³</span></div><button data-key="SQR" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x²</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">ⁿ√x</span></div><button data-key="POW" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x<sup>▪</sup></button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">10<sup>▪</sup></span></div><button data-key="LOG" class="btn-casio btn-grey-dark rounded-md t9 fw-sb">log</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">e<sup>▪</sup></span></div><button data-key="LN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">ln</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">FACT</span><span class="lbl-var">A</span></div><button data-key="NEG" class="btn-casio btn-grey-dark rounded-md txs fw-sb">(-)</button></div>
+    </div>
+
+    <div class="grid6">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">DMS</span><span class="lbl-var">B</span></div><button data-key="DMS" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">°′″</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Abs</span><span class="lbl-var">C</span></div><button data-key="HYP" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">hyp</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">sin⁻¹</span><span class="lbl-var">D</span></div><button data-key="SIN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">sin</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">cos⁻¹</span><span class="lbl-var">E</span></div><button data-key="COS" class="btn-casio btn-grey-dark rounded-md txs fw-sb">cos</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">tan⁻¹</span><span class="lbl-var">F</span></div><button data-key="TAN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">tan</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">STO</span></div><button data-key="RCL" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">RCL</button></div>
+    </div>
+
+    <div class="grid6">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">i</span></div><button data-key="ENG" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">ENG</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">%</span></div><button data-key="LPAREN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">(</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">,</span><span class="lbl-var">x</span></div><button data-key="RPAREN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">)</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">a b/c</span><span class="lbl-var">y</span></div><button data-key="SD" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">S⇔D</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">M-</span><span class="lbl-var">M</span></div><button data-key="MPLUS" class="btn-casio btn-grey-dark rounded-md txs fw-sb">M+</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="CONST" class="btn-casio btn-grey-dark rounded-md t9 fw-sb">CNST</button></div>
+    </div>
+
+    <!-- All-in-one module launchers -->
+    <div class="grid4">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:var(--cyan-400);">GRAPH</span></div><button data-key="GRAPH" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-cyan">y=f(x)</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="SOLVE" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-amber">f(x)=0</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#f9a8d4;">CHEM</span></div><button data-key="CHEM" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-rose">⚗</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#a78bfa;">FORM</span></div><button data-key="FORM" class="btn-casio btn-grey-dark rounded-md t10 fw-b" style="color:#a78bfa;">ƒ(x)</button></div>
+    </div>
+
+    <!-- Numeric block -->
+    <div class="grid5">
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="7" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">7</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONV</span></div><button data-key="8" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">8</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">INS</span></div><button data-key="9" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">9</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">OFF</span></div><button data-key="DEL" class="btn-casio btn-casio-num btn-danger-red rounded-lg txs fw-eb">DEL</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RESET</span></div><button data-key="AC" class="btn-casio btn-casio-num btn-danger-red rounded-lg txs fw-eb">AC</button></div>
+
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Mat</span></div><button data-key="4" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">4</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Vct</span></div><button data-key="5" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">5</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Stat</span></div><button data-key="6" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">6</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">nPr</span></div><button data-key="MUL" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">×</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">nCr</span></div><button data-key="DIV" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">÷</button></div>
+
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Pol</span></div><button data-key="1" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">1</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rec</span></div><button data-key="2" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">2</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rnd</span></div><button data-key="3" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">3</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Abs</span></div><button data-key="ADD" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">+</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">GCD</span><span class="lbl-var">z</span></div><button data-key="SUB" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">−</button></div>
+
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rnd#</span></div><button data-key="0" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">0</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RanInt</span></div><button data-key="DOT" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">.</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">π</span><span class="lbl-alpha">e</span></div><button data-key="EXP" class="btn-casio btn-casio-num btn-grey-dark rounded-lg txs fw-b">×10<sup>x</sup></button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">PreAns</span></div><button data-key="ANS" class="btn-casio btn-casio-num btn-grey-dark rounded-lg txs fw-b">Ans</button></div>
+      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">≈</span></div><button data-key="EQUALS" class="btn-casio btn-casio-num btn-primary-blue rounded-lg txl fw-b">=</button></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Natural V.P.A.M. · 552 Functions</span>
+    <span class="cyan">ClassWiz FX-991EX</span>
+  </div>
+</div>
+
+<div id="guideOverlay" class="overlay hidden">
         <div class="ov-head"><span class="ov-title cyan">ClassWiz Guide</span><span class="ov-hint">Everything explained</span><button id="closeGuide" class="ov-close">✕</button></div>
         <div class="guide-scroll">
   <div class="guide-toc">
@@ -715,107 +818,7 @@ sub { font-size:.7em; } sup { font-size:.7em; }
       <li><b>Ctrl/Cmd+V</b> paste · <b>Ctrl/Cmd+C</b> works natively on selected display text</li>
     </ul></div>
 </div>        </div>
-      </div>
-    </div>
 
-  <!-- Keys -->
-  <div class="keys">
-
-    <!-- Row: SHIFT / ALPHA / DPAD / MENU / ON -->
-    <div class="grid5" style="align-items:end;">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="SHIFT" class="btn-casio btn-shift-gold rounded-lg txs fw-b">SHIFT</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-alpha">A-LOCK</span></div><button data-key="ALPHA" class="btn-casio btn-alpha-pink rounded-lg txs fw-b">ALPHA</button></div>
-      <div class="key-cell">
-        <div class="lbl-container"><span class="lbl-replay">REPLAY</span></div>
-        <div id="dpadTrackpad" class="dpad-trackpad" title="Swipe or click quadrants">
-          <span id="arrowUp" class="dpad-arrow dpad-arrow-up"></span>
-          <span id="arrowLeft" class="dpad-arrow dpad-arrow-left"></span>
-          <span id="arrowRight" class="dpad-arrow dpad-arrow-right"></span>
-          <span id="arrowDown" class="dpad-arrow dpad-arrow-down"></span>
-        </div>
-      </div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SETUP</span></div><button data-key="MENU" class="btn-casio btn-grey-dark rounded-lg t10 fw-b">MENU</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RESET</span></div><button data-key="ON" class="btn-casio btn-grey-dark rounded-lg t10 fw-b c-amber">ON</button></div>
-    </div>
-
-    <!-- Function rows -->
-    <div class="grid6">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">QR</span></div><button data-key="OPTN" class="btn-casio btn-grey-dark rounded-md t10 fw-b">OPTN</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="CALC" class="btn-casio btn-grey-dark rounded-md t10 fw-b">CALC</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">d/dx</span></div><button data-key="INTEGRAL" class="btn-casio btn-grey-dark rounded-md txs fw-sb">∫dx</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Σ</span></div><button data-key="VARIABLE_X" class="btn-casio btn-grey-dark rounded-md txs fw-b c-rose">x</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">≫</span></div><button data-key="FRAC" class="btn-casio btn-grey-dark rounded-md txs fw-sb">▪/▪</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">∛</span></div><button data-key="SQRT" class="btn-casio btn-grey-dark rounded-md txs fw-sb">√▪</button></div>
-    </div>
-
-    <div class="grid6">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">x!</span></div><button data-key="INVERSE" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x⁻¹</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">x³</span></div><button data-key="SQR" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x²</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">ⁿ√x</span></div><button data-key="POW" class="btn-casio btn-grey-dark rounded-md txs fw-sb">x<sup>▪</sup></button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">10<sup>▪</sup></span></div><button data-key="LOG" class="btn-casio btn-grey-dark rounded-md t9 fw-sb">log</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">e<sup>▪</sup></span></div><button data-key="LN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">ln</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">FACT</span><span class="lbl-var">A</span></div><button data-key="NEG" class="btn-casio btn-grey-dark rounded-md txs fw-sb">(-)</button></div>
-    </div>
-
-    <div class="grid6">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">DMS</span><span class="lbl-var">B</span></div><button data-key="DMS" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">°′″</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Abs</span><span class="lbl-var">C</span></div><button data-key="HYP" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">hyp</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">sin⁻¹</span><span class="lbl-var">D</span></div><button data-key="SIN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">sin</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">cos⁻¹</span><span class="lbl-var">E</span></div><button data-key="COS" class="btn-casio btn-grey-dark rounded-md txs fw-sb">cos</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">tan⁻¹</span><span class="lbl-var">F</span></div><button data-key="TAN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">tan</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">STO</span></div><button data-key="RCL" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">RCL</button></div>
-    </div>
-
-    <div class="grid6">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">i</span></div><button data-key="ENG" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">ENG</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">%</span></div><button data-key="LPAREN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">(</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">,</span><span class="lbl-var">x</span></div><button data-key="RPAREN" class="btn-casio btn-grey-dark rounded-md txs fw-sb">)</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">a b/c</span><span class="lbl-var">y</span></div><button data-key="SD" class="btn-casio btn-grey-dark rounded-md t10 fw-sb">S⇔D</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">M-</span><span class="lbl-var">M</span></div><button data-key="MPLUS" class="btn-casio btn-grey-dark rounded-md txs fw-sb">M+</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="CONST" class="btn-casio btn-grey-dark rounded-md t9 fw-sb">CNST</button></div>
-    </div>
-
-    <!-- All-in-one module launchers -->
-    <div class="grid4">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:var(--cyan-400);">GRAPH</span></div><button data-key="GRAPH" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-cyan">y=f(x)</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">SOLVE</span></div><button data-key="SOLVE" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-amber">f(x)=0</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#f9a8d4;">CHEM</span></div><button data-key="CHEM" class="btn-casio btn-grey-dark rounded-md t10 fw-b c-rose">⚗</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift" style="color:#a78bfa;">FORM</span></div><button data-key="FORM" class="btn-casio btn-grey-dark rounded-md t10 fw-b" style="color:#a78bfa;">ƒ(x)</button></div>
-    </div>
-
-    <!-- Numeric block -->
-    <div class="grid5">
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONST</span></div><button data-key="7" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">7</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">CONV</span></div><button data-key="8" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">8</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">INS</span></div><button data-key="9" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">9</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">OFF</span></div><button data-key="DEL" class="btn-casio btn-casio-num btn-danger-red rounded-lg txs fw-eb">DEL</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RESET</span></div><button data-key="AC" class="btn-casio btn-casio-num btn-danger-red rounded-lg txs fw-eb">AC</button></div>
-
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Mat</span></div><button data-key="4" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">4</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Vct</span></div><button data-key="5" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">5</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Stat</span></div><button data-key="6" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">6</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">nPr</span></div><button data-key="MUL" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">×</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">nCr</span></div><button data-key="DIV" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">÷</button></div>
-
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Pol</span></div><button data-key="1" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">1</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rec</span></div><button data-key="2" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">2</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rnd</span></div><button data-key="3" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">3</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Abs</span></div><button data-key="ADD" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">+</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">GCD</span><span class="lbl-var">z</span></div><button data-key="SUB" class="btn-casio btn-casio-num btn-grey-dark rounded-lg tlg fw-b">−</button></div>
-
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">Rnd#</span></div><button data-key="0" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">0</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">RanInt</span></div><button data-key="DOT" class="btn-casio btn-casio-num btn-white rounded-lg tlg fw-b">.</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">π</span><span class="lbl-alpha">e</span></div><button data-key="EXP" class="btn-casio btn-casio-num btn-grey-dark rounded-lg txs fw-b">×10<sup>x</sup></button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">PreAns</span></div><button data-key="ANS" class="btn-casio btn-casio-num btn-grey-dark rounded-lg txs fw-b">Ans</button></div>
-      <div class="key-cell"><div class="lbl-container"><span class="lbl-shift">≈</span></div><button data-key="EQUALS" class="btn-casio btn-casio-num btn-primary-blue rounded-lg txl fw-b">=</button></div>
-    </div>
-  </div>
-
-  <div class="footer">
-    <span>Natural V.P.A.M. · 552 Functions</span>
-    <span class="cyan">ClassWiz FX-991EX</span>
-  </div>
-</div>
 
 <!-- QR (full-screen modal, outside the scaled calculator) -->
 <div id="qrOverlay" class="qr-overlay hidden">
